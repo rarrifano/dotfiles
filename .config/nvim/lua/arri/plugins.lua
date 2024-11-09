@@ -4,13 +4,13 @@ local Plug = vim.fn['plug#']
 vim.call('plug#begin')
 
 Plug ('airblade/vim-gitgutter')
-Plug ('numToStr/Navigator.nvim')
+Plug ('christoomey/vim-tmux-navigator')
 Plug ('nvim-lua/plenary.nvim')
 Plug ('nvim-telescope/telescope.nvim', { ['tag'] = '0.1.8' })
+Plug ('nvim-treesitter/nvim-treesitter', { ['tag'] = 'v0.7.2' })
 Plug ('sainnhe/gruvbox-material')
 Plug ('tpope/vim-fugitive')
 Plug ('tpope/vim-sensible')
-Plug ('sheerun/vim-polyglot')
 
 vim.call('plug#end')
 
