@@ -1,4 +1,3 @@
-local vim = vim
 local Plug = vim.fn['plug#']
 
 vim.call('plug#begin')
@@ -11,7 +10,10 @@ Plug ('nvim-treesitter/nvim-treesitter', { ['tag'] = 'v0.7.2' })
 Plug ('sainnhe/gruvbox-material')
 Plug ('tpope/vim-fugitive')
 Plug ('tpope/vim-sensible')
+Plug ('tpope/vim-surround')
 
 vim.call('plug#end')
 
 vim.cmd('colorscheme gruvbox-material')
+
+require'nvim-treesitter.configs'.setup { highlight = { enable = true } }
