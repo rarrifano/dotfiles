@@ -116,5 +116,4 @@ if ! shopt -oq posix; then
 fi
 
 alias k='kubectl'
-alias q='nvim ~/Documentos/$(date +%y%m%d%k%M%S).md'
 complete -o default -F __start_kubectl k
