@@ -15,5 +15,3 @@ Plug ('tpope/vim-sensible')
 vim.call('plug#end')
 
 vim.cmd('colorscheme gruvbox-material')
-
-require('Navigator').setup()
