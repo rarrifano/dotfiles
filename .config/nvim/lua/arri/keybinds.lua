@@ -17,7 +17,7 @@ vim.keymap.set('n', '<leader>fb', '<cmd>Telescope buffers<cr>', { silent = true 
 vim.keymap.set('n', '<leader>fh', '<cmd>Telescope help_tags<cr>', { silent = true })
 vim.keymap.set('n', '<leader>fw', '<cmd>Telescope grep_string<cr>', { silent = true })
 
-vim.keymap.set('n', '<M-h>', '<CMD>NavigatorLeft<CR>', { silent = true })
-vim.keymap.set('n', '<M-j>', '<CMD>NavigatorDown<CR>', { silent = true })
-vim.keymap.set('n', '<M-k>', '<CMD>NavigatorUp<CR>', { silent = true })
-vim.keymap.set('n', '<M-l>', '<CMD>NavigatorRight<CR>', { silent = true })
+vim.keymap.set('n', '<M-h>', '<CMD>TmuxNavigateLeft<CR>', { silent = true })
+vim.keymap.set('n', '<M-j>', '<CMD>TmuxNavigateDown<CR>', { silent = true })
+vim.keymap.set('n', '<M-k>', '<CMD>TmuxNavigateUp<CR>', { silent = true })
+vim.keymap.set('n', '<M-l>', '<CMD>TmuxNavigateRight<CR>', { silent = true })
