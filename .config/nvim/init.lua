@@ -3,12 +3,12 @@ local Plug = vim.fn['plug#']
 vim.call('plug#begin')
 
 Plug ('morhetz/gruvbox')
-Plug ('christoomey/vim-tmux-navigator')
 Plug ('nvim-treesitter/nvim-treesitter', { ['tag'] = 'v0.7.2' })
 
 vim.call('plug#end')
 
 vim.cmd('colorscheme gruvbox')
+
 vim.opt.termguicolors=true
 vim.g.gruvbox_transparent_background=1
 vim.g.gruvbox_gruvbox_italic=1
