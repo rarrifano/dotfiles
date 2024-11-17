@@ -2,7 +2,6 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
-export PATH=$PATH:/usr/local/go/bin
 DOCKER_HOST=unix:///run/user/1000/docker.sock
 
 # If not running interactively, don't do anything
