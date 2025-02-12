@@ -34,7 +34,7 @@ require('mason').setup({})
 require('mason-lspconfig').setup({
     -- Replace the language servers listed here
     -- with the ones you want to install
-    ensure_installed = {'gopls', 'docker_compose_language_service', 'dockerls', 'yamlls'},
+    ensure_installed = {'gopls', 'docker_compose_language_service', 'dockerls', 'yamlls', 'terraformls'},
     handlers = {
         function(server_name)
             require('lspconfig')[server_name].setup({})
@@ -48,3 +48,4 @@ require('lspconfig').gopls.setup({})
 require('lspconfig').docker_compose_language_service.setup({})
 require('lspconfig').dockerls.setup({})
 require('lspconfig').yamlls.setup({})
+require('lspconfig').terraformls.setup({})
