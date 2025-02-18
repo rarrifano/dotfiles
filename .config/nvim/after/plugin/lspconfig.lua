@@ -1,5 +1,5 @@
 -- Reserve a space in the gutter
-vim.opt.signcolumn = 'yes'
+-- vim.opt.signcolumn = 'yes'
 
 -- Add cmp_nvim_lsp capabilities settings to lspconfig
 -- This should be executed before you configure any language server
@@ -32,8 +32,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
 require('mason').setup({})
 require('mason-lspconfig').setup({
-    -- Replace the language servers listed here
-    -- with the ones you want to install
     ensure_installed = {'gopls', 'docker_compose_language_service', 'dockerls', 'yamlls', 'terraformls'},
     handlers = {
         function(server_name)
@@ -42,10 +40,24 @@ require('mason-lspconfig').setup({
     }
 })
 
--- These are just examples. Replace them with the language
--- servers you have installed in your system
 require('lspconfig').gopls.setup({})
 require('lspconfig').docker_compose_language_service.setup({})
 require('lspconfig').dockerls.setup({})
-require('lspconfig').yamlls.setup({})
 require('lspconfig').terraformls.setup({})
+
+require("lspconfig").yamlls.setup {
+  settings = {
+    yaml = {
+      schemas = {
+        kubernetes = "*.yaml",
+        ["http://json.schemastore.org/github-workflow"] = ".github/workflows/*",
+        ["http://json.schemastore.org/github-action"] = ".github/action.{yml,yaml}",
+        ["http://json.schemastore.org/ansible-stable-2.9"] = "roles/tasks/**/*.{yml,yaml}",
+        ["http://json.schemastore.org/prettierrc"] = ".prettierrc.{yml,yaml}",
+        ["http://json.schemastore.org/kustomization"] = "kustomization.{yml,yaml}",
+        ["http://json.schemastore.org/chart"] = "Chart.{yml,yaml}",
+        ["http://json.schemastore.org/circleciconfig"] = ".circleci/**/*.{yml,yaml}",
+      },
+    },
+  },
+}

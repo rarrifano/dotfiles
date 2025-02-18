@@ -1,37 +1,36 @@
--- This file can be loaded by calling `lua require('plugins')` from your init.vim
+local function bootstrap_pckr()
+  local pckr_path = vim.fn.stdpath("data") .. "/pckr/pckr.nvim"
 
--- Only required if you have packer configured as `opt`
-vim.cmd [[packadd packer.nvim]]
+  if not (vim.uv or vim.loop).fs_stat(pckr_path) then
+    vim.fn.system({
+      'git',
+      'clone',
+      "--filter=blob:none",
+      'https://github.com/lewis6991/pckr.nvim',
+      pckr_path
+    })
+  end
 
-return require('packer').startup(function(use)
+  vim.opt.rtp:prepend(pckr_path)
+end
 
-    use 'wbthomason/packer.nvim'
-    use 'ellisonleao/gruvbox.nvim'
-    use 'tpope/vim-fugitive'
-    use 'neovim/nvim-lspconfig'
-    use 'hrsh7th/nvim-cmp'
-    use 'hrsh7th/cmp-nvim-lsp'
-    use "williamboman/mason.nvim"
-    use "williamboman/mason-lspconfig.nvim"
+bootstrap_pckr()
 
-    use {
-        'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'
-    }
+require('pckr').add{
+  'ellisonleao/gruvbox.nvim';
+  'tpope/vim-fugitive';
+  'neovim/nvim-lspconfig';
+  'hrsh7th/nvim-cmp';
+  'hrsh7th/cmp-nvim-lsp';
+  "williamboman/mason.nvim";
+  "williamboman/mason-lspconfig.nvim";
 
-    use {
-        'nvim-telescope/telescope.nvim', tag = '0.1.8',
-        requires = { {'nvim-lua/plenary.nvim'} }
-    }
+  {
+    'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'
+  };
 
-    use{
-        'altermo/ultimate-autopair.nvim',
-        event={'InsertEnter','CmdlineEnter'},
-        branch='v0.6', --recommended as each new version will have breaking changes
-        config=function ()
-            require('ultimate-autopair').setup({
-                --Config goes here
-            })
-        end,
-    }
-
-end)
+  {
+    'nvim-telescope/telescope.nvim', tag = '0.1.8',
+    requires = { {'nvim-lua/plenary.nvim'} }
+  };
+}
