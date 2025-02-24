@@ -1,5 +1,4 @@
-vim.keymap.set('n', '<leader>ee', ':Ex<CR>', { silent = true })
-vim.keymap.set('n', '<leader>op', ':e $MYVIMRC<CR>', { silent = true })
+vim.keymap.set('n', '<leader>op', ':e $MYVIMRC<CR>:lcd%:p:h<CR>', { silent = true })
 
 vim.keymap.set('n', '<leader>p', '"+p', { silent = true })
 vim.keymap.set('n', '<leader>y', '"+y', { silent = true })
