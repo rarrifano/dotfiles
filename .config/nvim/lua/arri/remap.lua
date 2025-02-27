@@ -1,4 +1,5 @@
 vim.keymap.set('n', '<leader>op', ':e $MYVIMRC<CR>:lcd%:p:h<CR>', { silent = true })
+vim.keymap.set('n', '<leader>ww', ':e $ZETTEL_HOME<CR>:lcd%:p:h<CR>', { silent = true })
 
 vim.keymap.set('n', '<leader>p', '"+p', { silent = true })
 vim.keymap.set('n', '<leader>y', '"+y', { silent = true })
