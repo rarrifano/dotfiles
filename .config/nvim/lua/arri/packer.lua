@@ -11,7 +11,6 @@ bootstrap_pckr()
 
 require('pckr').add{
   'ellisonleao/gruvbox.nvim';
-  'tpope/vim-fugitive';
   'neovim/nvim-lspconfig';
   'hrsh7th/nvim-cmp';
   'hrsh7th/cmp-nvim-lsp';

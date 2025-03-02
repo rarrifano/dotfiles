@@ -119,4 +119,4 @@ alias k='kubectl'
 complete -o default -F __start_kubectl k
 
 export EDITOR='vi'
-export ZETTEL_HOME='~/zettelkasten'
+export ZETTEL_HOME='~/Documentos/zettelkasten'
