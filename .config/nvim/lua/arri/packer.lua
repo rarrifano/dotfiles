@@ -16,6 +16,7 @@ require('pckr').add{
   'hrsh7th/cmp-nvim-lsp';
   'williamboman/mason.nvim';
   'williamboman/mason-lspconfig.nvim';
+  'vimwiki/vimwiki';
 
   { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' };
 
