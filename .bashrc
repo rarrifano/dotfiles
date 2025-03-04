@@ -1,6 +1,5 @@
 DOCKER_HOST=unix:///run/user/1000/docker.sock
 MYVIMRC=~/.config/nvim
-Z=~/Documentos/zettelkasten
 
 HISTCONTROL=ignoreboth
 HISTSIZE=1000

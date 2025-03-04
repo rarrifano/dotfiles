@@ -1,8 +1,3 @@
--- Reserve a space in the gutter
--- vim.opt.signcolumn = 'yes'
-
--- Add cmp_nvim_lsp capabilities settings to lspconfig
--- This should be executed before you configure any language server
 local lspconfig_defaults = require('lspconfig').util.default_config
 lspconfig_defaults.capabilities = vim.tbl_deep_extend(
 'force',
@@ -10,8 +5,6 @@ lspconfig_defaults.capabilities,
 require('cmp_nvim_lsp').default_capabilities()
 )
 
--- This is where you enable features that only work
--- if there is a language server active in the file
 vim.api.nvim_create_autocmd('LspAttach', {
     desc = 'LSP actions',
     callback = function(event)
@@ -32,7 +25,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
 require('mason').setup({})
 require('mason-lspconfig').setup({
-    ensure_installed = {'gopls', 'docker_compose_language_service', 'dockerls', 'yamlls', 'terraformls'},
+    ensure_installed = {'gopls', 'yamlls', 'dockerls', 'terraformls', 'marksman'},
     handlers = {
         function(server_name)
             require('lspconfig')[server_name].setup({})
@@ -41,10 +34,9 @@ require('mason-lspconfig').setup({
 })
 
 require('lspconfig').gopls.setup({})
-require('lspconfig').docker_compose_language_service.setup({})
 require('lspconfig').dockerls.setup({})
 require('lspconfig').terraformls.setup({})
-
+require('lspconfig').marksman.setup({})
 require("lspconfig").yamlls.setup {
   settings = {
     yaml = {

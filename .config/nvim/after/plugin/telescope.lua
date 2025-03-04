@@ -1,29 +1,40 @@
 local builtin = require('telescope.builtin')
-vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Telescope find files' })
-vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = 'Telescope live grep' })
+
+-- Files
+vim.keymap.set('n', '<leader>fe', builtin.find_files, { desc = 'Telescope find files' })
+vim.keymap.set('n', '<leader>ff', builtin.live_grep, { desc = 'Telescope live grep' })
 vim.keymap.set('n', '<leader>fw', builtin.grep_string, { desc = 'Telescope grep string' })
-vim.keymap.set('n', '<leader>fe', builtin.buffers, { desc = 'Telescope buffers' })
+
+-- Zettel
+vim.keymap.set('n', '<leader>wn', function() vim.cmd('e ~/Documentos/Zettelkasten/' .. os.date('%Y%m%d%H%M%S') .. '.md') end)
+vim.keymap.set('n', '<leader>ww', function() builtin.live_grep({cwd = '~/Documentos/Zettelkasten'}) end, { desc = 'Zettel live grep' })
+
+-- Settings
+vim.keymap.set('n', '<leader>op', function() builtin.live_grep({cwd = '~/.config/nvim'}) end, { desc = 'Settings live grep' })
+
+-- Buffers
+vim.keymap.set('n', '<leader>ee', builtin.buffers, { desc = 'Telescope buffers' })
+
+-- Docs
 vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Telescope help tags' })
 
-local harpoon = require('harpoon')
-harpoon:setup({})
-
-local conf = require("telescope.config").values
-local function toggle_telescope(harpoon_files)
-    local file_paths = {}
-    for _, item in ipairs(harpoon_files.items) do
-        table.insert(file_paths, item.value)
-    end
-
-    require("telescope.pickers").new({}, {
-        prompt_title = "Harpoon",
-        finder = require("telescope.finders").new_table({
-            results = file_paths,
-        }),
-        previewer = conf.file_previewer({}),
-        sorter = conf.generic_sorter({}),
-    }):find()
-end
-
-vim.keymap.set("n", "<leader>ee", function() toggle_telescope(harpoon:list()) end,
-    { desc = "Open harpoon window" })
+-- Zettel Link
+vim.keymap.set('n', '<leader>wl',
+function()
+    builtin.live_grep({
+        prompt_title = "Zettel link file",
+        cwd = '~/Documentos/Zettelkasten/',
+        attach_mappings = function(_, map)
+            map("i", "<CR>", function(prompt_bufnr)
+                local selection = require("telescope.actions.state").get_selected_entry()
+                require("telescope.actions").close(prompt_bufnr)
+                
+                local wiki_link = selection.filename
+                    :gsub(".*/", "")
+                
+                vim.api.nvim_put({ "[[" .. wiki_link .. "]]" }, "", false, true)
+            end)
+            return true
+        end
+    })
+end)
