@@ -8,9 +8,10 @@ vim.keymap.set('n', '<leader>fw', builtin.grep_string, { desc = 'Telescope grep 
 -- Zettel
 vim.keymap.set('n', '<leader>wn', function() vim.cmd('e ~/Documentos/Zettelkasten/' .. os.date('%Y%m%d%H%M%S') .. '.md') end)
 vim.keymap.set('n', '<leader>ww', function() builtin.live_grep({cwd = '~/Documentos/Zettelkasten'}) end, { desc = 'Zettel live grep' })
+vim.keymap.set('n', '<leader>we', function() builtin.find_files({cwd = '~/Documentos/Zettelkasten'}) end, { desc = 'Zettel find files' })
 
 -- Settings
-vim.keymap.set('n', '<leader>op', function() builtin.live_grep({cwd = '~/.config/nvim'}) end, { desc = 'Settings live grep' })
+vim.keymap.set('n', '<leader>op', function() builtin.find_files({cwd = '~/.config/nvim'}) end, { desc = 'Settings find files' })
 
 -- Buffers
 vim.keymap.set('n', '<leader>ee', builtin.buffers, { desc = 'Telescope buffers' })
