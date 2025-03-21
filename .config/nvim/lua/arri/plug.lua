@@ -25,9 +25,7 @@ require('pckr').add{
   'hrsh7th/cmp-buffer';
   'hrsh7th/cmp-path';
 
-  -- Pickers
+  -- Picker
   { 'nvim-telescope/telescope.nvim', requires = {
     {'nvim-lua/plenary.nvim'} } };
-  { "ThePrimeagen/harpoon", branch = "harpoon2", requires = {
-    {"nvim-lua/plenary.nvim"} } };
 }

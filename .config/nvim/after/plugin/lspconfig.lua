@@ -25,7 +25,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
 require('mason').setup({})
 require('mason-lspconfig').setup({
-    ensure_installed = {'gopls', 'yamlls', 'dockerls', 'terraformls', 'marksman'},
+    ensure_installed = {'gopls', 'yamlls', 'dockerls', 'terraformls', 'pyright', 'jsonls'},
     handlers = {
         function(server_name)
             require('lspconfig')[server_name].setup({})
@@ -36,7 +36,8 @@ require('mason-lspconfig').setup({
 require('lspconfig').gopls.setup({})
 require('lspconfig').dockerls.setup({})
 require('lspconfig').terraformls.setup({})
-require('lspconfig').marksman.setup({})
+require('lspconfig').pyright.setup({})
+require('lspconfig').jsonls.setup({})
 require("lspconfig").yamlls.setup {
   settings = {
     yaml = {
