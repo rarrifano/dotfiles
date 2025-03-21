@@ -13,8 +13,8 @@ vim.keymap.set('n', '<M-j>', ':wincmd j<CR>', { silent = true })
 vim.keymap.set('n', '<M-k>', ':wincmd k<CR>', { silent = true })
 vim.keymap.set('n', '<M-l>', ':wincmd l<CR>', { silent = true })
 
-vim.keymap.set('n', '<leader>ew', '<cmd>lcd %:p:h<cr>')
 vim.keymap.set('n', '<leader>]', ':bnext<CR>', { silent = true })
 vim.keymap.set('n', '<leader>[', ':bprevious<CR>', { silent = true })
 
+vim.keymap.set('n', '<leader>`', ':ter <CR>i', { silent = true })
 vim.keymap.set('t', '<ESC>', [[<C-\><C-n>]], { silent = true })
