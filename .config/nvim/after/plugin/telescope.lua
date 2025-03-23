@@ -10,7 +10,7 @@ vim.keymap.set('v', 'F', builtin.grep_string, { desc = 'Telescope grep string' }
 vim.keymap.set('n', '<leader>;', function() builtin.find_files({cwd = '~/.config/nvim'}) end, { desc = 'Settings find files' })
 
 -- Buffers
-vim.keymap.set('n', '	', builtin.buffers, { desc = 'Telescope buffers' })
+vim.keymap.set('n', '<leader><TAB>', builtin.buffers, { desc = 'Telescope buffers' })
 
 -- Docs
 vim.keymap.set('n', '<leader>k', builtin.help_tags, { desc = 'Telescope help tags' })
