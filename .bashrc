@@ -1,13 +1,13 @@
-DOCKER_HOST=unix:///run/user/1000/docker.sock
-MYVIMRC=~/.config/nvim
+export PATH=$PATH:~/.go/bin/
 
+DOCKER_HOST=unix:///run/user/1000/docker.sock
 HISTCONTROL=ignoreboth
 HISTSIZE=1000
 HISTFILESIZE=2000
 
 shopt -s checkwinsize
 shopt -s histappend
-alias eb='vi ~/.bashrc'
+
 alias k='kubectl'
 alias l='ls -CF'
 alias la='ls -A'
@@ -59,4 +59,3 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
-
