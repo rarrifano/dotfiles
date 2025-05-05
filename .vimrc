@@ -1,39 +1,51 @@
 set termguicolors
+set encoding=utf-8
 set nobackup
-set expandtab
-set hidden
-set nohlsearch
-set laststatus=1
-set number
-set relativenumber
-set shiftwidth=2
-set softtabstop=2
-set tabstop=2
-set splitbelow
-set splitright
 set noswapfile
 set undofile
+set hidden
+
+set number
+set relativenumber
+set laststatus=1
 set nowrap
-set smartindent
-set autoindent
 set scrolloff=4
-set encoding=utf-8
 set showmatch
+set showcmd
+set wildmenu
+set wildmode=list:longest
+set nohlsearch
 set incsearch
 set ignorecase
 set smartcase
-set clipboard=unnamed
+
+set expandtab
+set smartindent
+set autoindent
+set tabstop=2
+set shiftwidth=2
+set softtabstop=2
 set backspace=indent,eol,start
-set history=1000
-set undolevels=1000
-set wildmenu
-set wildmode=list:longest
-set showcmd
+set splitbelow
+set splitright
 set mouse=
+
 set timeout
 set timeoutlen=1000
 set ttimeoutlen=0
 set updatetime=300
+
+set autoread
+set history=1000
+set undolevels=1000
+set title
+set ttyfast
+set shortmess+=c
+set complete-=i
+set nrformats-=octal
+set display+=lastline
+set formatoptions+=j
+set lazyredraw
 
 let mapleader=" "
 
@@ -51,22 +63,29 @@ nnoremap j :wincmd j<CR>
 nnoremap k :wincmd k<CR>
 nnoremap l :wincmd l<CR>
 
-autocmd BufNewFile,BufRead Dockerfile* set syntax=dockerfile
-autocmd BufNewFile,BufRead docker-compose*.{yaml,yml} set syntax=yaml
-autocmd BufNewFile,BufRead *.{tf,tfvars} set syntax=terraform
-autocmd BufNewFile,BufRead *.hcl set syntax=hcl
-autocmd BufNewFile,BufRead *.{yaml,yml} set syntax=yaml
-autocmd BufNewFile,BufRead inventory set syntax=ansible_hosts
-autocmd BufNewFile,BufRead playbook*.{yaml,yml} set syntax=ansible
-autocmd BufNewFile,BufRead *.{yaml,yml} if search('apiVersion:', 'n') | set syntax=yaml.kubernetes | endif
+nnoremap <C-j> :bnext<CR>
+nnoremap <C-k> :bprev<CR>
 
-autocmd FileType yaml,yml setlocal ts=2 sts=2 sw=2 expandtab
+autocmd BufNewFile,BufRead Dockerfile* set filetype=dockerfile
+autocmd BufNewFile,BufRead docker-compose*.{yaml,yml} set filetype=yaml
+autocmd BufNewFile,BufRead *.{tf,tfvars} set filetype=terraform
+autocmd BufNewFile,BufRead *.hcl set filetype=hcl
+autocmd BufNewFile,BufRead *.{yaml,yml} set filetype=yaml
+autocmd BufNewFile,BufRead inventory set filetype=ansible_hosts
+autocmd BufNewFile,BufRead playbook*.{yaml,yml} set filetype=ansible
+autocmd BufNewFile,BufRead *.{yaml,yml} if search('apiVersion:', 'n') | set filetype=yaml.kubernetes | endif
+
+autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab indentkeys-=0# indentkeys-=<:> foldmethod=indent nofoldenable
 autocmd FileType json setlocal ts=2 sts=2 sw=2 expandtab
 autocmd FileType terraform setlocal ts=2 sts=2 sw=2 expandtab
 autocmd FileType dockerfile setlocal ts=2 sts=2 sw=2 expandtab
 autocmd FileType go setlocal ts=4 sts=4 sw=4 noexpandtab
 autocmd FileType python setlocal ts=4 sts=4 sw=4 expandtab
 
-set background=dark
-colorscheme gruvbox
 syntax on
+set background=dark
+if filereadable(expand("~/.vim/colors/gruvbox.vim"))
+  colorscheme gruvbox
+else
+  colorscheme desert
+endif
