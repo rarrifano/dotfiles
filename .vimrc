@@ -10,7 +10,6 @@ set relativenumber
 set laststatus=1
 set nowrap
 set scrolloff=4
-set showmatch
 set showcmd
 set wildmenu
 set wildmode=list:longest
@@ -38,6 +37,7 @@ set updatetime=300
 set autoread
 set history=1000
 set undolevels=1000
+set undodir=~/.vim/undodir
 set title
 set ttyfast
 set shortmess+=c
@@ -65,6 +65,8 @@ nnoremap l :wincmd l<CR>
 
 nnoremap <C-j> :bnext<CR>
 nnoremap <C-k> :bprev<CR>
+
+nnoremap <F2> :set list!<CR>
 
 autocmd BufNewFile,BufRead Dockerfile* set filetype=dockerfile
 autocmd BufNewFile,BufRead docker-compose*.{yaml,yml} set filetype=yaml
