@@ -19,8 +19,6 @@ bootstrap_pckr()
 require('pckr').add {
     { 'sainnhe/gruvbox-material',        as = 'gruvbox-material' },
     { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' },
-    { 'nvim-telescope/telescope.nvim', tag = '0.1.8',
-        requires = { 'nvim-lua/plenary.nvim' } },
     { 'neovim/nvim-lspconfig' },
     { 'hrsh7th/nvim-cmp' },
     { 'hrsh7th/cmp-nvim-lsp' },
