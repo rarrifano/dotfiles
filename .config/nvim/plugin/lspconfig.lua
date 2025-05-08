@@ -10,11 +10,14 @@ vim.api.nvim_create_autocmd('LspAttach', {
     callback = function(event)
         local opts = { buffer = event.buf }
         vim.keymap.set({ 'n', 'x' }, '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', opts)
+        vim.keymap.set({ 'n', 'v' }, '<F2>', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
+        vim.keymap.set('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
     end,
 })
 
 vim.diagnostic.config({
-    virtual_text = true
+    virtual_text = false,
+    signs = false
 })
 
 require('mason').setup({})
