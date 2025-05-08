@@ -19,7 +19,7 @@ vim.diagnostic.config({
 
 require('mason').setup({})
 require('mason-lspconfig').setup({
-    ensure_installed = { 'gopls', 'yamlls', 'dockerls', 'terraformls', 'pyright' },
+    ensure_installed = { 'yamlls', 'dockerls', 'terraformls', 'pyright' },
     handlers = {
         function(server_name)
             require('lspconfig')[server_name].setup({})

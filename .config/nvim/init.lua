@@ -1,3 +1,3 @@
 require("settings")
-require("keymappings")
+require("shortcuts")
 require("plugins")

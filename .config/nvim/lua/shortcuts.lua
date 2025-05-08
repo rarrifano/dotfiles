@@ -15,3 +15,7 @@ vim.keymap.set('n', '<A-k>', '<cmd>wincmd k<CR>')
 vim.keymap.set('n', '<A-l>', '<cmd>wincmd l<CR>')
 vim.keymap.set('n', '<C-j>', '<cmd>bnext<CR>')
 vim.keymap.set('n', '<C-k>', '<cmd>bprev<CR>')
+
+-- Netrw
+vim.keymap.set('n', '<leader>;', '<cmd>Vex ~/.config/nvim<CR>')
+vim.keymap.set('n', '<leader>e', '<cmd>Ex<CR>')
