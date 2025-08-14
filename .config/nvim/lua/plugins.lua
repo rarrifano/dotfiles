@@ -23,5 +23,5 @@ require('pckr').add {
     { 'hrsh7th/nvim-cmp' },
     { 'hrsh7th/cmp-nvim-lsp' },
     { 'williamboman/mason.nvim' },
-    { 'williamboman/mason-lspconfig.nvim' }
+    { 'williamboman/mason-lspconfig.nvim', tag = 'v2.0.0-rc.1' }
 }

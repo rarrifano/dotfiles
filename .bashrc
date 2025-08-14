@@ -1,4 +1,5 @@
 export PATH=$PATH:~/.go/bin/
+export EDITOR=nvim
 
 DOCKER_HOST=unix:///run/user/1000/docker.sock
 HISTCONTROL=ignoreboth
