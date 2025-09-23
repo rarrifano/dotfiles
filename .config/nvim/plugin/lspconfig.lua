@@ -30,7 +30,6 @@ require('mason-lspconfig').setup({
     }
 })
 
-require('lspconfig').gopls.setup({})
 require('lspconfig').dockerls.setup({})
 require('lspconfig').terraformls.setup({})
 require('lspconfig').pyright.setup({})
