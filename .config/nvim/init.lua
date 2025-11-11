@@ -62,6 +62,10 @@ require'nvim-treesitter.configs'.setup {
 	incremental_selection = { enable = true }
 }
 
+require("gruvbox").setup({
+	transparent_mode = true
+})
+
 vim.cmd([[colorscheme gruvbox]])
 
 require'mason'.setup{}
