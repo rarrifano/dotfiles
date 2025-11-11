@@ -35,7 +35,7 @@ vim.keymap.set('n', '<leader>Y', '"+Y')
 vim.keymap.set('v', '<leader>P', '"+P')
 vim.keymap.set('v', '<leader>Y', '"+Y')
 
-vim.keymap.set('n', '<leader>;', '<cmd>Vex ~/.config/nvim<CR>')
+vim.keymap.set('n', '<leader>;', '<cmd>e $MYVIMRC<CR>')
 vim.keymap.set('n', '<leader>e', '<cmd>Ex<CR>')
 
 vim.pack.add({
