@@ -44,7 +44,8 @@ vim.pack.add({
 	'https://github.com/mason-org/mason.nvim',
 	'https://github.com/neovim/nvim-lspconfig',
 	'https://github.com/nvim-mini/mini.completion',
-	'https://github.com/lewis6991/gitsigns.nvim'
+	'https://github.com/lewis6991/gitsigns.nvim',
+	'https://github.com/windwp/nvim-autopairs'
 })
 
 require'nvim-treesitter.configs'.setup { 
@@ -68,3 +69,7 @@ vim.diagnostic.config({ virtual_text = true })
 require'mini.completion'.setup{}
 
 require('gitsigns').setup { current_line_blame = true }
+
+require('nvim-autopairs').setup{}
+
+-- todo: add picker for lsp and file search
