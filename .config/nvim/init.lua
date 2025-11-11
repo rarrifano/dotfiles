@@ -4,7 +4,7 @@ vim.g.maplocalleader = " "
 vim.o.number = true
 vim.o.mouse = 'a'
 vim.o.showmode = false
-vim.o.breakindent = true
+vim.o.breakindent = false
 vim.o.undofile = true
 vim.o.ignorecase = true
 vim.o.smartcase = true
@@ -38,8 +38,15 @@ vim.keymap.set('v', '<leader>Y', '"+Y')
 vim.keymap.set('n', '<leader>;', '<cmd>e $MYVIMRC<CR>')
 vim.keymap.set('n', '<leader>e', '<cmd>Ex<CR>')
 
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "yaml",
+  callback = function()
+    vim.bo.indentexpr = ''
+  end,
+})
+
 vim.pack.add({
-	{ src = 'https://github.com/nvim-treesitter/nvim-treesitter', run = ':TSUpdate' },
+	'https://github.com/nvim-treesitter/nvim-treesitter',
 	'https://github.com/ellisonleao/gruvbox.nvim',
 	'https://github.com/mason-org/mason.nvim',
 	'https://github.com/neovim/nvim-lspconfig',
@@ -51,7 +58,7 @@ vim.pack.add({
 require'nvim-treesitter.configs'.setup { 
 	auto_install = true,
 	highlight = { enable = true },
-	indent = { enable = true },
+	indent = { enable = true, disable = { "yaml" } },
 	incremental_selection = { enable = true }
 }
 
