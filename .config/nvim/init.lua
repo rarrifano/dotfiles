@@ -15,7 +15,13 @@ vim.o.splitbelow = true
 vim.o.inccommand = 'split'
 vim.o.scrolloff = 10
 
+vim.opt.tabstop = 2
+vim.opt.shiftwidth = 2
+vim.opt.expandtab = true
+vim.opt.softtabstop = 2
+
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>')
+vim.keymap.set('n', '<leader>tt', '<cmd>ter<CR>')
 
 vim.keymap.set('n', '<A-h>', '<cmd>wincmd h<CR>')
 vim.keymap.set('n', '<A-j>', '<cmd>wincmd j<CR>')
@@ -38,11 +44,16 @@ vim.keymap.set('v', '<leader>Y', '"+Y')
 vim.keymap.set('n', '<leader>;', '<cmd>e $MYVIMRC<CR>')
 vim.keymap.set('n', '<leader>e', '<cmd>Ex<CR>')
 
+vim.keymap.set('n', '<leader>ff', '<cmd>Telescope find_files<CR>')
+vim.keymap.set('n', '<leader>fg', '<cmd>Telescope live_grep<CR>')
+vim.keymap.set('n', '<leader><leader>', '<cmd>Telescope buffers<CR>')
+vim.keymap.set('n', '<leader>fh', '<cmd>Telescope help_tags<CR>')
+
 vim.api.nvim_create_autocmd("FileType", {
-  pattern = "yaml",
-  callback = function()
-    vim.bo.indentexpr = ''
-  end,
+	pattern = "yaml",
+	callback = function()
+		vim.bo.indentexpr = ''
+	end,
 })
 
 vim.pack.add({
@@ -52,10 +63,12 @@ vim.pack.add({
 	'https://github.com/neovim/nvim-lspconfig',
 	'https://github.com/nvim-mini/mini.completion',
 	'https://github.com/lewis6991/gitsigns.nvim',
-	'https://github.com/windwp/nvim-autopairs'
+	'https://github.com/windwp/nvim-autopairs',
+	'https://github.com/nvim-lua/plenary.nvim',
+	'https://github.com/nvim-telescope/telescope.nvim',
 })
 
-require'nvim-treesitter.configs'.setup { 
+require'nvim-treesitter.config'.setup { 
 	auto_install = true,
 	highlight = { enable = true },
 	indent = { enable = true, disable = { "yaml" } },
@@ -68,19 +81,16 @@ require("gruvbox").setup({
 
 vim.cmd([[colorscheme gruvbox]])
 
-require'mason'.setup{}
-
 vim.lsp.enable({
 	'pyright',
-	'yamlls'
+	'yamlls',
+  'terraform-ls'
 })
 
 vim.diagnostic.config({ virtual_text = true })
 
+require'mason'.setup{}
 require'mini.completion'.setup{}
-
-require('gitsigns').setup { current_line_blame = true }
-
-require('nvim-autopairs').setup{}
-
--- todo: add picker for lsp and file search
+require'gitsigns'.setup { current_line_blame = true }
+require'nvim-autopairs'.setup{}
+require'telescope'.setup{}
