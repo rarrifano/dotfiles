@@ -2,6 +2,7 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
 vim.o.number = true
+vim.o.relativenumber = true
 vim.o.mouse = 'a'
 vim.o.showmode = false
 vim.o.breakindent = false
@@ -44,10 +45,9 @@ vim.keymap.set('v', '<leader>Y', '"+Y')
 vim.keymap.set('n', '<leader>;', '<cmd>e $MYVIMRC<CR>')
 vim.keymap.set('n', '<leader>e', '<cmd>Ex<CR>')
 
+vim.keymap.set('n', '<leader>fj', '<cmd>Telescope live_grep<CR>')
+vim.keymap.set('n', '<leader>fk', '<cmd>Telescope grep_string<CR>')
 vim.keymap.set('n', '<leader>ff', '<cmd>Telescope find_files<CR>')
-vim.keymap.set('n', '<leader>fg', '<cmd>Telescope live_grep<CR>')
-vim.keymap.set('n', '<leader><leader>', '<cmd>Telescope buffers<CR>')
-vim.keymap.set('n', '<leader>fh', '<cmd>Telescope help_tags<CR>')
 
 vim.api.nvim_create_autocmd("FileType", {
 	pattern = "yaml",
@@ -83,8 +83,7 @@ vim.cmd([[colorscheme gruvbox]])
 
 vim.lsp.enable({
 	'pyright',
-	'yamlls',
-  'terraform-ls'
+	'yamlls'
 })
 
 vim.diagnostic.config({ virtual_text = true })
