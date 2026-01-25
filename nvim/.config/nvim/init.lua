@@ -17,3 +17,5 @@ require('plugins')
 
 -- Set Gruvbox colorscheme after plugins load
 vim.cmd('colorscheme gruvbox')
+
+vim.o.mouse = ""
