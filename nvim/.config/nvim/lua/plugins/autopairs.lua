@@ -1,0 +1,1 @@
+-- autopairs now handled by lazy_setup.lua

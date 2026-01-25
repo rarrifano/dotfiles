@@ -1,0 +1,2 @@
+-- gitsigns now handled by lazy_setup.lua
+-- Fugitive is available by :Git commands (see :h fugitive)

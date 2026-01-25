@@ -1,0 +1,2 @@
+-- nvim-cmp setup
+-- nvim-cmp setup now handled in lazy_setup.lua plugin config.

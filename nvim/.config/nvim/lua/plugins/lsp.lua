@@ -1,0 +1,3 @@
+-- Mason & LSP config for Terraform, Python, Bash, Docker, YAML, JSON
+-- LSP setup now lives in lazy_setup.lua config blocks.
+-- Remove this file or add additional per-LSP/server custom logic here only if necessary.

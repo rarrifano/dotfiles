@@ -1,0 +1,1 @@
+-- Loads all plugin config modules

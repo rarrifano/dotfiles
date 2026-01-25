@@ -1,0 +1,2 @@
+-- Treesitter setup
+-- Treesitter setup now handled in lazy_setup.lua plugin config.
