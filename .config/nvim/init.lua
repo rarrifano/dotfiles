@@ -92,4 +92,4 @@ require'mason'.setup{}
 require'mini.completion'.setup{}
 require'gitsigns'.setup { current_line_blame = true }
 require'nvim-autopairs'.setup{}
-require'telescope'.setup{}
+-- Telescope setup is handled by lazy.nvim
