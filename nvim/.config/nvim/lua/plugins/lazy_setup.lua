@@ -57,38 +57,54 @@ return {
             vim.lsp.config('yamlls', {
                 settings = {
                     yaml = {
-                        schemas = {
-                            ["https://json.schemastore.org/kubernetes.json"] = "/*.k8s.yaml",
-                            ["https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json"] = "/docker-compose*.yml",
+                         schemas = {
+                             ["https://json.schemastore.org/kubernetes.json"] = "/*.k8s.yaml",
+                             ["https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json"] = "/docker-compose*.yml",
+                         }
+                     }
+                 }
+             })
+             vim.lsp.enable('yamlls')
+             vim.lsp.enable('pyright')
+             vim.lsp.enable('bashls')
+             vim.lsp.enable('dockerls')
+             vim.lsp.enable('jsonls')
+             vim.lsp.enable('terraformls')
+         end,
     },
     {
-        'github/copilot.vim',
-        build = ':Copilot setup',
+        'zbirenbaum/copilot.lua',
         config = function()
-            -- Copilot will show ghost text (inline suggestions) automatically
-            -- Use :Copilot setup for authentication if not done already
+            require("copilot").setup {
+                suggestion = {
+                    enabled = true,
+                    auto_trigger = true,
+                    keymap = {
+                        accept = "<C-l>", -- also accepts on cmp selection!
+                        accept_word = false,
+                        accept_line = false,
+                        next = "]c",
+                        prev = "[c",
+                        dismiss = "<C-e>",
+                    }
+                },
+                panel = { enabled = false },
+            }
         end,
     },
     {
-        'f-person/git-blame.nvim',
-        opts = {
-            enabled = true,
-            message_template = '<author> • <date> • <summary>',
-            date_format = '%r',
-            virtual_text_column = 1,
-        },
-    }
-}
-                }
-            })
-            vim.lsp.enable('yamlls')
-            vim.lsp.enable('pyright')
-            vim.lsp.enable('bashls')
-            vim.lsp.enable('dockerls')
-            vim.lsp.enable('jsonls')
-            vim.lsp.enable('terraformls')
+        'zbirenbaum/copilot-cmp',
+        after = {"copilot.lua", "nvim-cmp"},
+        config = function()
+            require("copilot_cmp").setup {
+                method = "getCompletionCycling",
+                formatters = {
+                    insert_text = require("copilot_cmp.format").remove_suffix,
+                },
+            }
         end,
     },
+
     {
         'hrsh7th/nvim-cmp',
         config = function()
@@ -103,6 +119,7 @@ return {
                 mapping = cmp.mapping.preset.insert({
                     ['<C-Space>'] = cmp.mapping.complete(),
                     ['<CR>'] = cmp.mapping.confirm { select = true },
+                    ['<C-l>'] = cmp.mapping.confirm { select = true },
                     ['<Tab>'] = cmp.mapping.select_next_item(),
                     ['<S-Tab>'] = cmp.mapping.select_prev_item(),
                 }),
@@ -170,20 +187,20 @@ return {
     end, },
     {
         'lewis6991/gitsigns.nvim',
-        config = function() require('gitsigns').setup() end,
+        config = function()
+            require('gitsigns').setup {
+                current_line_blame = true,
+                current_line_blame_opts = {
+                    delay = 0,
+                    virt_text = true,
+                    virt_text_pos = 'eol',
+                    relative_time = true
+                }
+            }
+            vim.cmd([[highlight GitSignsCurrentLineBlame guifg=#585850 guibg=NONE gui=italic]])
+        end,
     },
     {'tpope/vim-fugitive'},
-    { 'folke/trouble.nvim',
-      config = function()
-        require('trouble').setup {}
-        vim.keymap.set('n', '<leader>xx', function() require('trouble').toggle() end, {desc = 'Trouble Diagnostics'})
-        vim.keymap.set('n', '<leader>xw', function() require('trouble').toggle('workspace_diagnostics') end, {desc = 'Workspace diagnostics'})
-        vim.keymap.set('n', '<leader>xd', function() require('trouble').toggle('document_diagnostics') end, {desc = 'Document diagnostics'})
-        vim.keymap.set('n', '<leader>xq', function() require('trouble').toggle('quickfix') end, {desc = 'Quickfix list'})
-        vim.keymap.set('n', '<leader>xl', function() require('trouble').toggle('loclist') end, {desc = 'Location list'})
-        vim.keymap.set('n', '<leader>xr', function() require('trouble').toggle('lsp_references') end, {desc = 'LSP references'})
-      end,
-    },
     {
         'stevearc/oil.nvim',
         config = function()
