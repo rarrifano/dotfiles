@@ -60,8 +60,25 @@ return {
                         schemas = {
                             ["https://json.schemastore.org/kubernetes.json"] = "/*.k8s.yaml",
                             ["https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json"] = "/docker-compose*.yml",
-                        }
-                    }
+    },
+    {
+        'github/copilot.vim',
+        build = ':Copilot setup',
+        config = function()
+            -- Copilot will show ghost text (inline suggestions) automatically
+            -- Use :Copilot setup for authentication if not done already
+        end,
+    },
+    {
+        'f-person/git-blame.nvim',
+        opts = {
+            enabled = true,
+            message_template = '<author> • <date> • <summary>',
+            date_format = '%r',
+            virtual_text_column = 1,
+        },
+    }
+}
                 }
             })
             vim.lsp.enable('yamlls')
