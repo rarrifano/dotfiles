@@ -70,6 +70,7 @@ complete -F __start_kubectl k
 
 # ----- Exports -----
 export PATH="$PATH:$HOME/.go/bin/"
+export GOPATH="$HOME/.go"
 export EDITOR=nvim
 export DOCKER_HOST=unix:///run/user/1000/docker.sock
 

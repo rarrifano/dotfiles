@@ -1,1 +1,6 @@
--- autopairs now handled by lazy_setup.lua
+-- Auto pairs
+return {
+    'windwp/nvim-autopairs',
+    event = 'InsertEnter',
+    opts = {},
+}
