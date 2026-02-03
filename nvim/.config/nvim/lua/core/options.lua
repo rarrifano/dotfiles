@@ -21,7 +21,7 @@ opt.ignorecase = true
 opt.smartcase = true
 opt.splitright = true
 opt.splitbelow = true
-opt.cursorline = true
+opt.cursorline = false
 opt.scrolloff = 8
 
 -- Highlight on yank
