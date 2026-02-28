@@ -1,0 +1,145 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+
+  // ── Model Defaults ──────────────────────────────────────────────────
+  "model": "github-copilot/claude-opus-4.6",
+  "small_model": "github-copilot/gpt-5-mini",
+
+  // ── Provider Restriction ────────────────────────────────────────────
+  "enabled_providers": ["github-copilot"],
+
+  // ── Username ────────────────────────────────────────────────────────
+  "username": "rarrifano",
+
+  // ── Sharing ─────────────────────────────────────────────────────────
+  "share": "manual",
+
+  // ── Autoupdate ──────────────────────────────────────────────────────
+  "autoupdate": true,
+
+  // ── Snapshots ───────────────────────────────────────────────────────
+  "snapshot": true,
+
+  // ── Compaction ──────────────────────────────────────────────────────
+  "compaction": {
+    "auto": true,
+    "prune": true,
+    "reserved": 10000
+  },
+
+  // ── Watcher ─────────────────────────────────────────────────────────
+  "watcher": {
+    "ignore": [
+      "node_modules/**",
+      "dist/**",
+      "build/**",
+      ".git/**",
+      ".next/**",
+      ".nuxt/**",
+      ".output/**",
+      "coverage/**",
+      ".turbo/**",
+      "*.lock",
+      "vendor/**",
+      "__pycache__/**",
+      ".venv/**",
+      "target/**"
+    ]
+  },
+
+  // ── Permissions (Permissive with safety guards) ─────────────────────
+  "permission": {
+    "*": "allow",
+    "bash": {
+      "*": "allow",
+      "rm -rf *": "ask",
+      "rm -r *": "ask",
+      "git push --force*": "deny",
+      "git push * --force*": "deny",
+      "git reset --hard*": "ask",
+      "git clean*": "ask",
+      "sudo *": "ask",
+      "chmod *": "ask",
+      "chown *": "ask",
+      "curl * | bash*": "deny",
+      "curl * | sh*": "deny",
+      "wget * | bash*": "deny"
+    },
+    "edit": "allow",
+    "read": {
+      "*": "allow",
+      "*.env": "deny",
+      "*.env.*": "deny",
+      "*.env.example": "allow"
+    },
+    "webfetch": "allow",
+    "external_directory": "ask",
+    "doom_loop": "ask"
+  },
+
+  // ── Custom Commands ─────────────────────────────────────────────────
+  "command": {
+    "test": {
+      "template": "Run the test suite for this project. Identify the test framework being used, run the tests, and report any failures with suggested fixes.",
+      "description": "Run project tests and fix failures"
+    },
+    "review": {
+      "template": "Review the recent changes in this project. Run `git diff` to see unstaged changes and `git diff --cached` for staged changes. Provide a thorough code review covering: correctness, edge cases, security, performance, and readability. Suggest specific improvements.",
+      "description": "Code review of recent changes",
+      "agent": "plan"
+    },
+    "commit": {
+      "template": "Review all staged and unstaged changes, then create a well-crafted git commit. Follow conventional commit format. Ask me to confirm the commit message before committing.",
+      "description": "Smart commit with conventional message"
+    },
+    "fix": {
+      "template": "Analyze the error or issue described in: $ARGUMENTS. Find the root cause, explain it, and implement a fix.",
+      "description": "Diagnose and fix an error"
+    },
+    "refactor": {
+      "template": "Refactor the code in $ARGUMENTS. Improve readability, reduce complexity, and follow best practices while preserving behavior. Explain the changes made.",
+      "description": "Refactor specified code"
+    },
+    "explain": {
+      "template": "Explain the code in $ARGUMENTS in detail. Cover the purpose, how it works, key patterns used, and any notable design decisions.",
+      "description": "Explain code in detail",
+      "agent": "plan"
+    },
+    "deps": {
+      "template": "Check for outdated dependencies in this project. List which packages have updates available and whether they are major, minor, or patch updates. Recommend which ones are safe to update.",
+      "description": "Check for outdated dependencies",
+      "agent": "plan"
+    }
+  },
+
+  // ── Agents ──────────────────────────────────────────────────────────
+  "agent": {
+    "build": {
+      "prompt": "You are a senior software engineer. Write clean, well-tested, and maintainable code. Follow existing project conventions and patterns. Always verify your changes work correctly."
+    },
+    "plan": {
+      "prompt": "You are a senior software architect. Analyze thoroughly before suggesting changes. Consider trade-offs, edge cases, and long-term maintainability. Provide clear, actionable plans."
+    }
+  },
+
+  // ── Instructions ────────────────────────────────────────────────────
+  "instructions": [
+    "AGENTS.md",
+    "CONTRIBUTING.md",
+    ".cursor/rules/*.md",
+    ".github/copilot-instructions.md"
+  ],
+
+  // ── Plugins ──────────────────────────────────────────────────────────
+  "plugin": ["@franlol/opencode-md-table-formatter@latest"],
+
+  // ── MCP Servers ─────────────────────────────────────────────────────
+  "mcp": {},
+
+  // ── Experimental ────────────────────────────────────────────────────
+  "experimental": {
+    "hook": {
+      "session_completed": []
+    }
+  }
+}
