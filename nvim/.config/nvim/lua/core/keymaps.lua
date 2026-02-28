@@ -34,3 +34,12 @@ map('n', '[d', vim.diagnostic.goto_prev, { desc = 'Prev diagnostic' })
 map('n', ']d', vim.diagnostic.goto_next, { desc = 'Next diagnostic' })
 map('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Show diagnostic' })
 map('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Diagnostic list' })
+
+-- Clipboard
+map('n', '<leader>y', '"+y', { noremap = true, desc = 'Yank to system clipboard' })
+map('v', '<leader>y', '"+y', { noremap = true, desc = 'Yank selection to system clipboard' })
+map('n', '<leader>Y', '"+Y', { noremap = true, desc = 'Yank line to system clipboard' })
+
+map('n', '<leader>p', '"+p', { noremap = true, desc = 'Paste from system clipboard' })
+map('n', '<leader>P', '"+P', { noremap = true, desc = 'Paste before from system clipboard' })
+map('v', '<leader>p', '"+p', { noremap = true, desc = 'Paste from system clipboard in visual mode' })
