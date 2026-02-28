@@ -23,6 +23,14 @@ opt.splitright = true
 opt.splitbelow = true
 opt.cursorline = false
 opt.scrolloff = 8
+opt.autoread = true
+
+-- Disable unused providers
+vim.g.loaded_perl_provider = 0
+vim.g.loaded_ruby_provider = 0
+
+-- Point Node.js provider to mise-managed neovim-node-host
+vim.g.node_host_prog = vim.fn.exepath('neovim-node-host')
 
 -- Highlight on yank
 vim.api.nvim_create_autocmd('TextYankPost', {
