@@ -143,10 +143,8 @@ stow_packages() {
         pkg="$(basename "$entry")"
         [[ "$pkg" == ".git" ]] && continue
         info "  stow $pkg"
-        stow --adopt --restow --dir="$DOTFILES_DIR" --target="$HOME" "$pkg"
+        stow --restow --override='.*' --dir="$DOTFILES_DIR" --target="$HOME" "$pkg"
     done
-    # --adopt may pull existing files into the repo; discard those changes
-    git -C "$DOTFILES_DIR" checkout -- . 2>/dev/null || true
 }
 
 # ── Step 5: mise ─────────────────────────────────────────────────────────────

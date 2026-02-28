@@ -6,6 +6,8 @@
 [settings]
 # Auto-install tools when entering a directory with a mise config
 auto_install = true
+# Keep global tools active even when a local .mise.toml is present
+activate_aggressive = true
 
 # ── Core Tools ───────────────────────────────────────────────────────────────
 
