@@ -5,7 +5,7 @@ return {
         opts = {
             current_line_blame = true,
             current_line_blame_opts = {
-                delay = 0,
+                delay = 300,
                 virt_text_pos = 'eol',
             },
             on_attach = function()
