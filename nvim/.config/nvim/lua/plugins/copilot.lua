@@ -1,18 +1,10 @@
--- GitHub Copilot inline suggestions
+-- GitHub Copilot (completions via nvim-cmp)
 return {
     'zbirenbaum/copilot.lua',
+    cmd = 'Copilot',
     event = 'InsertEnter',
     opts = {
-        suggestion = {
-            enabled = true,
-            auto_trigger = true,
-            keymap = {
-                accept = '<C-l>',
-                next = '<M-]>',
-                prev = '<M-[>',
-                dismiss = '<C-e>',
-            },
-        },
+        suggestion = { enabled = false },
         panel = { enabled = false },
     },
 }
