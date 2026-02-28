@@ -12,5 +12,5 @@ return {
     require('plugins.git'),
     require('plugins.oil'),
     require('plugins.autopairs'),
-    require('plugins.avante'),
+    require('plugins.opencode'),
 }
