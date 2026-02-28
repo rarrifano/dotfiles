@@ -138,6 +138,22 @@ setup_docker_rootless() {
 
 stow_packages() {
     info "Stowing dotfiles"
+
+    # Remove files that would conflict with stow (e.g. pre-existing ~/.bashrc, ~/.gitconfig)
+    for entry in "$DOTFILES_DIR"/*/; do
+        local pkg
+        pkg="$(basename "$entry")"
+        [[ "$pkg" == ".git" ]] && continue
+        while IFS= read -r -d '' rel; do
+            local target="$HOME/$rel"
+            if [[ -e "$target" && ! -L "$target" ]] || \
+               [[ -L "$target" && "$(readlink "$target")" != *"$DOTFILES_DIR"* ]]; then
+                info "  backup $rel → ${rel}.bak"
+                mv "$target" "${target}.bak"
+            fi
+        done < <(cd "$entry" && find . -type f -print0 | sed -z 's|^\./||')
+    done
+
     for entry in "$DOTFILES_DIR"/*/; do
         local pkg
         pkg="$(basename "$entry")"
