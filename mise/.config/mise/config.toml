@@ -3,12 +3,6 @@
 # Managed via dotfiles. Stow with: stow -t ~ mise
 # =============================================================================
 
-[settings]
-# Auto-install tools when entering a directory with a mise config
-auto_install = true
-# Keep global tools active even when a local .mise.toml is present
-activate_aggressive = true
-
 # ── Core Tools ───────────────────────────────────────────────────────────────
 
 [tools]
@@ -43,10 +37,10 @@ helm = "latest"
 # ── Terminal & Editor ────────────────────────────────────────────────────────
 
 # tmux — terminal multiplexer (builds from tmux/tmux-builds releases)
-"github:tmux/tmux-builds" = "latest"
+tmux = "latest"
 
 # Neovim
-"github:neovim/neovim" = "latest"
+neovim = "latest"
 
 # tree-sitter CLI (required for nvim-treesitter compilation)
 tree-sitter = "latest"
@@ -76,4 +70,4 @@ usage = "latest"
 # ── GitHub-hosted Tools ──────────────────────────────────────────────────────
 
 # Girus CLI
-"github:badtuxx/girus-cli" = "latest"
+# "github:badtuxx/girus-cli" = "latest"
