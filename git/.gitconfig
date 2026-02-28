@@ -3,8 +3,6 @@
 	name = Rafael Arrifano
 [init]
 	defaultBranch = main
-[core]
-	editor = nvim
 [pull]
 	rebase = true
 [push]
