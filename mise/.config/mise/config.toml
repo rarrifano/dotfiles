@@ -1,0 +1,79 @@
+# =============================================================================
+# mise — DevOps/SRE + Development toolchain
+# Managed via dotfiles. Stow with: stow -t ~ mise
+# =============================================================================
+
+[settings]
+# Auto-install tools when entering a directory with a mise config
+auto_install = true
+# Keep global tools active even when a local .mise.toml is present
+activate_aggressive = true
+
+# ── Core Tools ───────────────────────────────────────────────────────────────
+
+[tools]
+# Languages & runtimes
+go     = "latest"
+lua    = "5.1"
+node   = "latest"
+python = "latest"
+
+# uv — fast Python package manager (required by pipx: backend)
+uv = "latest"
+
+# ── Cloud & Infrastructure ───────────────────────────────────────────────────
+
+# AWS CLI v2
+awscli    = "latest"
+
+# HashiCorp Terraform
+terraform = "latest"
+
+# ── Kubernetes ───────────────────────────────────────────────────────────────
+
+# Kubernetes CLI
+kubectl = "latest"
+
+# Kubernetes in Docker (local clusters)
+kind = "latest"
+
+# Kubernetes package manager
+helm = "latest"
+
+# ── Terminal & Editor ────────────────────────────────────────────────────────
+
+# tmux — terminal multiplexer (builds from tmux/tmux-builds releases)
+"github:tmux/tmux-builds" = "latest"
+
+# Neovim
+"github:neovim/neovim" = "latest"
+
+# tree-sitter CLI (required for nvim-treesitter compilation)
+tree-sitter = "latest"
+
+# fd — fast file finder (used by telescope.nvim)
+fd = "latest"
+
+# ripgrep — fast content search (used by telescope.nvim)
+ripgrep = "latest"
+
+# usage CLI — required for mise shell completions
+usage = "latest"
+
+# ── npm Global Tools ────────────────────────────────────────────────────────
+
+# AI-powered coding assistant
+"npm:opencode-ai" = "latest"
+
+# Neovim Node.js client (required by nvim Node.js provider)
+"npm:neovim" = "latest"
+
+# ── pip Global Tools ────────────────────────────────────────────────────────
+
+# Neovim Python client (required by nvim Python 3 provider)
+"pipx:pynvim" = "latest"
+
+# ── GitHub-hosted Tools ──────────────────────────────────────────────────────
+
+# Girus CLI
+"github:badtuxx/girus-cli" = "latest"
