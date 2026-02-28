@@ -43,3 +43,7 @@ map('n', '<leader>Y', '"+Y', { noremap = true, desc = 'Yank line to system clipb
 map('n', '<leader>p', '"+p', { noremap = true, desc = 'Paste from system clipboard' })
 map('n', '<leader>P', '"+P', { noremap = true, desc = 'Paste before from system clipboard' })
 map('v', '<leader>p', '"+p', { noremap = true, desc = 'Paste from system clipboard in visual mode' })
+
+map('n', '<leader>d', '"_d', { noremap = true, desc = 'Delete without yanking' })
+map('v', '<leader>d', '"_d', { noremap = true, desc = 'Delete selection without yanking' })
+map('n', '<leader>D', '"_D', { noremap = true, desc = 'Delete line without yanking' })
