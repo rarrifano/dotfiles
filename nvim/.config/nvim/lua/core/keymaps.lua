@@ -30,8 +30,8 @@ map('n', '<leader>ld', '<cmd>Telescope lsp_definitions<CR>', { desc = 'Definitio
 map('n', '<leader>lt', '<cmd>Telescope lsp_type_definitions<CR>', { desc = 'Type definitions' })
 
 -- Diagnostics
-map('n', '[d', vim.diagnostic.goto_prev, { desc = 'Prev diagnostic' })
-map('n', ']d', vim.diagnostic.goto_next, { desc = 'Next diagnostic' })
+map('n', '[d', function() vim.diagnostic.jump({ count = -1 }) end, { desc = 'Prev diagnostic' })
+map('n', ']d', function() vim.diagnostic.jump({ count = 1 }) end, { desc = 'Next diagnostic' })
 map('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Show diagnostic' })
 map('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Diagnostic list' })
 
