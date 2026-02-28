@@ -45,10 +45,16 @@ apt_install() {
         build-essential
         curl
         git
+        libbz2-dev
+        libffi-dev
+        liblzma-dev
         libreadline-dev
+        libsqlite3-dev
+        libssl-dev
         stow
         unzip
         wget
+        zlib1g-dev
         dconf-cli
         uuid-runtime
     )
@@ -85,7 +91,7 @@ install_docker() {
     sudo tee /etc/apt/sources.list.d/docker.sources >/dev/null <<REPO
 Types: deb
 URIs: https://download.docker.com/linux/debian
-Suites: $(. /etc/os-release && echo "$VERSION_CODENAME")
+Suites: $(. /etc/os-release && echo "${VERSION_CODENAME:-bookworm}")
 Components: stable
 Signed-By: /etc/apt/keyrings/docker.asc
 REPO
@@ -249,7 +255,7 @@ install_gogh_theme() {
     profiles_before=$(dconf read /org/gnome/terminal/legacy/profiles:/list 2>/dev/null || echo "[]")
 
     # Install Gruvbox Dark via Gogh
-    TERMINAL=gnome-terminal bash -c "$(wget -qO- https://git.io/vQgMr)" -- "Gruvbox Dark"
+    TERMINAL=gnome-terminal bash -c "$(wget -qO- https://raw.githubusercontent.com/Gogh-Co/Gogh/master/gogh.sh)" -- "Gruvbox Dark"
 
     # Detect the newly created profile UUID
     local profiles_after
@@ -276,8 +282,9 @@ main() {
     info "DOTFILES_DIR=$DOTFILES_DIR"
     echo
 
-    # Prompt for sudo once (some steps need it)
+    # Prompt for sudo once and keep it alive in the background
     sudo -v
+    while true; do sudo -n true; sleep 55; kill -0 "$$" || exit; done 2>/dev/null &
 
     apt_install
 

@@ -16,6 +16,9 @@ lua    = "5.1"
 node   = "latest"
 python = "latest"
 
+# uv — fast Python package manager (required by pipx: backend)
+uv = "latest"
+
 # ── Cloud & Infrastructure ───────────────────────────────────────────────────
 
 # AWS CLI v2
@@ -35,7 +38,10 @@ kind = "latest"
 # Kubernetes package manager
 helm = "latest"
 
-# ── Editor & CLI Utilities ───────────────────────────────────────────────────
+# ── Terminal & Editor ────────────────────────────────────────────────────────
+
+# tmux — terminal multiplexer (builds from tmux/tmux-builds releases)
+"github:tmux/tmux-builds" = "latest"
 
 # Neovim
 "github:neovim/neovim" = "latest"
@@ -59,9 +65,6 @@ usage = "latest"
 
 # Neovim Node.js client (required by nvim Node.js provider)
 "npm:neovim" = "latest"
-
-# uv — fast Python package manager (required by pipx: backend)
-uv = "latest"
 
 # ── pip Global Tools ────────────────────────────────────────────────────────
 

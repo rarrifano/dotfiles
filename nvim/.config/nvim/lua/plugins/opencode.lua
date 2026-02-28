@@ -6,8 +6,6 @@ return {
         ---@type opencode.Opts
         vim.g.opencode_opts = {}
 
-        vim.o.autoread = true
-
         local map = vim.keymap.set
         map({ 'n', 'x' }, '<leader>oa', function() require('opencode').ask('@this: ', { submit = true }) end, { desc = 'Ask opencode' })
         map({ 'n', 'x' }, '<leader>os', function() require('opencode').select() end, { desc = 'Opencode select' })

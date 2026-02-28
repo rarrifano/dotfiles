@@ -1,6 +1,7 @@
 -- LuaSnip snippets for DevOps
 return {
     'L3MON4D3/LuaSnip',
+    event = 'InsertEnter',
     config = function()
         local ls = require('luasnip')
         local s, t, i = ls.snippet, ls.text_node, ls.insert_node

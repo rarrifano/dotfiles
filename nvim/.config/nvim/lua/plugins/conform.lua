@@ -4,13 +4,15 @@ return {
     event = 'BufWritePre',
     opts = {
         formatters_by_ft = {
-            yaml = { 'prettier' },
+            hcl = { 'terraform_fmt' },
             json = { 'prettier' },
+            lua = { 'stylua' },
+            markdown = { 'prettier' }, -- manual only: format-on-save disabled for markdown
+            python = { 'black' },
             sh = { 'shfmt' },
             terraform = { 'terraform_fmt' },
-            python = { 'black' },
-            markdown = { 'prettier' }, -- manual only: format-on-save disabled for markdown
-            lua = { 'stylua' },
+            toml = { 'taplo' },
+            yaml = { 'prettier' },
         },
         format_on_save = function(bufnr)
             if vim.tbl_contains({ 'gitcommit', 'markdown' }, vim.bo[bufnr].filetype) then

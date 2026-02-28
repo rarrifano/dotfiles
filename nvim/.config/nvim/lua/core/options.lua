@@ -11,7 +11,6 @@ opt.mouse = ''
 opt.clipboard = ''
 opt.undofile = true
 opt.swapfile = false
-opt.termguicolors = true
 opt.tabstop = 4
 opt.shiftwidth = 4
 opt.expandtab = true

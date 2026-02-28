@@ -7,14 +7,22 @@ case $- in
       *) return;;
 esac
 
+# ----- mise -----
+# Activate early so all mise-managed tools are on PATH for the rest of .bashrc
+export PATH="$HOME/.local/bin:$PATH"
+eval "$(mise activate bash)"
+eval "$(mise completion bash)"
+
 # ----- History Settings -----
 HISTCONTROL=ignoreboth
-HISTSIZE=1000
-HISTFILESIZE=2000
+HISTSIZE=50000
+HISTFILESIZE=100000
+HISTTIMEFORMAT='%F %T  '
 shopt -s histappend
 
-# ----- Window Size -----
+# ----- Shell Options -----
 shopt -s checkwinsize
+shopt -s globstar cdspell dirspell
 
 # ----- Chroot for Prompt -----
 if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
@@ -65,14 +73,10 @@ alias la='ls -A'
 alias ll='ls -l'
 alias tf='terraform'
 
-# Bash completion for kubectl alias
-complete -F __start_kubectl k
-
 # ----- Exports -----
-export PATH="$PATH:$HOME/.go/bin/"
-export GOPATH="$HOME/.go"
+export PATH="${GOPATH:-$HOME/go}/bin:$PATH"
 export EDITOR=nvim
-export DOCKER_HOST=unix:///run/user/1000/docker.sock
+export DOCKER_HOST=unix://${XDG_RUNTIME_DIR}/docker.sock
 
 # Source extra aliases if present
 if [ -f ~/.bash_aliases ]; then
@@ -87,9 +91,3 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-eval "$(~/.local/bin/mise activate bash)"
-eval "$(mise completion bash)"

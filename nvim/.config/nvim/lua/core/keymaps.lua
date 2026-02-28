@@ -1,13 +1,18 @@
 -- Keymaps
 
 local map = vim.keymap.set
-local opts = { noremap = true, silent = true }
 
 -- Window navigation with Alt+hjkl
-map('n', '<A-h>', '<C-w>h', opts)
-map('n', '<A-j>', '<C-w>j', opts)
-map('n', '<A-k>', '<C-w>k', opts)
-map('n', '<A-l>', '<C-w>l', opts)
+map('n', '<A-h>', '<C-w>h', { desc = 'Window left' })
+map('n', '<A-j>', '<C-w>j', { desc = 'Window down' })
+map('n', '<A-k>', '<C-w>k', { desc = 'Window up' })
+map('n', '<A-l>', '<C-w>l', { desc = 'Window right' })
+
+-- Clear search highlight
+map('n', '<Esc>', '<cmd>nohlsearch<CR>', { desc = 'Clear search highlight' })
+
+-- Close buffer
+map('n', '<leader>x', '<cmd>bdelete<CR>', { desc = 'Close buffer' })
 
 -- Git
 map('n', '<leader>gs', '<cmd>Telescope git_status<CR>', { desc = 'Git status' })
@@ -36,14 +41,14 @@ map('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Show diagnostic' })
 map('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Diagnostic list' })
 
 -- Clipboard
-map('n', '<leader>y', '"+y', { noremap = true, desc = 'Yank to system clipboard' })
-map('v', '<leader>y', '"+y', { noremap = true, desc = 'Yank selection to system clipboard' })
-map('n', '<leader>Y', '"+Y', { noremap = true, desc = 'Yank line to system clipboard' })
+map('n', '<leader>y', '"+y', { desc = 'Yank to system clipboard' })
+map('v', '<leader>y', '"+y', { desc = 'Yank selection to system clipboard' })
+map('n', '<leader>Y', '"+Y', { desc = 'Yank line to system clipboard' })
 
-map('n', '<leader>p', '"+p', { noremap = true, desc = 'Paste from system clipboard' })
-map('n', '<leader>P', '"+P', { noremap = true, desc = 'Paste before from system clipboard' })
-map('v', '<leader>p', '"+p', { noremap = true, desc = 'Paste from system clipboard in visual mode' })
+map('n', '<leader>p', '"+p', { desc = 'Paste from system clipboard' })
+map('n', '<leader>P', '"+P', { desc = 'Paste before from system clipboard' })
+map('v', '<leader>p', '"+p', { desc = 'Paste from system clipboard in visual mode' })
 
-map('n', '<leader>d', '"_d', { noremap = true, desc = 'Delete without yanking' })
-map('v', '<leader>d', '"_d', { noremap = true, desc = 'Delete selection without yanking' })
-map('n', '<leader>D', '"_D', { noremap = true, desc = 'Delete line without yanking' })
+map('n', '<leader>d', '"_d', { desc = 'Delete without yanking' })
+map('v', '<leader>d', '"_d', { desc = 'Delete selection without yanking' })
+map('n', '<leader>D', '"_D', { desc = 'Delete line without yanking' })
