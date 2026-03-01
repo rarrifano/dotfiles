@@ -1,6 +1,6 @@
 [tools]
-go = "latest"
+go = "1.26"
 lua = "5.1"
-node = "latest"
-python = "latest"
+node = "25.7"
+python = "3.14"
 usage = "latest"
