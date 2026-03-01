@@ -99,14 +99,14 @@ case "$ACTION" in
                 backup_conflicts "$pkg"
             fi
             info "Stowing $pkg"
-            stow --dir="$DOTFILES_DIR" --target="$HOME" "${STOW_OPTS[@]}" "$pkg"
+            stow --dir="$DOTFILES_DIR" --target="$HOME" --adopt "${STOW_OPTS[@]}" "$pkg"
             ok "$pkg"
         done
         ;;
     unstow)
         for pkg in "${PACKAGES[@]}"; do
             info "Unstowing $pkg"
-            stow --dir="$DOTFILES_DIR" --target="$HOME" "${STOW_OPTS[@]}" -D "$pkg"
+            stow --dir="$DOTFILES_DIR" --target="$HOME" --adopt "${STOW_OPTS[@]}" -D "$pkg"
             ok "$pkg"
         done
         ;;
@@ -116,7 +116,7 @@ case "$ACTION" in
                 backup_conflicts "$pkg"
             fi
             info "Restowing $pkg"
-            stow --dir="$DOTFILES_DIR" --target="$HOME" "${STOW_OPTS[@]}" -R "$pkg"
+            stow --dir="$DOTFILES_DIR" --target="$HOME" --adopt "${STOW_OPTS[@]}" -R "$pkg"
             ok "$pkg"
         done
         ;;
