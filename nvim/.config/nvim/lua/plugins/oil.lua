@@ -4,5 +4,9 @@ return {
     keys = {
         { '-', function() require('oil').open() end, desc = 'Open file browser' },
     },
-    opts = {},
+    opts = {
+        view_options = {
+            show_hidden = true,
+        },
+    },
 }
