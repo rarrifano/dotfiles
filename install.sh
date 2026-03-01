@@ -26,10 +26,10 @@ EOF
     exit 0
 }
 
-info()  { printf '\033[1;34m::\033[0m %s\n' "$*"; }
-ok()    { printf '\033[1;32m✓\033[0m  %s\n' "$*"; }
-warn()  { printf '\033[1;33m!\033[0m  %s\n' "$*"; }
-err()   { printf '\033[1;31m✗\033[0m  %s\n' "$*" >&2; }
+info()  { printf '\033[1;34m[INFO]\033[0m %s\n' "$*"; }
+ok()    { printf '\033[1;32m[OK]\033[0m %s\n' "$*"; }
+warn()  { printf '\033[1;33m[WARN]\033[0m %s\n' "$*"; }
+err()   { printf '\033[1;31m[ERROR]\033[0m %s\n' "$*" >&2; }
 
 check_deps() {
     if ! command -v stow &>/dev/null; then
@@ -37,6 +37,22 @@ check_deps() {
         echo "  Install it with: sudo apt install stow"
         exit 1
     fi
+}
+
+is_stow_managed() {
+    local path="$1"
+    local check="$path"
+    while [[ "$check" != "$HOME" && "$check" != "/" ]]; do
+        if [[ -L "$check" ]]; then
+            local link_target
+            link_target="$(readlink -f "$check")"
+            if [[ "$link_target" == "$DOTFILES_DIR"/* ]]; then
+                return 0
+            fi
+        fi
+        check="$(dirname "$check")"
+    done
+    return 1
 }
 
 backup_conflicts() {
@@ -47,7 +63,7 @@ backup_conflicts() {
         local rel="${file#"$pkg_dir"/}"
         local target="$HOME/$rel"
 
-        if [[ -e "$target" && ! -L "$target" ]]; then
+        if [[ -e "$target" ]] && ! is_stow_managed "$target"; then
             local backup_path="$BACKUP_DIR/$pkg/$rel"
             mkdir -p "$(dirname "$backup_path")"
             mv "$target" "$backup_path"
@@ -99,14 +115,14 @@ case "$ACTION" in
                 backup_conflicts "$pkg"
             fi
             info "Stowing $pkg"
-            stow --dir="$DOTFILES_DIR" --target="$HOME" --adopt "${STOW_OPTS[@]}" "$pkg"
+            stow --dir="$DOTFILES_DIR" --target="$HOME" "${STOW_OPTS[@]}" "$pkg"
             ok "$pkg"
         done
         ;;
     unstow)
         for pkg in "${PACKAGES[@]}"; do
             info "Unstowing $pkg"
-            stow --dir="$DOTFILES_DIR" --target="$HOME" --adopt "${STOW_OPTS[@]}" -D "$pkg"
+            stow --dir="$DOTFILES_DIR" --target="$HOME" "${STOW_OPTS[@]}" -D "$pkg"
             ok "$pkg"
         done
         ;;
@@ -116,7 +132,7 @@ case "$ACTION" in
                 backup_conflicts "$pkg"
             fi
             info "Restowing $pkg"
-            stow --dir="$DOTFILES_DIR" --target="$HOME" --adopt "${STOW_OPTS[@]}" -R "$pkg"
+            stow --dir="$DOTFILES_DIR" --target="$HOME" "${STOW_OPTS[@]}" -R "$pkg"
             ok "$pkg"
         done
         ;;
