@@ -2,5 +2,6 @@
 go = "1.26"
 lua = "5.1"
 node = "25.7"
+opencode = "latest"
 python = "3.14"
 usage = "latest"
