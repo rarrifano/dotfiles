@@ -1,7 +1,8 @@
 [tools]
+aws = { version = "latest", symlink_bins = "true" }
 go = "latest"
+kubectl = "latest"
 lua = "5.1"
-node = "lts"
 opencode = "latest"
 python = "latest"
 terraform = "latest"
