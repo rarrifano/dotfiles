@@ -2,12 +2,6 @@
 
 local map = vim.keymap.set
 
--- Window navigation with Alt+hjkl
-map('n', '<A-h>', '<C-w>h', { desc = 'Window left' })
-map('n', '<A-j>', '<C-w>j', { desc = 'Window down' })
-map('n', '<A-k>', '<C-w>k', { desc = 'Window up' })
-map('n', '<A-l>', '<C-w>l', { desc = 'Window right' })
-
 -- Clear search highlight
 map('n', '<Esc>', '<cmd>nohlsearch<CR>', { desc = 'Clear search highlight' })
 

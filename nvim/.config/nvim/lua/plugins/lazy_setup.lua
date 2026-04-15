@@ -13,4 +13,5 @@ return {
     require('plugins.oil'),
     require('plugins.autopairs'),
     require('plugins.opencode'),
+    require('plugins.tmux'),
 }
