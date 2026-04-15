@@ -1,7 +1,8 @@
 [tools]
-go = "1.26"
+go = "latest"
 lua = "5.1"
-node = "25.7"
+node = "lts"
 opencode = "latest"
-python = "3.14"
+python = "latest"
+terraform = "latest"
 usage = "latest"
