@@ -3,6 +3,7 @@ aws = { version = "latest", symlink_bins = "true" }
 go = "latest"
 kubectl = "latest"
 lua = "5.1"
+node = "latest"
 opencode = "latest"
 python = "latest"
 terraform = "latest"
