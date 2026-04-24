@@ -53,10 +53,10 @@ return {
   -- ── vim-fugitive: Git command suite ──────────────────────────────────────
   {
     "tpope/vim-fugitive",
-    cmd = { "G", "Git", "Gdiffsplit", "Gread", "Gwrite", "Glog", "Gclog" },
+    cmd = { "G", "Git", "Gdiffsplit", "Gvdiffsplit", "Gread", "Gwrite", "Glog", "Gclog" },
     keys = {
       { "<leader>gg", "<cmd>Git<cr>",       desc = "Git status (fugitive)" },
-      { "<leader>gd", "<cmd>Gdiffsplit<cr>", desc = "Git diff split" },
+      { "<leader>gd", "<cmd>Gvdiffsplit<cr>", desc = "Git diff vertical split" },
     },
   },
 }
