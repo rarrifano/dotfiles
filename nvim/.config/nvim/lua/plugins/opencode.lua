@@ -18,10 +18,8 @@ return {
       },
     },
     cmd = { "Opencode", "OpencodeAsk", "OpencodeToggle" },
-    opts = {
-      -- Require: `autoread` so edited buffers reload automatically
-      -- (set globally below via init)
-    },
+    -- opencode.nvim has no setup() function; disable lazy's auto-setup call
+    config = false,
     init = function()
       -- Required by opencode.nvim: auto-reload buffers changed on disk
       vim.o.autoread = true
