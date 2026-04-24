@@ -76,6 +76,7 @@ alias tf='terraform'
 # ----- Exports -----
 export PATH="${GOPATH:-$HOME/go}/bin:$PATH"
 export EDITOR=nvim
+export COLORTERM=truecolor   # enables termguicolors in nvim (24-bit RGB)
 export DOCKER_HOST=unix://${XDG_RUNTIME_DIR}/docker.sock
 
 # Source extra aliases if present

@@ -1,20 +1,22 @@
--- Seamless navigation between nvim splits and tmux panes
 return {
-    'numToStr/Navigator.nvim',
+  {
+    "mrjones2014/smart-splits.nvim",
     lazy = false,
-    opts = {
-        auto_save = nil,
-        disable_on_zoom = false,
-    },
-    config = function(_, opts)
-        require('Navigator').setup(opts)
+    config = function()
+      local ss = require("smart-splits")
+      local map = vim.keymap.set
 
-        local map = vim.keymap.set
-        local nav = require('Navigator')
+      -- Move between nvim splits and tmux panes seamlessly
+      map({ "n", "t" }, "<A-h>", ss.move_cursor_left,  { desc = "Move to left split/pane" })
+      map({ "n", "t" }, "<A-j>", ss.move_cursor_down,  { desc = "Move to lower split/pane" })
+      map({ "n", "t" }, "<A-k>", ss.move_cursor_up,    { desc = "Move to upper split/pane" })
+      map({ "n", "t" }, "<A-l>", ss.move_cursor_right, { desc = "Move to right split/pane" })
 
-        map({ 'n', 't' }, '<A-h>', nav.left,  { desc = 'Navigate left (nvim/tmux)' })
-        map({ 'n', 't' }, '<A-j>', nav.down,  { desc = 'Navigate down (nvim/tmux)' })
-        map({ 'n', 't' }, '<A-k>', nav.up,    { desc = 'Navigate up (nvim/tmux)' })
-        map({ 'n', 't' }, '<A-l>', nav.right, { desc = 'Navigate right (nvim/tmux)' })
+      -- Resize splits with Alt+arrows
+      map("n", "<A-Left>",  ss.resize_left,  { desc = "Resize split left" })
+      map("n", "<A-Down>",  ss.resize_down,  { desc = "Resize split down" })
+      map("n", "<A-Up>",    ss.resize_up,    { desc = "Resize split up" })
+      map("n", "<A-Right>", ss.resize_right, { desc = "Resize split right" })
     end,
+  },
 }
