@@ -66,6 +66,20 @@ return {
     },
   },
 
+  -- ── dressing.nvim: float for vim.ui.input / vim.ui.select ────────────────
+  {
+    "stevearc/dressing.nvim",
+    event = "VeryLazy",
+    opts = {
+      input = {
+        enabled      = true,
+        border       = "rounded",
+        win_options  = { winblend = 0 },
+      },
+      select = { enabled = true },
+    },
+  },
+
   -- ── mason-conform: auto-install formatters ────────────────────────────────
   {
     "zapling/mason-conform.nvim",
