@@ -79,7 +79,7 @@ taplo check mise/.config/mise/config.toml
 |------------------|-------------------------------------------------------------|
 | `dap.lua`        | Debug adapters (nvim-dap, dap-ui, mason-nvim-dap; Go/Python/Bash) |
 | `editing.lua`    | mini.comment, mini.surround, mini.pairs, conform (format-on-save) |
-| `fzf.lua`        | Fuzzy finder (fzf-lua — **not** Telescope)                  |
+| `fzf.lua`        | Fuzzy finder (fzf-lua — **not** Telescope); `<leader>*` (visual) greps selection via `grep_visual` |
 | `git.lua`        | Gitsigns + Fugitive                                         |
 | `lsp.lua`        | LSP servers (Mason + lspconfig)                             |
 | `opencode.lua`   | OpenCode AI integration                                     |
