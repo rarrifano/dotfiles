@@ -1,35 +1,17 @@
 {
   "$schema": "https://opencode.ai/config.json",
 
-  // -- Model Defaults --
-  // claude-sonnet-4-5 is the current best balance of capability and speed for DevOps tasks:
-  // strong at Terraform, HCL, YAML, shell scripting, and reasoning about infra.
-  // small_model handles cheap tasks like title generation.
+  // -- Model --
   "model": "github-copilot/claude-sonnet-4-5",
-  "small_model": "github-copilot/claude-sonnet-4-5",
-
-  // -- Provider Restriction --
-  // Lock to GitHub Copilot so only authenticated provider is used.
   "enabled_providers": ["github-copilot"],
 
   // -- Identity --
   "username": "rarrifano",
-
-  // -- Sharing --
-  // Manual sharing only; never auto-share sessions.
   "share": "manual",
-
-  // -- Autoupdate --
   "autoupdate": true,
-
-  // -- Snapshots --
-  // Keep snapshots enabled so /undo works reliably while editing infra files.
   "snapshot": true,
 
   // -- Compaction --
-  // Auto-compact when context fills up (common in long IaC sessions).
-  // prune=true removes old tool outputs to save tokens.
-  // reserved=10000 ensures there is headroom before the context window overflows.
   "compaction": {
     "auto": true,
     "prune": true,
@@ -37,85 +19,57 @@
   },
 
   // -- Watcher --
-  // Ignore generated, vendor, and runtime-state directories that are not
-  // source-controlled. Includes common DevOps artifact paths.
   "watcher": {
     "ignore": [
       "node_modules/**",
+      ".git/**",
       "dist/**",
       "build/**",
-      ".git/**",
-      ".next/**",
-      ".nuxt/**",
-      ".output/**",
       "coverage/**",
-      ".turbo/**",
-      "*.lock",
       "vendor/**",
       "__pycache__/**",
       ".venv/**",
-      "target/**",
-      // Terraform/OpenTofu state and provider cache
       ".terraform/**",
-      ".terraform.lock.hcl",
       "*.tfstate",
       "*.tfstate.backup",
-      ".terragrunt-cache/**",
-      // Helm chart dependencies
-      "charts/**",
-      // Ansible retry files
-      "*.retry",
-      // Go module cache
-      "pkg/mod/**"
+      ".terragrunt-cache/**"
     ]
   },
 
-  // -- Permissions (Permissive with safety guards) --
-  // Allow most operations by default but gate destructive infra commands.
-  // DevOps-specific additions: kubectl delete, terraform destroy, aws * delete.
+  // -- Permissions --
   "permission": {
     "*": "allow",
     "bash": {
       "*": "allow",
-      // Filesystem destruction
       "rm -rf *": "ask",
       "rm -r *": "ask",
-      // Git safety
       "git push --force*": "deny",
       "git push * --force*": "deny",
       "git reset --hard*": "ask",
       "git clean*": "ask",
-      // Privilege escalation
       "sudo *": "ask",
       "chmod *": "ask",
       "chown *": "ask",
-      // Pipe-to-shell (supply chain risk)
       "curl * | bash*": "deny",
       "curl * | sh*": "deny",
       "wget * | bash*": "deny",
-      // Terraform: destructive operations need confirmation
       "terraform destroy*": "ask",
       "tofu destroy*": "ask",
       "terraform apply*": "ask",
       "tofu apply*": "ask",
-      // Kubernetes: deletions need confirmation
       "kubectl delete *": "ask",
       "kubectl drain *": "ask",
       "kubectl cordon *": "ask",
-      // AWS CLI: delete/destroy actions
       "aws * delete*": "ask",
       "aws * terminate*": "ask",
-      // Docker: prune operations can be lossy
       "docker system prune*": "ask",
       "docker volume prune*": "ask",
-      // Helm: uninstall/rollback need confirmation
       "helm uninstall *": "ask",
       "helm rollback *": "ask"
     },
     "edit": "allow",
     "read": {
       "*": "allow",
-      // Never read plain .env files (may contain secrets)
       "*.env": "deny",
       "*.env.*": "deny",
       "*.env.example": "allow"
@@ -126,20 +80,18 @@
   },
 
   // -- Agents --
-  // Override built-in agents with DevOps-tuned system prompts.
   "agent": {
     "build": {
-      "description": "Full-access agent for implementing DevOps changes",
+      "description": "Implement changes",
       "mode": "primary",
-      "prompt": "You are a senior DevOps/Platform engineer. You write clean, idiomatic infrastructure code following best practices for Terraform, Helm, Kubernetes, Docker, GitHub Actions, and shell scripting. Always follow existing project conventions and formatting. Validate your changes are syntactically correct before finishing. Prefer minimal, targeted changes over large refactors unless explicitly asked."
+      "prompt": "Senior DevOps/Platform engineer. Follow existing conventions, prefer minimal targeted changes, validate syntax before finishing."
     },
     "plan": {
-      "description": "Read-only agent for planning and reviewing infra changes",
+      "description": "Plan and review changes",
       "mode": "primary",
       "temperature": 0.1,
-      "prompt": "You are a senior infrastructure architect. Analyze infrastructure and configuration thoroughly before suggesting changes. Consider blast radius, security implications, cost, idempotency, and drift risk. Provide clear, actionable plans with step-by-step reasoning. Do not make changes — only plan and advise."
+      "prompt": "Senior infrastructure architect. Consider blast radius, security, cost, idempotency, and drift risk. Plan only — do not make changes."
     },
-    // DevOps-specific subagents
     "security": {
       "description": "Reviews infrastructure and config for security issues",
       "mode": "subagent",
@@ -152,14 +104,12 @@
           "git diff*": "allow",
           "git log*": "allow",
           "grep *": "allow",
-          "find *": "allow",
-          "cat *": "allow",
           "trivy *": "allow",
           "checkov *": "allow",
           "tfsec *": "allow"
         }
       },
-      "prompt": "You are a cloud security engineer specializing in DevSecOps. Review infrastructure code (Terraform, Helm, Dockerfiles, CI/CD pipelines, shell scripts, IAM policies) for security vulnerabilities. Check for: overly permissive IAM roles, exposed secrets or credentials, insecure network policies, missing encryption, privilege escalation paths, supply-chain risks (base images, third-party actions), and CIS/NIST benchmark violations. Provide specific remediation steps with code examples. Do NOT modify files — report only."
+      "prompt": "Cloud security engineer. Review infrastructure code for vulnerabilities and misconfigurations. Provide specific remediation steps. Do NOT modify files — report only."
     },
     "cost": {
       "description": "Analyzes infrastructure for cost optimization opportunities",
@@ -168,140 +118,92 @@
       "temperature": 0.1,
       "permission": {
         "edit": "deny",
-        "bash": {
-          "*": "deny",
-          "grep *": "allow",
-          "cat *": "allow",
-          "find *": "allow"
-        }
+        "bash": { "*": "deny" }
       },
-      "prompt": "You are a cloud cost optimization engineer. Analyze infrastructure-as-code (Terraform, CloudFormation, Kubernetes manifests, Helm charts) for cost inefficiencies. Look for: over-provisioned resources, unused/idle resources, missing autoscaling, expensive instance types where cheaper alternatives exist, data transfer costs, storage tiering opportunities, reserved/spot instance candidates, and orphaned resources. Provide specific, actionable recommendations with estimated savings. Do NOT modify files."
+      "prompt": "Cloud cost optimization engineer. Analyze IaC for cost inefficiencies and over-provisioning. Provide actionable recommendations with estimated savings. Do NOT modify files."
     }
   },
 
-  // -- Custom Commands --
-  // DevOps-oriented slash commands available globally in any session.
+  // -- Commands --
   "command": {
-    // General engineering
     "test": {
-      "template": "Run the test suite for this project. Identify the test framework being used, run the tests, and report any failures with suggested fixes.",
-      "description": "Run project tests and fix failures"
+      "description": "Run project tests and fix failures",
+      "template": "Identify the test framework, run the tests, and report any failures with suggested fixes."
     },
     "review": {
-      "template": "Review the recent changes in this project. Run `git diff` to see unstaged changes and `git diff --cached` for staged changes. Provide a thorough code review covering: correctness, edge cases, security, performance, and readability. Suggest specific improvements.",
       "description": "Code review of recent changes",
+      "template": "Run `git diff` and `git diff --cached`. Review for correctness, edge cases, security, performance, and readability.",
       "agent": "plan"
     },
     "commit": {
-      "template": "Review all staged and unstaged changes, then create a well-crafted git commit. Follow conventional commit format (type(scope): description). Ask me to confirm the commit message before committing.",
-      "description": "Smart commit with conventional message"
+      "description": "Smart commit with conventional message",
+      "template": "Review all staged and unstaged changes, draft a conventional commit message (type(scope): description), ask me to confirm, then commit."
     },
     "fix": {
-      "template": "Analyze the error or issue described in: $ARGUMENTS. Find the root cause, explain it, and implement a fix.",
-      "description": "Diagnose and fix an error"
+      "description": "Diagnose and fix an error",
+      "template": "Analyze the error in: $ARGUMENTS. Find the root cause, explain it, and implement a fix."
     },
     "refactor": {
-      "template": "Refactor the code in $ARGUMENTS. Improve readability, reduce complexity, and follow best practices while preserving behavior. Explain the changes made.",
-      "description": "Refactor specified code"
+      "description": "Refactor specified code",
+      "template": "Refactor $ARGUMENTS. Improve readability and reduce complexity while preserving behavior."
     },
     "explain": {
-      "template": "Explain the code in $ARGUMENTS in detail. Cover the purpose, how it works, key patterns used, and any notable design decisions.",
       "description": "Explain code in detail",
+      "template": "Explain $ARGUMENTS: purpose, how it works, key patterns, and notable design decisions.",
       "agent": "plan"
     },
-    "deps": {
-      "template": "Check for outdated dependencies in this project. List which packages have updates available and whether they are major, minor, or patch updates. Recommend which ones are safe to update.",
-      "description": "Check for outdated dependencies",
-      "agent": "plan"
-    },
-    // DevOps-specific commands
     "tf-plan": {
-      "template": "Review the Terraform/OpenTofu configuration in this directory. Run `terraform validate` to check syntax, then explain what `terraform plan` would change. Highlight any resources that will be destroyed or replaced, and flag any security or cost concerns.",
-      "description": "Validate and explain Terraform plan"
+      "description": "Validate and explain Terraform plan",
+      "template": "Run `terraform validate`, explain what `terraform plan` would change, highlight destroys/replacements, and flag security or cost concerns."
     },
     "tf-docs": {
-      "template": "Generate or update documentation for the Terraform module in $ARGUMENTS (or current directory if no argument). Create/update README.md with: module description, inputs table (name, type, description, default, required), outputs table, and usage example. Follow terraform-docs conventions.",
-      "description": "Generate Terraform module docs"
-    },
-    "helm-lint": {
-      "template": "Lint and review the Helm chart in $ARGUMENTS (or current directory). Run `helm lint` if available, check values.yaml for completeness, verify template syntax, and suggest improvements for production-readiness (resource limits, probes, security contexts, etc.).",
-      "description": "Lint and review a Helm chart"
+      "description": "Generate Terraform module docs",
+      "template": "Generate or update README.md for the Terraform module in $ARGUMENTS with: description, inputs table, outputs table, and usage example."
     },
     "docker-review": {
-      "template": "Review the Dockerfile in $ARGUMENTS (or current directory) for best practices: multi-stage builds, layer caching optimization, non-root user, minimal base image, secret handling, .dockerignore coverage, and image size. Suggest specific improvements.",
-      "description": "Review Dockerfile for best practices"
+      "description": "Review Dockerfile for best practices",
+      "template": "Review the Dockerfile in $ARGUMENTS for: multi-stage builds, layer caching, non-root user, minimal base image, secret handling, and .dockerignore coverage."
     },
     "cicd-review": {
-      "template": "Review the CI/CD pipeline configuration in $ARGUMENTS (GitHub Actions workflow, GitLab CI, Jenkinsfile, etc.). Check for: security issues (secrets exposure, pinned action versions), performance (caching, parallelism), correctness, and best practices. Suggest improvements.",
-      "description": "Review CI/CD pipeline config"
+      "description": "Review CI/CD pipeline config",
+      "template": "Review the CI/CD config in $ARGUMENTS for: secrets exposure, pinned action versions, caching, parallelism, and correctness."
     },
     "k8s-review": {
-      "template": "Review the Kubernetes manifests in $ARGUMENTS (or current directory) for production-readiness: resource requests/limits, liveness/readiness probes, security contexts (non-root, read-only filesystem, dropped capabilities), pod disruption budgets, horizontal pod autoscalers, and RBAC. Suggest specific fixes.",
-      "description": "Review Kubernetes manifests"
+      "description": "Review Kubernetes manifests",
+      "template": "Review Kubernetes manifests in $ARGUMENTS for: resource limits, probes, security contexts, PDBs, HPAs, and RBAC."
     },
     "shell-review": {
-      "template": "Review the shell script in $ARGUMENTS for best practices: set -euo pipefail, quoting, error handling, portability, security (injection risks, temp file handling), and readability. Run shellcheck analysis if available. Provide a corrected version.",
-      "description": "Review and lint a shell script"
+      "description": "Review and lint a shell script",
+      "template": "Review $ARGUMENTS for: set -euo pipefail, quoting, error handling, security risks, and readability. Run shellcheck if available."
     },
     "sec-scan": {
-      "template": "Perform a security review of the infrastructure code in this project. Check Terraform for IAM over-permissioning, public S3 buckets, missing encryption; Dockerfiles for privileged containers, secrets baked in; Kubernetes manifests for privileged pods, missing network policies; CI/CD for secret exposure. Prioritize findings by severity.",
       "description": "Security scan of infra code",
+      "template": "Security review of this project's infrastructure code. Prioritize findings by severity.",
       "agent": "security"
     },
     "runbook": {
-      "template": "Create a runbook for $ARGUMENTS. Include: overview, prerequisites, step-by-step instructions, expected outcomes at each step, rollback procedure, and troubleshooting tips. Format as Markdown suitable for a team wiki.",
-      "description": "Generate an operational runbook"
+      "description": "Generate an operational runbook",
+      "template": "Create a runbook for $ARGUMENTS: overview, prerequisites, step-by-step instructions, expected outcomes, rollback procedure, and troubleshooting."
     },
     "incident": {
-      "template": "Help me with an incident involving: $ARGUMENTS. Suggest immediate mitigation steps, diagnostic commands to run, and questions to investigate. Format output as a structured incident response checklist.",
       "description": "Incident response checklist",
+      "template": "Incident involving: $ARGUMENTS. Provide immediate mitigation steps, diagnostic commands, and a structured response checklist.",
       "agent": "plan"
     }
   },
 
   // -- Instructions --
-  // Load project-level AGENTS.md and other rule files automatically.
-  "instructions": [
-    "AGENTS.md",
-    "CONTRIBUTING.md",
-    ".cursor/rules/*.md",
-    ".github/copilot-instructions.md"
-  ],
-
-  // -- Plugins --
-  "plugin": ["@franlol/opencode-md-table-formatter@latest"],
+  "instructions": ["AGENTS.md"],
 
   // -- MCP Servers --
-  // Commented-out examples of useful DevOps MCP servers.
-  // Uncomment and authenticate with `opencode mcp auth <name>` to use.
   "mcp": {
-    // GitHub integration — search issues, PRs, code. High token usage; use selectively.
-    // "github": {
-    //   "type": "local",
-    //   "command": ["npx", "-y", "@modelcontextprotocol/server-github"],
-    //   "enabled": false,
-    //   "environment": {
-    //     "GITHUB_PERSONAL_ACCESS_TOKEN": "{env:GITHUB_TOKEN}"
-    //   }
-    // },
-    // Context7 — fetch up-to-date docs for Terraform providers, k8s, Helm, etc.
-    // "context7": {
-    //   "type": "remote",
-    //   "url": "https://mcp.context7.com/mcp",
-    //   "enabled": false
-    // },
-    // Grep by Vercel — search real-world code examples on GitHub.
-    // "gh_grep": {
-    //   "type": "remote",
-    //   "url": "https://mcp.grep.app",
-    //   "enabled": false
-    // }
+    // Live docs for Terraform providers, Kubernetes API, Helm, etc.
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp"
+    }
   },
 
-  // -- Experimental --
-  "experimental": {
-    "hook": {
-      "session_completed": []
-    }
-  }
+  // -- Plugins --
+  "plugin": ["@franlol/opencode-md-table-formatter@latest"]
 }

@@ -10,14 +10,14 @@ tests, no build artifacts, no dependencies beyond `stow`.
 
 ### Stow Packages
 
-| Package    | Key Files                                               |
-|------------|---------------------------------------------------------|
-| `bash`     | `.bashrc`                                               |
-| `git`      | `.gitconfig`                                            |
-| `mise`     | `.config/mise/config.toml`                              |
-| `nvim`     | `.config/nvim/init.lua`, `lua/`, `lua/plugins/`        |
-| `opencode` | `.config/opencode/opencode.jsonc`                       |
-| `tmux`     | `.tmux.conf`                                            |
+| Package    | Key Files                                          |
+|------------|----------------------------------------------------|
+| `bash`     | `.bashrc`                                          |
+| `git`      | `.gitconfig`                                       |
+| `mise`     | `.config/mise/config.toml`                         |
+| `nvim`     | `.config/nvim/init.lua`, `lua/`, `lua/plugins/`   |
+| `opencode` | `.config/opencode/opencode.jsonc`                  |
+| `tmux`     | `.tmux.conf`                                       |
 
 ## Commands
 
@@ -37,7 +37,7 @@ luacheck nvim/.config/nvim/
 taplo check mise/.config/mise/config.toml
 ```
 
-**Formatters**: `shfmt` (shell) · `stylua` (Lua) · `taplo` (TOML) · `prettier` (YAML/JSON/MD) · `black` (Python) · `terraform_fmt` (HCL)
+**Formatters**: `shfmt` (shell) · `stylua` (Lua) · `taplo` (TOML) · `prettier` (YAML/JSON/MD)
 
 ## Critical Agent Rules
 
@@ -75,17 +75,51 @@ taplo check mise/.config/mise/config.toml
 
 `lazy_setup.lua` auto-discovers all files in `lua/plugins/` — this table is the authoritative list:
 
-| File             | Purpose                                                     |
-|------------------|-------------------------------------------------------------|
-| `dap.lua`        | Debug adapters (nvim-dap, dap-ui, mason-nvim-dap; Go/Python/Bash) |
-| `editing.lua`    | mini.comment, mini.surround, mini.pairs, conform (format-on-save) |
-| `fzf.lua`        | Fuzzy finder (fzf-lua — **not** Telescope); `<leader>*` (visual) greps selection via `grep_visual` |
-| `git.lua`        | Gitsigns + Fugitive; `<leader>gd` → `Gvdiffsplit` (always vertical — use this, not `Gdiffsplit`) |
-| `lsp.lua`        | LSP servers (Mason + lspconfig)                             |
-| `opencode.lua`   | OpenCode AI integration                                     |
-| `tmux.lua`       | Navigator.nvim — nvim/tmux pane nav                         |
-| `treesitter.lua` | Syntax highlighting                                         |
-| `ui.lua`         | Gruvbox dark theme + lualine statusline                     |
+| File             | Purpose                                                                  |
+|------------------|--------------------------------------------------------------------------|
+| `dap.lua`        | Debug adapters (nvim-dap, dap-ui, mason-nvim-dap; Go/Python/Bash)       |
+| `editing.lua`    | mini.comment, mini.surround, mini.pairs, conform (format-on-save)        |
+| `fzf.lua`        | Fuzzy finder (fzf-lua — **not** Telescope)                                      |
+| `git.lua`        | Gitsigns + Fugitive; `<leader>gd` → `Gvdiffsplit` (always vertical)     |
+| `lsp.lua`        | LSP servers (Mason + lspconfig); LSP keymaps set in `LspAttach` autocmd  |
+| `opencode.lua`   | OpenCode AI integration                                                  |
+| `tmux.lua`       | Navigator.nvim — nvim/tmux pane nav                                      |
+| `treesitter.lua` | Syntax highlighting                                                      |
+| `ui.lua`         | Gruvbox dark theme + lualine statusline                                  |
+
+## Nvim Keymap Reference
+
+`clipboard` is intentionally unset — system clipboard access requires explicit `"+` register mappings.
+
+| Key(s)                  | Mode    | Action                          | Source       |
+|-------------------------|---------|---------------------------------|--------------|
+| `<leader>y` / `Y`       | n / v   | Yank to system clipboard        | keymaps.lua  |
+| `<leader>p`             | n / v   | Paste from system clipboard     | keymaps.lua  |
+| `<leader>e`             | n       | File explorer (netrw)           | keymaps.lua  |
+| `<leader>bd`            | n       | Delete buffer                   | keymaps.lua  |
+| `<leader>R`             | n       | Rename word in file (sed)       | keymaps.lua  |
+| `<leader>r`             | n       | LSP references (fzf picker)     | fzf.lua      |
+| `<leader>f`             | n       | Find files                      | fzf.lua      |
+| `<leader>/`             | n       | Live grep                       | fzf.lua      |
+| `<leader>b`             | n       | Buffers                         | fzf.lua      |
+| `<leader>?`             | n       | Recent files                    | fzf.lua      |
+| `<leader>d`             | n       | Document diagnostics (fzf)      | fzf.lua      |
+| `<leader>gc` / `gs`     | n       | Git commits / status            | fzf.lua      |
+| `<leader>gg`            | n       | Fugitive status                 | git.lua      |
+| `<leader>gd`            | n       | Git diff (vertical split)       | git.lua      |
+| `<leader>gb`            | n       | Blame line                      | git.lua      |
+| `<leader>hs/hr/hp/hS/hd`| n       | Gitsigns hunk actions           | git.lua      |
+| `<leader>ca`            | n       | Code action                     | lsp.lua      |
+| `<leader>rn`            | n       | Rename symbol (LSP)             | lsp.lua      |
+| `<leader>cf`            | n       | Format (conform)                | editing.lua  |
+| `<leader>db/dc/do/di/dO/dq/dr/du` | n | DAP debug actions          | dap.lua      |
+| `gd` / `gD`             | n       | Go to definition / declaration  | lsp.lua      |
+| `gr`                    | n       | References (quickfix fallback)  | lsp.lua      |
+| `gI`                    | n       | Go to implementation            | lsp.lua      |
+| `K`                     | n       | Hover docs                      | lsp.lua      |
+| `[d` / `]d`             | n       | Prev / next diagnostic          | lsp.lua      |
+
+> **Finding all usages of a symbol**: use `<leader>r` (fzf picker with preview) — prefer this over `gr` (raw quickfix).
 
 ## Commit Convention
 
@@ -97,8 +131,8 @@ taplo check mise/.config/mise/config.toml
 
 ## OpenCode Config Notes
 
-- `opencode.jsonc` references `CONTRIBUTING.md`, `.cursor/rules/*.md`, and `.github/copilot-instructions.md` in `instructions` — these files do not exist; OpenCode silently skips missing paths. Creating them will cause them to be auto-loaded.
+- `instructions` loads only `AGENTS.md`.
 - Snapshots enabled (`"snapshot": true`) — `/undo` works reliably.
 - Provider locked to `github-copilot`; model `github-copilot/claude-sonnet-4-5`.
 - Destructive commands (`terraform destroy`, `kubectl delete`, `rm -rf`, etc.) require confirmation (`"ask"`); `git push --force` and pipe-to-shell are denied.
-- MCP servers (github, context7, gh_grep) are defined but commented out — disabled by default.
+- Custom slash commands: `/test`, `/review`, `/commit`, `/fix`, `/refactor`, `/explain`, `/tf-plan`, `/tf-docs`, `/docker-review`, `/cicd-review`, `/k8s-review`, `/shell-review`, `/sec-scan`, `/runbook`, `/incident`.

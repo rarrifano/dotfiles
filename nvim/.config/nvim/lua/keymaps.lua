@@ -23,11 +23,8 @@ map("n", "<Esc>", "<cmd>nohlsearch<CR>")
 map({ "n", "v" }, "<leader>y", '"+y', { desc = "Yank to system clipboard" })
 map("n", "<leader>Y", '"+Y', { desc = "Yank line to system clipboard" })
 
--- Paste without overwriting register
-map("x", "<leader>p", '"_dP', { desc = "Paste without yank" })
-
--- Delete to blackhole (don't pollute yank register)
-map({ "n", "v" }, "<leader>d", '"_d', { desc = "Delete to blackhole" })
+-- Paste from system clipboard
+map({ "n", "v" }, "<leader>p", '"+p', { desc = "Paste from system clipboard" })
 
 -- ── Quickfix ──────────────────────────────────────────────────────────────────
 map("n", "]q", ":cnext<CR>zz", { desc = "Next quickfix" })

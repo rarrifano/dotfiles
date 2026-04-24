@@ -11,7 +11,6 @@ return {
       { "<leader>gc", "<cmd>FzfLua git_commits<cr>",     desc = "Git commits" },
       { "<leader>gs", "<cmd>FzfLua git_status<cr>",      desc = "Git status" },
       { "<leader>d", "<cmd>FzfLua diagnostics_document<cr>", desc = "Document diagnostics" },
-      { "<leader>*", "<cmd>FzfLua grep_visual<cr>", mode = "v", desc = "Grep selected text" },
     },
     opts = {
       winopts = {
