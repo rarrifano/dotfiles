@@ -31,7 +31,6 @@ opt.incsearch = true
 -- Appearance
 opt.termguicolors = true
 opt.signcolumn = "yes"
-opt.colorcolumn = "120"
 opt.cursorline = false
 opt.scrolloff = 8
 opt.sidescrolloff = 8
@@ -45,10 +44,10 @@ opt.swapfile = false
 opt.backup = false
 opt.undofile = true
 opt.undodir = vim.fn.stdpath("data") .. "/undo"
-opt.autoread = true  -- auto-reload files changed on disk (required by opencode.nvim)
+opt.autoread = true -- auto-reload files changed on disk (required by opencode.nvim)
 
 -- Performance
-opt.updatetime = 50   -- faster CursorHold → snappier gitsigns blame + LSP
+opt.updatetime = 50 -- faster CursorHold → snappier gitsigns blame + LSP
 opt.timeoutlen = 400
 
 -- Completion
@@ -63,9 +62,9 @@ opt.mouse = ""
 -- OSC 52 passthrough (tmux: set-clipboard on) handles cross-pane yank.
 
 -- Misc
-opt.showmode = false          -- lualine shows mode
+opt.showmode = false -- lualine shows mode
 opt.showcmd = false
-opt.laststatus = 3            -- global statusline
+opt.laststatus = 3 -- global statusline
 opt.isfname:append("@-@")
-opt.shortmess:append("sI")    -- suppress intro + search messages
+opt.shortmess:append("sI") -- suppress intro + search messages
 opt.fillchars = { eob = " " } -- hide ~ on empty lines
