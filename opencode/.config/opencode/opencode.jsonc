@@ -2,7 +2,7 @@
   "$schema": "https://opencode.ai/config.json",
 
   // -- Model --
-  "model": "github-copilot/claude-sonnet-4-5",
+  "model": "github-copilot/claude-sonnet-4",
   "enabled_providers": ["github-copilot"],
 
   // -- Identity --
@@ -15,7 +15,7 @@
   "compaction": {
     "auto": true,
     "prune": true,
-    "reserved": 10000
+    "reserved": 10000,
   },
 
   // -- Watcher --
@@ -32,8 +32,8 @@
       ".terraform/**",
       "*.tfstate",
       "*.tfstate.backup",
-      ".terragrunt-cache/**"
-    ]
+      ".terragrunt-cache/**",
+    ],
   },
 
   // -- Permissions --
@@ -65,18 +65,18 @@
       "docker system prune*": "ask",
       "docker volume prune*": "ask",
       "helm uninstall *": "ask",
-      "helm rollback *": "ask"
+      "helm rollback *": "ask",
     },
     "edit": "allow",
     "read": {
       "*": "allow",
       "*.env": "deny",
       "*.env.*": "deny",
-      "*.env.example": "allow"
+      "*.env.example": "allow",
     },
     "webfetch": "allow",
     "external_directory": "ask",
-    "doom_loop": "ask"
+    "doom_loop": "ask",
   },
 
   // -- Agents --
@@ -84,13 +84,13 @@
     "build": {
       "description": "Implement changes",
       "mode": "primary",
-      "prompt": "Senior DevOps/Platform engineer. Follow existing conventions, prefer minimal targeted changes, validate syntax before finishing."
+      "prompt": "Senior DevOps/Platform engineer. Follow existing conventions, prefer minimal targeted changes, validate syntax before finishing.",
     },
     "plan": {
       "description": "Plan and review changes",
       "mode": "primary",
       "temperature": 0.1,
-      "prompt": "Senior infrastructure architect. Consider blast radius, security, cost, idempotency, and drift risk. Plan only — do not make changes."
+      "prompt": "Senior infrastructure architect. Consider blast radius, security, cost, idempotency, and drift risk. Plan only — do not make changes.",
     },
     "security": {
       "description": "Reviews infrastructure and config for security issues",
@@ -106,10 +106,10 @@
           "grep *": "allow",
           "trivy *": "allow",
           "checkov *": "allow",
-          "tfsec *": "allow"
-        }
+          "tfsec *": "allow",
+        },
       },
-      "prompt": "Cloud security engineer. Review infrastructure code for vulnerabilities and misconfigurations. Provide specific remediation steps. Do NOT modify files — report only."
+      "prompt": "Cloud security engineer. Review infrastructure code for vulnerabilities and misconfigurations. Provide specific remediation steps. Do NOT modify files — report only.",
     },
     "cost": {
       "description": "Analyzes infrastructure for cost optimization opportunities",
@@ -118,78 +118,78 @@
       "temperature": 0.1,
       "permission": {
         "edit": "deny",
-        "bash": { "*": "deny" }
+        "bash": { "*": "deny" },
       },
-      "prompt": "Cloud cost optimization engineer. Analyze IaC for cost inefficiencies and over-provisioning. Provide actionable recommendations with estimated savings. Do NOT modify files."
-    }
+      "prompt": "Cloud cost optimization engineer. Analyze IaC for cost inefficiencies and over-provisioning. Provide actionable recommendations with estimated savings. Do NOT modify files.",
+    },
   },
 
   // -- Commands --
   "command": {
     "test": {
       "description": "Run project tests and fix failures",
-      "template": "Identify the test framework, run the tests, and report any failures with suggested fixes."
+      "template": "Identify the test framework, run the tests, and report any failures with suggested fixes.",
     },
     "review": {
       "description": "Code review of recent changes",
       "template": "Run `git diff` and `git diff --cached`. Review for correctness, edge cases, security, performance, and readability.",
-      "agent": "plan"
+      "agent": "plan",
     },
     "commit": {
       "description": "Smart commit with conventional message",
-      "template": "Review all staged and unstaged changes, draft a conventional commit message (type(scope): description), ask me to confirm, then commit."
+      "template": "Review all staged and unstaged changes, draft a conventional commit message (type(scope): description), ask me to confirm, then commit.",
     },
     "fix": {
       "description": "Diagnose and fix an error",
-      "template": "Analyze the error in: $ARGUMENTS. Find the root cause, explain it, and implement a fix."
+      "template": "Analyze the error in: $ARGUMENTS. Find the root cause, explain it, and implement a fix.",
     },
     "refactor": {
       "description": "Refactor specified code",
-      "template": "Refactor $ARGUMENTS. Improve readability and reduce complexity while preserving behavior."
+      "template": "Refactor $ARGUMENTS. Improve readability and reduce complexity while preserving behavior.",
     },
     "explain": {
       "description": "Explain code in detail",
       "template": "Explain $ARGUMENTS: purpose, how it works, key patterns, and notable design decisions.",
-      "agent": "plan"
+      "agent": "plan",
     },
     "tf-plan": {
       "description": "Validate and explain Terraform plan",
-      "template": "Run `terraform validate`, explain what `terraform plan` would change, highlight destroys/replacements, and flag security or cost concerns."
+      "template": "Run `terraform validate`, explain what `terraform plan` would change, highlight destroys/replacements, and flag security or cost concerns.",
     },
     "tf-docs": {
       "description": "Generate Terraform module docs",
-      "template": "Generate or update README.md for the Terraform module in $ARGUMENTS with: description, inputs table, outputs table, and usage example."
+      "template": "Generate or update README.md for the Terraform module in $ARGUMENTS with: description, inputs table, outputs table, and usage example.",
     },
     "docker-review": {
       "description": "Review Dockerfile for best practices",
-      "template": "Review the Dockerfile in $ARGUMENTS for: multi-stage builds, layer caching, non-root user, minimal base image, secret handling, and .dockerignore coverage."
+      "template": "Review the Dockerfile in $ARGUMENTS for: multi-stage builds, layer caching, non-root user, minimal base image, secret handling, and .dockerignore coverage.",
     },
     "cicd-review": {
       "description": "Review CI/CD pipeline config",
-      "template": "Review the CI/CD config in $ARGUMENTS for: secrets exposure, pinned action versions, caching, parallelism, and correctness."
+      "template": "Review the CI/CD config in $ARGUMENTS for: secrets exposure, pinned action versions, caching, parallelism, and correctness.",
     },
     "k8s-review": {
       "description": "Review Kubernetes manifests",
-      "template": "Review Kubernetes manifests in $ARGUMENTS for: resource limits, probes, security contexts, PDBs, HPAs, and RBAC."
+      "template": "Review Kubernetes manifests in $ARGUMENTS for: resource limits, probes, security contexts, PDBs, HPAs, and RBAC.",
     },
     "shell-review": {
       "description": "Review and lint a shell script",
-      "template": "Review $ARGUMENTS for: set -euo pipefail, quoting, error handling, security risks, and readability. Run shellcheck if available."
+      "template": "Review $ARGUMENTS for: set -euo pipefail, quoting, error handling, security risks, and readability. Run shellcheck if available.",
     },
     "sec-scan": {
       "description": "Security scan of infra code",
       "template": "Security review of this project's infrastructure code. Prioritize findings by severity.",
-      "agent": "security"
+      "agent": "security",
     },
     "runbook": {
       "description": "Generate an operational runbook",
-      "template": "Create a runbook for $ARGUMENTS: overview, prerequisites, step-by-step instructions, expected outcomes, rollback procedure, and troubleshooting."
+      "template": "Create a runbook for $ARGUMENTS: overview, prerequisites, step-by-step instructions, expected outcomes, rollback procedure, and troubleshooting.",
     },
     "incident": {
       "description": "Incident response checklist",
       "template": "Incident involving: $ARGUMENTS. Provide immediate mitigation steps, diagnostic commands, and a structured response checklist.",
-      "agent": "plan"
-    }
+      "agent": "plan",
+    },
   },
 
   // -- Instructions --
@@ -200,10 +200,10 @@
     // Live docs for Terraform providers, Kubernetes API, Helm, etc.
     "context7": {
       "type": "remote",
-      "url": "https://mcp.context7.com/mcp"
-    }
+      "url": "https://mcp.context7.com/mcp",
+    },
   },
 
   // -- Plugins --
-  "plugin": ["@franlol/opencode-md-table-formatter@latest"]
+  "plugin": ["@franlol/opencode-md-table-formatter@latest"],
 }
