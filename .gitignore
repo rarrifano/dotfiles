@@ -1,4 +1,17 @@
+# Neovim
 nvim/.config/nvim/lazy-lock.json
+nvim/.config/nvim/.netrwhist
+
+# Editor swap and backup files
 *.swp
 *.swo
 *~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs and local env files
+*.log
+.env
+.env.*

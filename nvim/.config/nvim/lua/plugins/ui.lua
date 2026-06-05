@@ -7,7 +7,10 @@ end
 vim.pack.add({ gh("NMAC427/guess-indent.nvim") })
 require("guess-indent").setup({})
 
-vim.pack.add({ gh("lewis6991/gitsigns.nvim") })
+vim.pack.add({
+  gh("lewis6991/gitsigns.nvim"),
+  gh("tpope/vim-fugitive"),
+})
 require("gitsigns").setup()
 
 vim.cmd.colorscheme("retrobox")
