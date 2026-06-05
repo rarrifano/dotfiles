@@ -1,45 +1,21 @@
-local map = vim.keymap.set
+-- keymaps
 
--- ── Sane defaults ─────────────────────────────────────────────────────────────
+vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 
--- Keep selection when indenting
-map("v", "<", "<gv")
-map("v", ">", ">gv")
+vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
 
--- Join lines but keep cursor position
-map("n", "J", "mzJ`z", { desc = "Join lines, keep cursor" })
+vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
 
--- Keep cursor centred when jumping / searching
-map("n", "<C-d>", "<C-d>zz")
-map("n", "<C-u>", "<C-u>zz")
-map("n", "n", "nzzzv")
-map("n", "N", "Nzzzv")
+local function navigate(dir)
+  local win = vim.fn.winnr()
+  vim.cmd("wincmd " .. dir)
+  if vim.fn.winnr() == win then
+    local map = { h = "L", j = "D", k = "U", l = "R" }
+    vim.fn.system("tmux select-pane -" .. map[dir])
+  end
+end
 
--- Clear search highlight
-map("n", "<Esc>", "<cmd>nohlsearch<CR>")
-
--- ── Clipboard ─────────────────────────────────────────────────────────────────
--- Explicit yank to system clipboard (clipboard option is intentionally unset)
-map({ "n", "v" }, "<leader>y", '"+y', { desc = "Yank to system clipboard" })
-map("n", "<leader>Y", '"+Y', { desc = "Yank line to system clipboard" })
-
--- Paste from system clipboard
-map({ "n", "v" }, "<leader>p", '"+p', { desc = "Paste from system clipboard" })
-
--- ── Quickfix ──────────────────────────────────────────────────────────────────
-map("n", "]q", ":cnext<CR>zz", { desc = "Next quickfix" })
-map("n", "[q", ":cprev<CR>zz", { desc = "Prev quickfix" })
-
--- ── Buffers ───────────────────────────────────────────────────────────────────
-map("n", "]b", ":bnext<CR>", { desc = "Next buffer" })
-map("n", "[b", ":bprev<CR>", { desc = "Prev buffer" })
-map("n", "<leader>bd", ":bdelete<CR>", { desc = "Delete buffer" })
-
--- ── Netrw file explorer ───────────────────────────────────────────────────────
-map("n", "<leader>e", ":Explore<CR>", { desc = "File explorer (netrw)" })
-
--- ── Terminal ──────────────────────────────────────────────────────────────────
-map("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
-
--- ── Project-wide rename word under cursor ─────────────────────────────────────
-map("n", "<leader>R", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = "Rename word in file" })
+vim.keymap.set("n", "<A-h>", function() navigate("h") end)
+vim.keymap.set("n", "<A-j>", function() navigate("j") end)
+vim.keymap.set("n", "<A-k>", function() navigate("k") end)
+vim.keymap.set("n", "<A-l>", function() navigate("l") end)

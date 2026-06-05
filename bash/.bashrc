@@ -1,94 +1,52 @@
-# ~/.bashrc: executed by bash(1) for non-login shells.
-# See /usr/share/doc/bash/examples/startup-files (in the package bash-doc) for examples
+# ~/.bashrc
 
-# If not running interactively, don't do anything
+# Non-interactive shell? Exit now.
 case $- in
     *i*) ;;
       *) return;;
 esac
 
-# ----- mise -----
-# Activate early so all mise-managed tools are on PATH for the rest of .bashrc
-export PATH="$HOME/.local/bin:$PATH"
-eval "$(mise activate bash)"
-eval "$(mise completion bash)"
-
-# ----- History Settings -----
+# History: bigger, no duplicates, append.
 HISTCONTROL=ignoreboth
-HISTSIZE=50000
-HISTFILESIZE=100000
-HISTTIMEFORMAT='%F %T  '
 shopt -s histappend
+HISTSIZE=1000
+HISTFILESIZE=2000
 
-# ----- Shell Options -----
+# Shell options: update window size, recursive globbing.
 shopt -s checkwinsize
-shopt -s globstar cdspell dirspell
+shopt -s globstar
 
-# ----- Chroot for Prompt -----
-if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
-    debian_chroot=$(cat /etc/debian_chroot)
-fi
+# PATH: add local bin directories.
+[ -d "$HOME/bin" ] && PATH="$HOME/bin:$PATH"
+[ -d "$HOME/.local/bin" ] && PATH="$HOME/.local/bin:$PATH"
 
-# ----- Color Prompt Setup -----
-case "$TERM" in
-    xterm-color|*-256color) color_prompt=yes;;
-esac
-#if you want a forced colored prompt, uncomment the next line:
-# force_color_prompt=yes
-
-if [ -n "$force_color_prompt" ]; then
-    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-        color_prompt=yes
-    else
-        color_prompt=
-    fi
-fi
-
-if [ "$color_prompt" = yes ]; then
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
-fi
-unset color_prompt force_color_prompt
-
-# If this is an xterm, set the title to user@host:dir
-case "$TERM" in
-    xterm*|rxvt*)
-        PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
-        ;;
-    *) ;;
-esac
-
-# ----- Color and Aliases -----
-if [ -x /usr/bin/dircolors ]; then
-    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    alias ls='ls --color=auto'
-fi
-
-# Aliases
-alias grep='grep --color=auto'
-alias k='kubectl'
-alias l='ls -CF'
-alias la='ls -A'
-alias ll='ls -l'
-alias tf='terraform'
-
-# ----- Exports -----
-export PATH="${GOPATH:-$HOME/go}/bin:$PATH"
-export EDITOR=nvim
-export COLORTERM=truecolor   # enables termguicolors in nvim (24-bit RGB)
-export DOCKER_HOST=unix://${XDG_RUNTIME_DIR}/docker.sock
-
-# Source extra aliases if present
-if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
-fi
-
-# Enable programmable completion features
+# Integrations: bash completion, lesspipe.
 if ! shopt -oq posix; then
-  if [ -f /usr/share/bash-completion/bash_completion ]; then
-    . /usr/share/bash-completion/bash_completion
-  elif [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-  fi
+  [ -f /usr/share/bash-completion/bash_completion ] && . /usr/share/bash-completion/bash_completion
+  [ -f /etc/bash_completion ] && . /etc/bash_completion
 fi
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+
+# Aliases: colored ls/grep, shortcuts.
+if [ -x /bin/dircolors ]; then
+    test -r ~/.dircolors && eval "$(/bin/dircolors -b ~/.dircolors)" || eval "$(/bin/dircolors -b)"
+    alias ls='ls --color=auto'
+    alias grep='grep --color=auto'
+fi
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+
+# Prompt: git-aware, colored.
+parse_git_branch() { git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'; }
+if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
+    PS1='\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[01;31m\]$(parse_git_branch)\[\033[00m\]\$ '
+else
+    PS1='\u@\h:\w$(parse_git_branch)\$ '
+fi
+[ -r /etc/debian_chroot ] && debian_chroot=$(cat /etc/debian_chroot) && PS1='($debian_chroot)$PS1'
+
+# Local overrides: aliases, machine-specific settings.
+[ -f ~/.bash_aliases ] && . ~/.bash_aliases
+[ -f ~/.bashrc.local ] && . ~/.bashrc.local
+

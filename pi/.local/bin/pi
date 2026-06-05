@@ -1,0 +1,7 @@
+#!/bin/bash
+docker run -it --rm \
+  -v "$(pwd)":/workspace \
+  -v "$HOME/.config/pi-sandbox":/root/.pi \
+  -w /workspace \
+  node:lts \
+  bash -c "npm install -g @mariozechner/pi-coding-agent && pi"

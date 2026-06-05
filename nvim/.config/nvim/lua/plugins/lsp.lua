@@ -1,218 +1,157 @@
-return {
-  -- ── Mason: LSP server installer ───────────────────────────────────────────
-  {
-    "williamboman/mason.nvim",
-    cmd = "Mason",
-    opts = { ui = { border = "rounded" } },
-  },
+-- lsp
 
-  -- ── mason-lspconfig: auto-install servers ─────────────────────────────────
-  {
-    "williamboman/mason-lspconfig.nvim",
-    event = { "BufReadPre", "BufNewFile" },
-    dependencies = { "williamboman/mason.nvim" },
-    opts = {
-      ensure_installed = {
-        "gopls",
-        "pyright",
-        "bashls",
-        "terraformls",
-        "tflint",
-        "dockerls",
-        "yamlls",
-        "jsonls",
-        "lua_ls",
-      },
-      automatic_installation = true,
-    },
-  },
+local function gh(repo)
+  return "https://github.com/" .. repo
+end
 
-  -- ── lazydev: Lua annotations for Neovim config editing ───────────────────
-  {
-    "folke/lazydev.nvim",
-    ft = "lua",
-    opts = {},
-  },
+vim.pack.add({ gh("j-hui/fidget.nvim") })
+require("fidget").setup({})
 
-  -- ── fidget: LSP progress notifications ───────────────────────────────────
-  {
-    "j-hui/fidget.nvim",
-    event = "LspAttach",
-    opts = {
-      notification = { window = { winblend = 0 } },
-    },
-  },
+vim.pack.add({
+  gh("neovim/nvim-lspconfig"),
+  gh("mason-org/mason.nvim"),
+  gh("mason-org/mason-lspconfig.nvim"),
+  gh("WhoIsSethDaniel/mason-tool-installer.nvim"),
+})
 
-  -- ── nvim-lspconfig: server configs (0.11 native API) ─────────────────────
-  {
-    "neovim/nvim-lspconfig",
-    event = { "BufReadPre", "BufNewFile" },
-    dependencies = {
-      "williamboman/mason-lspconfig.nvim",
-      "saghen/blink.cmp",
-    },
-    config = function()
-      -- Capabilities extended by blink.cmp
-      local capabilities = require("blink.cmp").get_lsp_capabilities()
+-- LSP servers: configured and enabled via vim.lsp
+local lsp_servers = {
+  lua_ls = {
+    on_init = function(client)
+      -- formatting delegated to stylua
+      client.server_capabilities.documentFormattingProvider = false
 
-      -- Diagnostic display
-      vim.diagnostic.config({
-        virtual_text     = { prefix = ">" },
-        signs            = true,
-        underline        = true,
-        update_in_insert = false,
-        severity_sort    = true,
-        float            = { border = "rounded" },
-      })
+      if client.workspace_folders then
+        local path = client.workspace_folders[1].name
+        if
+          path ~= vim.fn.stdpath("config")
+          and (vim.uv.fs_stat(path .. "/.luarc.json") or vim.uv.fs_stat(path .. "/.luarc.jsonc"))
+        then
+          return
+        end
+      end
 
-      -- Helm template filetype detection — prevent yamlls false errors
-      vim.filetype.add({
-        pattern = {
-          [".*templates/.*%.yaml"] = "helm",
-          [".*templates/.*%.tpl"]  = "helm",
+      client.config.settings.Lua = vim.tbl_deep_extend("force", client.config.settings.Lua, {
+        runtime = {
+          version = "LuaJIT",
+          path = { "lua/?.lua", "lua/?/init.lua" },
         },
-      })
-
-      -- ── Server configs via 0.11 vim.lsp.config API ──────────────────────
-
-      vim.lsp.config("gopls", {
-        capabilities = capabilities,
-        settings = {
-          gopls = {
-            analyses      = { unusedparams = true },
-            staticcheck   = true,
-            gofumpt       = true,
-          },
+        workspace = {
+          checkThirdParty = false,
+          library = vim.tbl_extend("force", vim.api.nvim_get_runtime_file("", true), {
+            "${3rd}/luv/library",
+            "${3rd}/busted/library",
+          }),
         },
-      })
-
-      vim.lsp.config("pyright", {
-        capabilities = capabilities,
-        settings = {
-          python = {
-            analysis = {
-              typeCheckingMode   = "basic",
-              autoSearchPaths    = true,
-              useLibraryCodeForTypes = true,
-            },
-          },
-        },
-      })
-
-      vim.lsp.config("bashls",     { capabilities = capabilities })
-      vim.lsp.config("terraformls",{ capabilities = capabilities })
-      vim.lsp.config("tflint",     { capabilities = capabilities })
-      vim.lsp.config("dockerls",   { capabilities = capabilities })
-
-      vim.lsp.config("yamlls", {
-        capabilities = capabilities,
-        settings = {
-          yaml = {
-            keyOrdering = false,
-            schemas = {
-              ["https://json.schemastore.org/github-workflow.json"]                                                                          = ".github/workflows/*.yml",
-              ["https://json.schemastore.org/kubernetes.json"]                                                                               = "*.k8s.yaml",
-              ["https://json.schemastore.org/chart.json"]                                                                                    = "Chart.yaml",
-              ["https://json.schemastore.org/kustomization.json"]                                                                            = "kustomization.yaml",
-              ["https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json"] = "docker-compose*.yml",
-            },
-          },
-        },
-      })
-
-      vim.lsp.config("jsonls", {
-        capabilities = capabilities,
-        settings = {
-          json = { validate = { enable = true } },
-        },
-      })
-
-      vim.lsp.config("lua_ls", {
-        capabilities = capabilities,
-        settings = {
-          Lua = {
-            runtime   = { version = "LuaJIT" },
-            workspace = {
-              checkThirdParty = false,
-              library         = { vim.env.VIMRUNTIME },
-            },
-            diagnostics = { globals = { "vim" } },
-            telemetry   = { enable = false },
-          },
-        },
-      })
-
-      -- Enable all configured servers
-      vim.lsp.enable({
-        "gopls", "pyright", "bashls", "terraformls", "tflint",
-        "dockerls", "yamlls", "jsonls", "lua_ls",
-      })
-
-      -- ── Buffer-local keymaps on LSP attach ──────────────────────────────
-      vim.api.nvim_create_autocmd("LspAttach", {
-        group = vim.api.nvim_create_augroup("LspKeymaps", { clear = true }),
-        callback = function(args)
-          local buf = args.buf
-          local map = function(keys, func, desc)
-            vim.keymap.set("n", keys, func, { buffer = buf, desc = "LSP: " .. desc })
-          end
-
-          map("gd",         vim.lsp.buf.definition,     "Go to definition")
-          map("gD",         vim.lsp.buf.declaration,    "Go to declaration")
-          map("gr",         vim.lsp.buf.references,     "References")
-          map("gI",         vim.lsp.buf.implementation, "Go to implementation")
-          map("K",          vim.lsp.buf.hover,          "Hover docs")
-          map("<C-k>",      vim.lsp.buf.signature_help, "Signature help")
-          map("<leader>ca", vim.lsp.buf.code_action,    "Code action")
-          map("<leader>rn", vim.lsp.buf.rename,         "Rename symbol")
-          map("[d",         vim.diagnostic.goto_prev,   "Prev diagnostic")
-          map("]d",         vim.diagnostic.goto_next,   "Next diagnostic")
-        end,
       })
     end,
+    settings = {
+      Lua = {
+        format = { enable = false },
+      },
+    },
+  },
+  pyright = {},
+
+  gopls = {
+    settings = {
+      gopls = {
+        hints = {
+          assignVariableTypes    = true,
+          compositeLiteralFields = true,
+          functionTypeParameters = true,
+          parameterNames         = true,
+          rangeVariableTypes     = true,
+        },
+      },
+    },
   },
 
-  -- ── blink.cmp: completion ─────────────────────────────────────────────────
-  {
-    "saghen/blink.cmp",
-    event = { "InsertEnter", "CmdlineEnter" },
-    version = "*",
-    dependencies = { "rafamadriz/friendly-snippets" },
-    opts = {
-      keymap = {
-        preset      = "default",
-        ["<Tab>"]   = { "select_next", "snippet_forward", "fallback" },
-        ["<S-Tab>"] = { "select_prev", "snippet_backward", "fallback" },
-        ["<CR>"]    = { "accept", "fallback" },
-        ["<C-Space>"] = { "show", "show_documentation", "hide_documentation" },
-        -- Snippet tabstop jumping
-        ["<C-l>"]   = { "snippet_forward",  "fallback" },
-        ["<C-h>"]   = { "snippet_backward", "fallback" },
-      },
-      appearance = {
-        use_nvim_cmp_as_default = false,
-      },
-      sources = {
-        default = { "lsp", "buffer", "snippets", "path" },
-      },
-      snippets = { preset = "default" },
-      completion = {
-        documentation = {
-          auto_show       = true,
-          auto_show_delay_ms = 200,
-          window          = { border = "rounded" },
-        },
-        menu = {
-          border = 'rounded',
-          -- Remove the kind-icon column entirely — no Nerd Font needed
-          draw = {
-            columns = {
-              { 'label', 'label_description', gap = 1 },
-              { 'kind' },
-            },
+  terraformls = {},
+
+  yamlls = {
+    settings = {
+      yaml = {
+        validate   = true,
+        completion = true,
+        hover      = true,
+        schemas = {
+          -- GitHub Actions
+          ["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*.{yml,yaml}",
+          -- Docker Compose
+          ["https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json"] = {
+            "docker-compose*.{yml,yaml}",
+            "compose*.{yml,yaml}",
+          },
+          -- Kubernetes (explicit paths to avoid false positives on all yaml)
+          kubernetes = {
+            "k8s/**/*.{yml,yaml}",
+            "manifests/**/*.{yml,yaml}",
+            "*.k8s.yaml",
           },
         },
       },
     },
   },
 }
+
+-- Mason-only tools: formatters/linters, not LSP servers
+local mason_tools = {
+  "stylua",
+  "goimports",
+}
+
+require("mason").setup({})
+require("mason-tool-installer").setup({
+  ensure_installed = vim.list_extend(vim.tbl_keys(lsp_servers), mason_tools),
+})
+
+for name, server in pairs(lsp_servers) do
+  vim.lsp.config(name, server)
+  vim.lsp.enable(name)
+end
+
+vim.api.nvim_create_autocmd("LspAttach", {
+  group = vim.api.nvim_create_augroup("lsp-attach", { clear = true }),
+  callback = function(event)
+    local map = function(keys, func, desc, mode)
+      vim.keymap.set(mode or "n", keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
+    end
+
+    map("grn", vim.lsp.buf.rename, "[R]e[n]ame")
+    map("gra", vim.lsp.buf.code_action, "[G]oto Code [A]ction", { "n", "x" })
+    map("grD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
+
+    local client = vim.lsp.get_client_by_id(event.data.client_id)
+    if not client then
+      return
+    end
+
+    if client:supports_method("textDocument/documentHighlight", event.buf) then
+      local group = vim.api.nvim_create_augroup("lsp-highlight", { clear = false })
+      vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
+        buffer = event.buf,
+        group = group,
+        callback = vim.lsp.buf.document_highlight,
+      })
+      vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
+        buffer = event.buf,
+        group = group,
+        callback = vim.lsp.buf.clear_references,
+      })
+      vim.api.nvim_create_autocmd("LspDetach", {
+        group = vim.api.nvim_create_augroup("lsp-detach", { clear = true }),
+        callback = function(event2)
+          vim.lsp.buf.clear_references()
+          vim.api.nvim_clear_autocmds({ group = "lsp-highlight", buffer = event2.buf })
+        end,
+      })
+    end
+
+    if client:supports_method("textDocument/inlayHint", event.buf) then
+      map("<leader>th", function()
+        vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = event.buf }))
+      end, "[T]oggle Inlay [H]ints")
+    end
+  end,
+})

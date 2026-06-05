@@ -1,54 +1,30 @@
-return {
-	-- ── Colorscheme ──────────────────────────────────────────────────────────
-	{
-		"ellisonleao/gruvbox.nvim",
-		lazy = false,
-		priority = 1000,
-		config = function()
-			require("gruvbox").setup({
-				contrast = "hard",
-				transparent_mode = true,
-				italic = {
-					strings = false,
-					emphasis = false,
-					comments = true,
-					operators = false,
-					folds = false,
-				},
-				overrides = {
-					SignColumn = { bg = "NONE" },
-					LineNr = { bg = "NONE" },
-					CursorLineNr = { bg = "NONE" },
-				},
-			})
-			vim.o.background = "dark"
-			vim.cmd.colorscheme("gruvbox")
-		end,
-	},
+-- ui
 
-	-- ── Statusline ───────────────────────────────────────────────────────────
-	{
-		"nvim-lualine/lualine.nvim",
-		lazy = false,
-		opts = {
-			options = {
-				theme = "gruvbox",
-				component_separators = { left = "|", right = "|" },
-				section_separators = { left = "", right = "" },
-				globalstatus = true,
-			},
-			sections = {
-				lualine_a = { "mode" },
-				lualine_b = {
-					"branch",
-					{ "diff", symbols = { added = " +", modified = " ~", removed = " -" } },
-					{ "diagnostics", symbols = { error = "E:", warn = "W:", info = "I:", hint = "H:" } },
-				},
-				lualine_c = { { "filename", path = 1 } }, -- relative path
-				lualine_x = { "filetype" },
-				lualine_y = { "progress" },
-				lualine_z = { "location" },
-			},
-		},
-	},
-}
+local function gh(repo)
+  return "https://github.com/" .. repo
+end
+
+vim.pack.add({ gh("NMAC427/guess-indent.nvim") })
+require("guess-indent").setup({})
+
+vim.pack.add({ gh("lewis6991/gitsigns.nvim") })
+require("gitsigns").setup()
+
+vim.cmd.colorscheme("retrobox")
+
+-- transparent background
+local function set_transparent_bg()
+  local groups = {
+    "Normal", "NormalNC", "NormalFloat",
+    "SignColumn", "FloatBorder",
+    "StatusLine", "StatusLineNC",
+  }
+  for _, group in ipairs(groups) do
+    vim.api.nvim_set_hl(0, group, { bg = "NONE", ctermbg = "NONE" })
+  end
+end
+
+set_transparent_bg()
+vim.api.nvim_create_autocmd("ColorScheme", {
+  callback = set_transparent_bg,
+})
