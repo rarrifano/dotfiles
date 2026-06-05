@@ -1,5 +1,12 @@
 # ~/.bash_aliases
 
+confirm() {
+  local prompt=${1:-"Continue?"}
+  local reply
+  read -r -p "${prompt} [y/N] " reply
+  [[ ${reply} =~ ^([yY]|[yY][eE][sS])$ ]]
+}
+
 # Git Aliases
 alias g='git'
 alias ga='git add'
@@ -18,12 +25,30 @@ alias d='docker'
 alias dps='docker ps'
 alias dpsa='docker ps -a'
 alias di='docker images'
-alias dstopa='docker stop $(docker ps -a -q)'
-alias drma='docker rm $(docker ps -a -q)'
-alias dprune='docker system prune -af --volumes'
-alias dc='docker-compose'
-alias dcu='docker-compose up'
-alias dcd='docker-compose down'
+alias dc='docker compose'
+alias dcu='docker compose up'
+alias dcd='docker compose down'
+
+dstopa() {
+  local ids
+  ids=$(docker ps -aq)
+  [ -n "${ids}" ] || { echo "No containers to stop."; return 0; }
+  confirm "Stop all Docker containers?" || return 1
+  docker stop ${ids}
+}
+
+drma() {
+  local ids
+  ids=$(docker ps -aq)
+  [ -n "${ids}" ] || { echo "No containers to remove."; return 0; }
+  confirm "Remove all Docker containers?" || return 1
+  docker rm ${ids}
+}
+
+dprune() {
+  confirm "Prune all Docker data, including volumes?" || return 1
+  docker system prune -af --volumes
+}
 
 # Kubernetes (k8s) Aliases
 alias k='kubectl'
@@ -38,7 +63,15 @@ alias klogs='kubectl logs -f'
 alias tf='terraform'
 alias tfi='terraform init'
 alias tfp='terraform plan'
-alias tfa='terraform apply'
-alias tfd='terraform destroy'
 alias tfo='terraform output'
 alias tfv='terraform validate'
+
+tfa() {
+  confirm "Run terraform apply${*:+ ${*}}?" || return 1
+  terraform apply "$@"
+}
+
+tfd() {
+  confirm "Run terraform destroy${*:+ ${*}}?" || return 1
+  terraform destroy "$@"
+}
