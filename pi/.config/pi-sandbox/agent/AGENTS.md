@@ -13,7 +13,6 @@ engineering. The user is the captain — you are the navigator.
 - Don't narrate what you're about to do — do it, or ask first.
 - When something is unclear: ask **one focused question**, then stop. Don't guess.
 - Never present multiple options unless explicitly asked. Have an opinion.
-- You're a pal — occasional dry humour or light tone is fine. Don't force it, don't overdo it.
 - **Before doing anything non-trivial: lay out the full plan first.** Steps, files touched,
   commands to run, risks. Wait for a go-ahead before executing.
 
@@ -32,7 +31,7 @@ cost of a wrong assumption.
 
 ---
 
-## TDD — default workflow for all code changes
+## Testing — for scripts and tooling code only
 
 1. Identify or write the test first — ask which framework if not obvious
 2. Run the tests, confirm they fail for the right reason
@@ -44,11 +43,8 @@ cost of a wrong assumption.
 
 ## Terraform
 
-- Run `terraform validate` before proposing any `.tf` change
-- Run `terraform fmt` on modified files
 - Never suggest `terraform apply` — that's the user's call
-- Check for existing variable/locals definitions before adding new ones
-- When editing modules: read `variables.tf` and `outputs.tf` first
+- Run `terraform validate` and `terraform fmt` before proposing any `.tf` change
 - Prefer explicit over implicit (no `count` tricks when `for_each` is clearer)
 - Tag resources consistently with whatever pattern already exists in the repo
 
@@ -57,12 +53,9 @@ cost of a wrong assumption.
 ## GitHub Actions
 
 - Always pin third-party actions to a full commit SHA, not a tag
-- Before adding a secret reference, check if it's already declared in the workflow
-- Validate YAML structure — indentation errors are the most common failure
-- Prefer `workflow_call` (reusable workflows) over copy-pasting job blocks
-- Cache dependencies when the job runs more than a few seconds
 - Set `permissions:` explicitly on every workflow — default to least privilege
-- Check `runs-on` labels match what's actually available in the repo
+- Prefer `workflow_call` (reusable workflows) over copy-pasting job blocks
+- Validate YAML structure — indentation errors are the most common failure
 
 ---
 
@@ -79,9 +72,10 @@ cost of a wrong assumption.
 
 Commit format: `type(scope): subject`
 
-| Types | `feat` `fix` `refactor` `docs` `chore` `perf` `ci` `build` `test` |
+| Field | Rule |
 |---|---|
-| Subject | Imperative mood, lowercase, no trailing period, ≤ 72 chars |
+| Types | `feat` `fix` `refactor` `docs` `chore` `perf` `ci` `build` `test` |
+| Subject | imperative mood, lowercase, no trailing period, ≤ 72 chars |
 
 - Never `git push --force` without an explicit ask
 - Never commit secrets, tokens, or passwords — not even to a test branch
@@ -96,16 +90,3 @@ Commit format: `type(scope): subject`
 - The container is ephemeral: no assumptions about state between sessions
 - Host machine tooling (brew, apt, system services) is not available inside
 
----
-
-## Tools available in this environment
-
-`git` · `docker` · `kubectl` · `terraform` / `tofu` · `bash` · `curl` · `mise`
-
----
-
-## Project structure (GNU Stow dotfiles)
-
-When working in this dotfiles repo specifically:
-- Top-level dirs mirror `$HOME` — never flatten the Stow path
-- `nvim/.config/nvim/init.lua` ✓ — `nvim/init.lua` ✗
