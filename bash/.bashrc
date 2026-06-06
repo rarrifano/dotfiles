@@ -15,6 +15,7 @@ HISTFILESIZE=2000
 # Shell options: update window size, recursive globbing.
 shopt -s checkwinsize
 shopt -s globstar
+set -o vi
 
 # PATH: add local bin directories.
 [ -d "$HOME/bin" ] && PATH="$HOME/bin:$PATH"
@@ -50,3 +51,4 @@ fi
 [ -f ~/.bash_aliases ] && . ~/.bash_aliases
 [ -f ~/.bashrc.local ] && . ~/.bashrc.local
 
+export DOCKER_HOST=unix:///run/user/1000/docker.sock

@@ -5,6 +5,7 @@ vim.o.relativenumber = true
 vim.o.mouse = "a"
 vim.o.mousemodel = "extend"
 vim.o.showmode = false
+vim.o.termguicolors = true
 
 vim.schedule(function()
   vim.o.clipboard = "unnamedplus"

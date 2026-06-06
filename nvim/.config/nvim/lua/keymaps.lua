@@ -12,6 +12,29 @@ vim.keymap.set("n", "<leader>e", function()
 end, { desc = "Open file explorer at current buffer" })
 vim.keymap.set("n", "<leader>gs", vim.cmd.Git, { desc = "Open Fugitive status" })
 
+local function reload_config()
+  local modules = { "options", "keymaps", "autocmds", "diagnostics" }
+  for _, module in ipairs(modules) do
+    package.loaded[module] = nil
+  end
+
+  for name, _ in pairs(package.loaded) do
+    if name:match("^plugins%.") then
+      package.loaded[name] = nil
+    end
+  end
+
+  local ok, err = pcall(dofile, vim.fn.stdpath("config") .. "/init.lua")
+  if ok then
+    vim.notify("Neovim config reloaded", vim.log.levels.INFO)
+    return
+  end
+
+  vim.notify("Failed to reload config:\n" .. err, vim.log.levels.ERROR)
+end
+
+vim.api.nvim_create_user_command("ReloadConfig", reload_config, { desc = "Reload Neovim config" })
+
 local function center_horizontally()
   local info = vim.fn.getwininfo(vim.api.nvim_get_current_win())[1]
   local width = vim.api.nvim_win_get_width(0) - info.textoff

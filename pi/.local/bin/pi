@@ -1,7 +1,19 @@
 #!/bin/bash
+set -euo pipefail
+
 docker run -it --rm \
   -v "$(pwd)":/workspace \
   -v "$HOME/.config/pi-sandbox":/root/.pi \
+  -v pi-npm-global:/root/.npm-global \
   -w /workspace \
   node:lts \
-  bash -c "npm install -g @mariozechner/pi-coding-agent && pi"
+  bash -lc '
+    export NPM_CONFIG_PREFIX=/root/.npm-global
+    export PATH="$NPM_CONFIG_PREFIX/bin:$PATH"
+
+    if ! command -v pi >/dev/null 2>&1; then
+      npm install -g --loglevel=error --no-audit --no-fund --no-update-notifier @earendil-works/pi-coding-agent >/dev/null
+    fi
+
+    exec pi "$@"
+  ' bash "$@"
