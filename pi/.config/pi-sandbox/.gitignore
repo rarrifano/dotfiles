@@ -1,5 +1,3 @@
-# API keys and credentials
 agent/auth.json
-
-# Binaries managed by pi (fd, rg, etc.)
 agent/bin/
+agent/sessions
