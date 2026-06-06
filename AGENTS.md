@@ -3,7 +3,8 @@
 ## Project scope
 
 - Personal dotfiles/config repo.
-- Top-level directories mirror home-directory targets rather than app namespaced source folders.
+- This repository is organized as Stow-style packages: top-level directories mirror home-directory targets rather than app-namespaced source folders.
+- Treat paths in the repo as the source of truth for symlinked dotfiles; edit the files in this repo, not resolved paths under `$HOME`.
 - Current repo content includes:
   - `bash/` for Bash config
   - `tmux/` for tmux config
@@ -29,6 +30,7 @@
 ## Repo-specific conventions
 
 - Preserve the Stow-style path layout used by the repo. Edit files in their full target paths, e.g. `nvim/.config/nvim/init.lua`, not flattened aliases.
+- Assume files may be deployed via GNU Stow or equivalent symlinks. Do not restructure directories unless the user explicitly asks for a layout change.
 - Keep changes scoped to the relevant subtree; this repo is a collection of independent configs.
 - Follow the existing style of the file you touch:
   - Bash config uses small aliases/functions, guard clauses, and quoted variables.
@@ -48,6 +50,7 @@
 
 ## pi notes
 
+- When a task involves pi settings, keybindings, sandbox agent config, or the launcher, check the `pi/` subtree first.
 - Project-local pi commands live in `.pi/extensions/`.
 - `commit.ts` registers `/commit`.
 - `init.ts` registers `/init`.
@@ -73,4 +76,5 @@
 - Read neighboring config modules before making style or keybinding changes.
 - When editing Neovim config, check related files under `lua/` and `lua/plugins/` to avoid duplicating behavior.
 - When editing shell aliases/functions, preserve the existing confirmation-first pattern for destructive helpers.
+- For pi-related changes, inspect `pi/` before looking elsewhere in the repo.
 - Do not add commands or workflows to this file unless they are present in the repo or you verified them in the current environment.

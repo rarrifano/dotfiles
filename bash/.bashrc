@@ -15,7 +15,6 @@ HISTFILESIZE=2000
 # Shell options: update window size, recursive globbing.
 shopt -s checkwinsize
 shopt -s globstar
-set -o vi
 
 # PATH: add local bin directories.
 [ -d "$HOME/bin" ] && PATH="$HOME/bin:$PATH"

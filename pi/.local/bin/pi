@@ -1,9 +1,12 @@
 #!/bin/bash
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "$(readlink -f "$0")")" && pwd)"
+PI_SANDBOX="$SCRIPT_DIR/../../.config/pi-sandbox"
+
 docker run -it --rm \
   -v "$(pwd)":/workspace \
-  -v "$HOME/.config/pi-sandbox":/root/.pi \
+  -v "$PI_SANDBOX":/root/.pi \
   -v pi-npm-global:/root/.npm-global \
   -w /workspace \
   node:lts \
@@ -13,6 +16,10 @@ docker run -it --rm \
 
     if ! command -v pi >/dev/null 2>&1; then
       npm install -g --loglevel=error --no-audit --no-fund --no-update-notifier @earendil-works/pi-coding-agent >/dev/null
+    fi
+
+    if ! npm list -g --depth=0 pi-web-access >/dev/null 2>&1; then
+      npm install -g --loglevel=error --no-audit --no-fund --no-update-notifier pi-web-access >/dev/null
     fi
 
     exec pi "$@"

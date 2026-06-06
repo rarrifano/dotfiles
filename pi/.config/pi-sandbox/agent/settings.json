@@ -1,10 +1,6 @@
 {
-  "lastChangelogVersion": "0.73.1",
   "defaultProvider": "github-copilot",
   "defaultModel": "claude-sonnet-4.6",
-  "showHardwareCursor": true,
-  "editorPaddingX": 3,
-  "quietStartup": true,
-  "doubleEscapeAction": "tree",
-  "theme": "gruvbox"
+  "theme": "gruvbox",
+  "lastChangelogVersion": "0.78.1"
 }
