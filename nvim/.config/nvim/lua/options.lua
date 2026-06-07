@@ -7,10 +7,6 @@ vim.o.mousemodel = "extend"
 vim.o.showmode = false
 vim.o.termguicolors = true
 
-vim.schedule(function()
-  vim.o.clipboard = "unnamedplus"
-end)
-
 vim.o.breakindent = true
 vim.o.undofile = true
 vim.o.ignorecase = true

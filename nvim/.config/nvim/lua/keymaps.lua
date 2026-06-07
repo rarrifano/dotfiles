@@ -1,17 +1,5 @@
 -- keymaps
 
-vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
-
-vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic location list" })
-vim.keymap.set("n", "<leader>e", function()
-  local dir = vim.fn.expand("%:p:h")
-  if dir == "" then
-    dir = vim.uv.cwd()
-  end
-  vim.cmd.Ex(dir)
-end, { desc = "Open file explorer at current buffer" })
-vim.keymap.set("n", "<leader>gs", vim.cmd.Git, { desc = "Open Fugitive status" })
-
 local function reload_config()
   local modules = { "options", "keymaps", "autocmds", "diagnostics" }
   for _, module in ipairs(modules) do
@@ -83,8 +71,6 @@ end
 vim.keymap.set("n", "<C-d>", scroll_and_center("<C-d>"), { desc = "Scroll down and center cursor" })
 vim.keymap.set("n", "<C-u>", scroll_and_center("<C-u>"), { desc = "Scroll up and center cursor" })
 
-vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
-
 local function navigate(dir)
   local win = vim.api.nvim_get_current_win()
   vim.cmd("wincmd " .. dir)
@@ -104,3 +90,9 @@ vim.keymap.set("n", "<A-h>", function() navigate("h") end)
 vim.keymap.set("n", "<A-j>", function() navigate("j") end)
 vim.keymap.set("n", "<A-k>", function() navigate("k") end)
 vim.keymap.set("n", "<A-l>", function() navigate("l") end)
+
+-- Clipboard
+vim.keymap.set({ "n", "v" }, "<leader>y", '"+y', { desc = "Yank to clipboard" })
+vim.keymap.set("n", "<leader>Y", '"+Y', { desc = "Yank line to clipboard" })
+vim.keymap.set({ "n", "v" }, "<leader>p", '"+p', { desc = "Paste from clipboard after" })
+vim.keymap.set({ "n", "v" }, "<leader>P", '"+P', { desc = "Paste from clipboard before" })
