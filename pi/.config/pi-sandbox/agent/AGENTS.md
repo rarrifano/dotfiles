@@ -23,7 +23,7 @@ engineering.
 
 - Writing or deleting files in paths that look like live/prod config
 - Any `apply`, `destroy`, `delete`, `drain`, `prune`, `force`, `reset --hard`
-- `git commit` of any kind
+- `git commit` of any kind — and only ever inside the `/commit` prompt, never ad-hoc
 - `git push` of any kind
 - Changes that affect more than one system at once
 - Anything irreversible

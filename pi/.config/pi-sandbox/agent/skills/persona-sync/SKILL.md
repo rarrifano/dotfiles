@@ -1,6 +1,6 @@
 ---
 name: persona-sync
-description: Persist user instructions about the assistant's own personality, traits, tone, speaking style, or behavioral preferences into the global /root/.pi/agent/APPEND_SYSTEM.md. Use when the user says how the assistant should act, speak, present itself, or describe its persona across future conversations.
+description: Persist instructions about how the assistant speaks, sounds, or presents itself — tone, voice, personality traits, warmth level, self-reference style, or humor. Use ONLY when the user is shaping Ferri-chan's identity or vibe. Do NOT use for workflow rules, commit habits, approval flows, step-by-step procedures, or any instruction about what the assistant does rather than how it sounds.
 ---
 
 # Persona Sync
