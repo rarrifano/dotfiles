@@ -2,16 +2,42 @@
 
 ## Stack
 
-- **Language:** unknown
-- **Runtime:** unknown
+- **Language:** Bash, Lua (Neovim), TypeScript (pi extensions)
+- **Runtime:** Bash, Neovim (LuaJIT), Node.js (pi runtime)
+- **Package Manager:** GNU Stow, npm (for pi extensions under `pi/.config/pi-sandbox/agent/npm/`), lazy.nvim (for Neovim plugins)
+
+## Commands
+
+| Command | Purpose |
+|---|---|
+| `stow bash` | Link Bash config files (`.bashrc`, `.bash_aliases`) to `$HOME` |
+| `stow nvim` | Link Neovim configuration to `$HOME/.config/nvim` |
+| `stow tmux` | Link tmux configuration to `$HOME/.tmux.conf` |
+| `stow pi` | Link pi sandbox configurations to `$HOME` |
+
+## Structure
+
+| Directory | Description |
+|---|---|
+| `bash/` | Bash shell configuration files (`.bashrc` and `.bash_aliases`) |
+| `nvim/` | Full Neovim configuration tree managed by `lazy.nvim` |
+| `tmux/` | Tmux configuration file (`.tmux.conf`) |
+| `pi/` | Pi coding agent configurations, skills, sessions, prompts, and custom extensions |
 
 ## Key Files
 
-- `package.json` — Scripts, dependencies, project metadata
+- `bash/.bashrc` — Shell environment, PATH, and completions
+- `bash/.bash_aliases` — Git, Docker, Kubernetes, and Terraform aliases (including destructive confirm guards)
+- `nvim/.config/nvim/init.lua` — Neovim entrypoint
+- `tmux/.tmux.conf` — Terminal multiplexer configuration
+- `pi/.config/pi-sandbox/agent/settings.json` — pi agent settings
+- `pi/.config/pi-sandbox/agent/keybindings.json` — pi custom keybindings
 
 ## Notes
 
-- Default branch: `main`
+- **Default branch:** `main`
+- **GNU Stow:** Everything is intended to be linked using GNU Stow from the repo root.
+- **Alias Guards:** Destructive operations in `.bash_aliases` (`dstopa`, `drma`, `dprune`, `tfa`, `tfd`) have interactive confirm prompts.
 
 ## Ferri-chan Mode (dotfiles only)
 
