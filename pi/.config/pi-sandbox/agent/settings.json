@@ -10,8 +10,14 @@
   "defaultThinkingLevel": "high",
   "editorPaddingX": 3,
   "terminal": {
-    "showTerminalProgress": true
+    "showTerminalProgress": false
   },
   "hideThinkingBlock": true,
-  "collapseChangelog": true
+  "collapseChangelog": true,
+  "steeringMode": "one-at-a-time",
+  "quietStartup": true,
+  "warnings": {
+    "anthropicExtraUsage": true
+  },
+  "autocompleteMaxVisible": 5
 }
