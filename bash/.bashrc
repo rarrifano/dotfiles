@@ -21,6 +21,10 @@ esac
 export GOPATH="${XDG_DATA_HOME:-$HOME/.local/share}/go"
 [ -d "${GOPATH}/bin" ] && PATH="${GOPATH}/bin:$PATH"
 
+# Default Editors for C-x C-e and system utilities
+export EDITOR="vi"
+export VISUAL="vi"
+
 # Docker rootless socket
 export DOCKER_HOST="unix:///run/user/$(id -u)/docker.sock"
 
