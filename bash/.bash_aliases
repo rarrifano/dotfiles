@@ -7,20 +7,20 @@ confirm() {
   [[ ${reply} =~ ^([yY]|[yY][eE][sS])$ ]]
 }
 
-# Git Aliases
-alias g='git'
+# Git
+alias gs='git status'
 alias ga='git add'
 alias gaa='git add .'
+alias gd='git diff'
+alias gds='git diff --staged'
 alias gc='git commit -m'
-alias gca='git commit -a -m'
-alias gs='git status'
-alias gl='git log --oneline --graph --decorate'
 alias gp='git push'
 alias gpl='git pull'
+alias gl='git log --oneline --graph --decorate'
 alias gco='git checkout'
 alias gb='git branch'
 
-# Docker Aliases
+# Docker
 alias d='docker'
 alias dps='docker ps'
 alias dpsa='docker ps -a'
@@ -50,21 +50,21 @@ dprune() {
   docker system prune -af --volumes
 }
 
-# Kubernetes (k8s) Aliases
+# Kubernetes
 alias k='kubectl'
 alias kgp='kubectl get pods'
-alias kgd='kubectl get deployment'
-alias kgs='kubectl get service'
+alias kgd='kubectl get deployments'
+alias kgs='kubectl get services'
 alias kall='kubectl get all --all-namespaces'
 alias kdesc='kubectl describe'
 alias klogs='kubectl logs -f'
 
-# Terraform Aliases
+# Terraform
 alias tf='terraform'
 alias tfi='terraform init'
 alias tfp='terraform plan'
-alias tfo='terraform output'
 alias tfv='terraform validate'
+alias tfo='terraform output'
 
 tfa() {
   confirm "Run terraform apply${*:+ ${*}}?" || return 1
@@ -76,6 +76,5 @@ tfd() {
   terraform destroy "$@"
 }
 
-# Pi Aliases
+# Pi
 alias fab='pi -p --no-tools --thinking off'
-
