@@ -10,14 +10,17 @@ import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
 
-const COOLDOWN_MS = 3 * 60 * 60 * 1000; // 3 hours
 const STAMP_FILE = path.join(os.homedir(), ".ferri-greeting-last");
 
 function shouldGreet(): boolean {
 	try {
 		const raw = fs.readFileSync(STAMP_FILE, "utf8").trim();
 		const last = parseInt(raw, 10);
-		if (!isNaN(last) && Date.now() - last < COOLDOWN_MS) return false;
+		if (!isNaN(last)) {
+			const lastDate = new Date(last).toDateString();
+			const todayDate = new Date().toDateString();
+			if (lastDate === todayDate) return false;
+		}
 	} catch {
 		// file missing or unreadable — greet
 	}
