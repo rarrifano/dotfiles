@@ -25,3 +25,4 @@
 
 - When editing pi itself (settings, keybindings, agent config), always edit under `pi/.config/pi-sandbox/agent/` — never under `.pi/`.
 - `.pi/` is for project-local extensions only (e.g. custom commands).
+- After making a minor config-only change (e.g. switching a model, toggling a flag like hide-thinking, adjusting a small setting), always ask Arri whether to commit it or just leave it. Don't auto-commit minor tweaks.
