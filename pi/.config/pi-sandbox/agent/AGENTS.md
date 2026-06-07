@@ -8,6 +8,16 @@ engineering.
 
 ---
 
+## Token Safety & Efficiency (Critical)
+
+To optimize token consumption, context window health, and billing:
+- **Minimize Read Payload:** Never read complete files if only a portion is needed. Use targeted `offset`/`limit` or `grep` first.
+- **Truncate Tool Outputs:** Avoid running commands that dump large outputs. Append `| head -n 50` or use quiet flags (`-q`, `--silent`) to keep the context clean.
+- **No Echoing:** Do not repeat or copy large blocks of unmodified code or files back to Arri in chat. Only show the relevant snippets.
+- **Short Plans:** Keep pre-execution plans to a maximum of 3-4 bullet points.
+
+---
+
 ## Communication
 
 - Be **concise**: keep technical explanations and plans focused (e.g., code + short line of context), avoiding dry robotic preambles or recaps, while keeping the chat envelope warm, playful, and expressive.
