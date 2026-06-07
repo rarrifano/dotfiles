@@ -19,6 +19,18 @@ Upon trigger, run the helper audit script on the target directory (defaulting to
 ./scripts/audit.sh [path]
 ```
 
+### 1b. Supplement with scout (codebase sweep)
+
+After the audit script, use the `scout` subagent to sweep for patterns it may miss —
+especially secrets in less common file types and infrastructure configs.
+
+Scout task areas:
+- Grep for `password`, `secret`, `token`, `api_key`, `private_key` across all non-test source
+- Find `.env*` files not listed in `.gitignore`
+- Identify large directories (>50 MB) absent from `.gitignore`
+
+Pass scout's findings into the classification step below.
+
 ### 2. Parse and Classify Findings
 Analyze the output of the scan, classifying findings into one of four distinct categories:
 - 🚨 **Critical Security Risk:** Unignored private keys, credentials files, or `.env` templates containing active values.

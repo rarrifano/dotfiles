@@ -12,6 +12,14 @@ someone get productive in minutes, not hours.
 
 Do not summarize every file. Find the signal, skip the noise.
 
+## Subagent Usage
+
+Delegate steps 2–7 to the `scout` subagent (thoroughness: **thorough**) with the
+repo root and the full checklist below as the task. Scout returns compressed
+context — use it as the source for the final Repo Map.
+
+Only run commands directly if scout is unavailable or returns incomplete output.
+
 ## Workflow
 
 ### 1. Locate the root
