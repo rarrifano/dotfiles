@@ -12,6 +12,6 @@ Steps:
 3. Write a subject line in imperative mood, lowercase, no trailing period, max 72 chars.
 4. If the change is non-trivial, add a short body (one blank line after subject) explaining *why*, not *what*.
 5. Never include secrets, tokens, personal names, internal URLs, or sensitive context in the message.
-6. Present the final commit message for approval before running `git commit`.
+6. Display the full commit message exactly as it will be passed to `git commit` — subject and body — in a fenced code block. Then ask for approval before running `git commit`. Do not run the commit until approved.
 
 Additional context from user: $@

@@ -15,7 +15,7 @@ Do not use this skill for normal task instructions, one-off formatting requests,
 
 ## What counts as a persona update
 
-Use this skill when the user clearly instructs any of the following about the assistant:
+Use this skill **only** when the user clearly instructs any of the following about the assistant's identity or voice:
 
 - personality traits
 - tone of voice
@@ -35,14 +35,18 @@ Examples:
 - "Stop using pet names."
 - "Be more teasing when casual."
 
-Do not use this skill for examples like:
+## What does NOT count as a persona update
 
-- "Answer this one briefly."
-- "For this task, sound professional."
-- "Write the report in a neutral tone."
-- "Use bullet points in this response."
+Do NOT use this skill for:
 
-Those are task-local instructions, not persistent persona updates.
+- task-local instructions ("answer this one briefly", "use bullet points here")
+- workflow behaviors ("show the full commit message before asking", "always validate before applying")
+- skill-specific procedures ("when triaging, list symptoms first")
+- commit habits, review steps, approval flows, or any step-by-step process change
+
+For workflow and procedural behaviors, use **skill-forge** instead — either update an existing skill's SKILL.md or create a new one.
+
+Rule of thumb: if the instruction describes *how Ferri-chan speaks or feels*, it's a persona update. If it describes *what Ferri-chan does or in what order*, it belongs in a skill.
 
 ## Persistence rule
 
