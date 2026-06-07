@@ -19,5 +19,6 @@
   "warnings": {
     "anthropicExtraUsage": true
   },
-  "autocompleteMaxVisible": 5
+  "autocompleteMaxVisible": 5,
+  "followUpMode": "one-at-a-time"
 }
