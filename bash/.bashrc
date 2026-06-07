@@ -74,7 +74,12 @@ alias la='ls -A'
 alias l='ls -CF'
 
 # ==========================================
-# 7. Sourcing Local Files & Customizations
+# 7. Readline Mode
+# ==========================================
+set -o emacs
+
+# ==========================================
+# 8. Sourcing Local Files & Customizations
 # ==========================================
 # These are sourced at the end so they can override settings above.
 [ -f ~/.bash_aliases ] && . ~/.bash_aliases
