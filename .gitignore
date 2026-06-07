@@ -11,6 +11,9 @@ nvim/.config/nvim/.netrwhist
 .DS_Store
 Thumbs.db
 
+# pi package cache
+pi/.config/pi-sandbox/agent/npm/
+
 # Logs and local env files
 *.log
 .env

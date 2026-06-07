@@ -1,14 +1,25 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "$(readlink -f "$0")")" && pwd)"
-PI_SANDBOX="$SCRIPT_DIR/../../.config/pi-sandbox"
+SOURCE="${BASH_SOURCE[0]}"
+while [ -L "${SOURCE}" ]; do
+  DIR="$(cd -P "$(dirname "${SOURCE}")" >/dev/null 2>&1 && pwd)"
+  SOURCE="$(readlink "${SOURCE}")"
+  [[ "${SOURCE}" != /* ]] && SOURCE="${DIR}/${SOURCE}"
+done
+SCRIPT_DIR="$(cd -P "$(dirname "${SOURCE}")" >/dev/null 2>&1 && pwd)"
+PI_SANDBOX="${SCRIPT_DIR}/../../.config/pi-sandbox"
 
-docker run -it --rm \
-  -v "$(pwd)":/workspace \
+PROJECT_NAME="$(basename "$(pwd)")"
+
+TTY_FLAG=""
+[ -t 0 ] && TTY_FLAG="-t"
+
+docker run -i ${TTY_FLAG} --rm \
+  -v "$(pwd)":"/${PROJECT_NAME}" \
   -v "$PI_SANDBOX":/root/.pi \
   -v pi-npm-global:/root/.npm-global \
-  -w /workspace \
+  -w "/${PROJECT_NAME}" \
   node:lts \
   bash -lc '
     export NPM_CONFIG_PREFIX=/root/.npm-global
@@ -16,10 +27,6 @@ docker run -it --rm \
 
     if ! command -v pi >/dev/null 2>&1; then
       npm install -g --loglevel=error --no-audit --no-fund --no-update-notifier @earendil-works/pi-coding-agent >/dev/null
-    fi
-
-    if ! npm list -g --depth=0 pi-web-access >/dev/null 2>&1; then
-      npm install -g --loglevel=error --no-audit --no-fund --no-update-notifier pi-web-access >/dev/null
     fi
 
     exec pi "$@"

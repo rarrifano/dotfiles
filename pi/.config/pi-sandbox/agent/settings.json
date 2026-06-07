@@ -2,5 +2,14 @@
   "defaultProvider": "github-copilot",
   "defaultModel": "claude-sonnet-4.6",
   "theme": "gruvbox",
-  "lastChangelogVersion": "0.78.1"
+  "lastChangelogVersion": "0.78.1",
+  "showHardwareCursor": true,
+  "packages": [
+    "npm:pi-web-access"
+  ],
+  "defaultThinkingLevel": "high",
+  "editorPaddingX": 3,
+  "terminal": {
+    "showTerminalProgress": true
+  }
 }

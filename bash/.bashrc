@@ -19,6 +19,9 @@ shopt -s globstar
 # PATH: add local bin directories.
 [ -d "$HOME/bin" ] && PATH="$HOME/bin:$PATH"
 [ -d "$HOME/.local/bin" ] && PATH="$HOME/.local/bin:$PATH"
+[ -d /usr/local/go/bin ] && PATH="/usr/local/go/bin:$PATH"
+export GOPATH="${XDG_DATA_HOME:-$HOME/.local/share}/go"
+[ -d "${GOPATH}/bin" ] && PATH="${GOPATH}/bin:$PATH"
 
 # Integrations: bash completion, lesspipe.
 if ! shopt -oq posix; then

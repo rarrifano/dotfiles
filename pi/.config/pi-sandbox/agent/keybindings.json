@@ -1,1 +1,6 @@
-{}
+{
+  "app.session.new":    "alt+n",
+  "app.session.tree":   "alt+t",
+  "app.session.fork":   "alt+f",
+  "app.session.resume": "alt+r"
+}

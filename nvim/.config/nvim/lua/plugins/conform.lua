@@ -4,7 +4,7 @@ local function gh(repo)
   return "https://github.com/" .. repo
 end
 
-vim.pack.add({ gh("stevearc/conform.nvim") })
+vim.pack.add({ { src = gh("stevearc/conform.nvim"), version = "v9.1.0" } })
 
 require("conform").setup({
   notify_on_error = false,

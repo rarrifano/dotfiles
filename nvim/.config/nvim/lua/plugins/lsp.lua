@@ -4,14 +4,18 @@ local function gh(repo)
   return "https://github.com/" .. repo
 end
 
-vim.pack.add({ gh("j-hui/fidget.nvim") })
+local function spec(repo, version)
+  return { src = gh(repo), version = version }
+end
+
+vim.pack.add({ spec("j-hui/fidget.nvim", "v1.6.1") })
 require("fidget").setup({})
 
 vim.pack.add({
-  gh("neovim/nvim-lspconfig"),
-  gh("mason-org/mason.nvim"),
-  gh("mason-org/mason-lspconfig.nvim"),
-  gh("WhoIsSethDaniel/mason-tool-installer.nvim"),
+  spec("neovim/nvim-lspconfig", "v2.9.0"),
+  spec("mason-org/mason.nvim", "v2.3.0"),
+  spec("mason-org/mason-lspconfig.nvim", "v2.2.0"),
+  spec("WhoIsSethDaniel/mason-tool-installer.nvim", "main"),
 })
 
 -- LSP servers: configured and enabled via vim.lsp

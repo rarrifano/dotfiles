@@ -4,10 +4,13 @@ local function gh(repo)
   return "https://github.com/" .. repo
 end
 
-vim.pack.add({ { src = gh("L3MON4D3/LuaSnip"), version = vim.version.range("2.*") } })
+vim.pack.add({ { src = gh("L3MON4D3/LuaSnip"), version = "v2.5.0" } })
 require("luasnip").setup({})
 
-vim.pack.add({ { src = gh("saghen/blink.cmp"), version = vim.version.range("1.*") } })
+vim.pack.add({ { src = gh("windwp/nvim-autopairs"), version = "0.10.0" } })
+require("nvim-autopairs").setup({})
+
+vim.pack.add({ { src = gh("saghen/blink.cmp"), version = "v1.10.2" } })
 require("blink.cmp").setup({
   keymap = {
     preset = "default",

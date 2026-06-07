@@ -4,7 +4,7 @@ local function gh(repo)
   return "https://github.com/" .. repo
 end
 
-vim.pack.add({ { src = gh("nvim-treesitter/nvim-treesitter"), version = "main" } })
+vim.pack.add({ { src = gh("nvim-treesitter/nvim-treesitter"), version = "v0.10.0" } })
 
 local parsers = {
   "bash", "c", "diff", "dockerfile", "go", "gomod", "gosum", "gowork",
