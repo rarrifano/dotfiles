@@ -155,11 +155,26 @@ function buildSubject(staged: StatusEntry[]): string {
   return `update ${nameList}`;
 }
 
+function buildBody(staged: StatusEntry[]): string {
+  const opLabel: Record<string, string> = {
+    A: "add",
+    M: "update",
+    D: "remove",
+    R: "rename",
+    C: "copy",
+  };
+  return staged
+    .map((e) => `- ${opLabel[e.index] ?? "change"} ${e.file}`)
+    .join("\n");
+}
+
 function buildCommitMessage(staged: StatusEntry[]): string {
   const type = inferType(staged);
   const scope = inferScope(staged);
   const subject = buildSubject(staged);
-  return scope ? `${type}(${scope}): ${subject}` : `${type}: ${subject}`;
+  const title = scope ? `${type}(${scope}): ${subject}` : `${type}: ${subject}`;
+  const body = buildBody(staged);
+  return `${title}\n\n${body}`;
 }
 
 // ── Extension ─────────────────────────────────────────────────────────────────

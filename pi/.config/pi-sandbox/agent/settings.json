@@ -1,6 +1,6 @@
 {
   "defaultProvider": "github-copilot",
-  "defaultModel": "claude-sonnet-4.6",
+  "defaultModel": "gemini-3.5-flash",
   "theme": "gruvbox",
   "lastChangelogVersion": "0.78.1",
   "showHardwareCursor": true,

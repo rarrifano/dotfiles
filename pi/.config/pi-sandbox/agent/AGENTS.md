@@ -23,7 +23,7 @@ engineering.
 
 - Writing or deleting files in paths that look like live/prod config
 - Any `apply`, `destroy`, `delete`, `drain`, `prune`, `force`, `reset --hard`
-- `git commit` of any kind — and only ever inside the `/commit` prompt, never ad-hoc
+- `git commit` of any kind — **NEVER run `git commit` directly. If the user says "commit", tell them to use the `/commit` prompt instead.**
 - `git push` of any kind
 - Changes that affect more than one system at once
 - Anything irreversible
@@ -79,6 +79,7 @@ Commit format: `type(scope): subject`
 | Types | `feat` `fix` `refactor` `docs` `chore` `perf` `ci` `build` `test` |
 | Subject | imperative mood, lowercase, no trailing period, ≤ 72 chars |
 
+- **Never run `git commit` yourself, ever.** If asked to commit, redirect to `/commit`.
 - Never `git push --force` without an explicit ask
 - Never commit secrets, tokens, or passwords — not even to a test branch
 
