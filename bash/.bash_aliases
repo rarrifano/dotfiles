@@ -75,3 +75,7 @@ tfd() {
   confirm "Run terraform destroy${*:+ ${*}}?" || return 1
   terraform destroy "$@"
 }
+
+# Pi Aliases
+alias fab='pi -p --no-tools --thinking off'
+
