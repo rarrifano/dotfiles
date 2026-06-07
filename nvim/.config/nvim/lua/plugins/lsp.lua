@@ -55,7 +55,26 @@ local lsp_servers = {
       },
     },
   },
-  pyright = {},
+  pyright = {
+    settings = {
+      pyright = {
+        -- Using ruff for import sorting and organizing
+        disableOrganizeImports = true,
+      },
+      python = {
+        analysis = {
+          -- Ignore hints that conflict with or duplicate ruff diagnostics
+          ignore = { "*" },
+        },
+      },
+    },
+  },
+  ruff = {
+    on_attach = function(client, bufnr)
+      -- Disable hover in favor of Pyright
+      client.server_capabilities.hoverProvider = false
+    end,
+  },
 
   gopls = {
     settings = {

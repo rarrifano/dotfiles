@@ -10,8 +10,9 @@ require("conform").setup({
   notify_on_error = false,
   format_on_save = function(bufnr)
     local enabled_filetypes = {
-      lua = true,
-      go  = true,
+      lua    = true,
+      go     = true,
+      python = true,
     }
     if enabled_filetypes[vim.bo[bufnr].filetype] then
       return { timeout_ms = 500 }
@@ -23,6 +24,7 @@ require("conform").setup({
   formatters_by_ft = {
     lua = { "stylua" },
     go = { "goimports" }, -- organises imports + formats
+    python = { "ruff_organize_imports", "ruff_format" },
   },
 })
 

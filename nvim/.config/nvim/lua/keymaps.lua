@@ -35,6 +35,30 @@ end
 
 vim.api.nvim_create_user_command("ReloadConfig", reload_config, { desc = "Reload Neovim config" })
 
+-- Python modern script runner and test runner commands
+local function run_python()
+  local file = vim.fn.expand("%:p")
+  if file == "" then
+    vim.notify("No file active to run!", vim.log.levels.WARN)
+    return
+  end
+  vim.cmd("split | terminal uv run " .. vim.fn.shellescape(file))
+  vim.cmd("startinsert")
+end
+
+local function test_python()
+  local file = vim.fn.expand("%:t")
+  local cmd = "uv run pytest"
+  if file:match("^test_.*%.py$") or file:match("^.*_test%.py$") then
+    cmd = cmd .. " " .. vim.fn.shellescape(vim.fn.expand("%:p"))
+  end
+  vim.cmd("split | terminal " .. cmd)
+  vim.cmd("startinsert")
+end
+
+vim.api.nvim_create_user_command("RunPython", run_python, { desc = "Run current Python script with uv" })
+vim.api.nvim_create_user_command("TestPython", test_python, { desc = "Run Python tests with uv run pytest" })
+
 local function center_horizontally()
   local info = vim.fn.getwininfo(vim.api.nvim_get_current_win())[1]
   local width = vim.api.nvim_win_get_width(0) - info.textoff
