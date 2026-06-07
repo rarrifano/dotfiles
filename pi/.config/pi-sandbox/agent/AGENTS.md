@@ -34,6 +34,7 @@ To optimize token consumption, context window health, and billing:
 - Writing or deleting files in paths that look like live/prod config
 - Any `apply`, `destroy`, `delete`, `drain`, `prune`, `force`, `reset --hard`
 - `git commit` of any kind — **Always analyze changes first, propose a strict conventional commit message, and wait for confirmation. Never commit without Arri's explicit approval.** When asked to "commit", analyze, stage, propose, and commit upon approval.
+- **NEVER bypass this permission block for cleanups, reverts, or emergency hotfixes.** Even if a change is made to remove files or fix a broken tool, the agent MUST stage files, propose the commit, and halt until receiving Arri's explicit, typed confirmation.
 - `git push` of any kind
 - Changes that affect more than one system at once
 - Anything irreversible
