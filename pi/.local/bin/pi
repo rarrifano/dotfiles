@@ -1,46 +1,18 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-SOURCE="${BASH_SOURCE[0]}"
-while [ -L "${SOURCE}" ]; do
-  DIR="$(cd -P "$(dirname "${SOURCE}")" >/dev/null 2>&1 && pwd)"
-  SOURCE="$(readlink "${SOURCE}")"
-  [[ "${SOURCE}" != /* ]] && SOURCE="${DIR}/${SOURCE}"
-done
-SCRIPT_DIR="$(cd -P "$(dirname "${SOURCE}")" >/dev/null 2>&1 && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "$(realpath "$0")")" && pwd)"
 PI_SANDBOX="${SCRIPT_DIR}/../../.config/pi-sandbox"
-
 PROJECT_NAME="$(basename "$(pwd)")"
 
 TTY_FLAG=""
 [ -t 0 ] && TTY_FLAG="-t"
 
 GITCONFIG_MOUNTS=()
-if command -v git >/dev/null 2>&1; then
-  # Parse all git config files on host, filtering out repo-local configs
-  while IFS= read -r file_path; do
-    if [ -f "$file_path" ]; then
-      if [[ "$file_path" == "$HOME"* ]]; then
-        container_path="/root/${file_path#$HOME/}"
-      else
-        container_path="$file_path"
-      fi
-      already_mounted=0
-      for mount in "${GITCONFIG_MOUNTS[@]+"${GITCONFIG_MOUNTS[@]}"}"; do
-        if [ "$mount" = "${file_path}:${container_path}:ro" ]; then
-          already_mounted=1
-          break
-        fi
-      done
-      if [ $already_mounted -eq 0 ]; then
-        GITCONFIG_MOUNTS+=("-v" "${file_path}:${container_path}:ro")
-      fi
-    fi
-  done < <(git config --list --show-origin 2>/dev/null | grep -oE '^file:[^\t]+' | cut -d: -f2- | grep -v '\.git/config' | sort -u)
-fi
+[ -f "$HOME/.gitconfig" ] && GITCONFIG_MOUNTS=("-v" "$HOME/.gitconfig:/root/.gitconfig:ro")
 
 docker run -i ${TTY_FLAG} --rm \
-  ${GITCONFIG_MOUNTS[@]+"${GITCONFIG_MOUNTS[@]}"} \
+  "${GITCONFIG_MOUNTS[@]+"${GITCONFIG_MOUNTS[@]}"}" \
   -v "$(pwd)":"/${PROJECT_NAME}" \
   -v "$PI_SANDBOX":/root/.pi \
   -v pi-npm-global:/root/.npm-global \
