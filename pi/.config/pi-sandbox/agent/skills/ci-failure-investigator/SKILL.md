@@ -64,14 +64,14 @@ Process completed with exit code
 
 Quote the exact failing line(s). Do not paraphrase.
 
-### 3a. Locate source with scout (code failures only)
+### 3a. Locate source (code failures only)
 
 If the failure class is `test-failure`, `lint-failure`, or `build-failure`,
-use the `scout` subagent to locate the failing file and its context before proposing a fix.
+locate the failing file and its context directly before proposing a fix.
 
-Provide scout with:
-- The exact file path or module name extracted from the log
-- A task to find the failing code, its dependencies, and any related config or test files
+Use `read`, `grep`, or `bash` to:
+- Find the exact file path or module name extracted from the log
+- Read the failing code, its dependencies, and any related config or test files
 
 Skip this step for `auth-failure`, `infra-failure`, `config-error`, and `flake` —
 those don't require source reading.

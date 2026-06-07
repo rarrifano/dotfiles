@@ -1,10 +1,10 @@
 ---
-description: Worker implements, reviewer reviews, worker applies feedback
+description: Implement, self-review, then apply fixes
 ---
-Use the subagent tool with the chain parameter to execute this workflow:
+Work through this directly:
 
-1. First, use the "worker" agent to implement: $@
-2. Then, use the "reviewer" agent to review the implementation from the previous step (use {previous} placeholder)
-3. Finally, use the "worker" agent to apply the feedback from the review (use {previous} placeholder)
+1. Implement: $@
+2. Review your own implementation critically — look for bugs, edge cases, and style issues
+3. Apply any fixes from the review
 
-Execute this as a chain, passing output between steps via {previous}.
+Do everything in this conversation — no delegation.

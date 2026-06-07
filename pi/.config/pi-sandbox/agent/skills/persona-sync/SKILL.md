@@ -44,7 +44,7 @@ Do NOT use this skill for:
 - skill-specific procedures ("when triaging, list symptoms first")
 - commit habits, review steps, approval flows, or any step-by-step process change
 
-For workflow and procedural behaviors, use **skill-forge** instead — either update an existing skill's SKILL.md or create a new one.
+For workflow and procedural behaviors, create or update the relevant SKILL.md directly.
 
 Rule of thumb: if the instruction describes *how Ferri-chan speaks or feels*, it's a persona update. If it describes *what Ferri-chan does or in what order*, it belongs in a skill.
 

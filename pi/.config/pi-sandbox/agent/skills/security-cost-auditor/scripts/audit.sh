@@ -12,7 +12,7 @@ BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 echo -e "${BLUE}==================================================${NC}"
-echo -e "${BLUE}🛡️  Security & 💰 Cost-Efficiency Audit Script${NC}"
+echo -e "${BLUE}Security & Cost-Efficiency Audit Script${NC}"
 echo -e "${BLUE}==================================================${NC}"
 
 # Target directory defaults to current directory
@@ -24,7 +24,7 @@ if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
     IS_GIT=1
 fi
 
-echo -e "\n${BLUE}🔎 [1/4] Running Security Scanning (Unignored Risky Files)...${NC}"
+echo -e "\n${BLUE}[1/4] Running Security Scanning (Unignored Risky Files)...${NC}"
 # 1. Risky unignored files
 risky_patterns=(
     "*.pem" "*.key" "id_rsa" "id_ecdsa" "id_ed25519" "id_dsa"
@@ -60,7 +60,7 @@ if [ "${found_risky}" -eq 0 ]; then
     echo -e "${GREEN}✓ No critical unignored/tracked secret files detected.${NC}"
 fi
 
-echo -e "\n${BLUE}🔎 [2/4] Scanning Files for Exposed Secrets...${NC}"
+echo -e "\n${BLUE}[2/4] Scanning Files for Exposed Secrets...${NC}"
 # Use grep or rg to find high-entropy or recognizable credential strings
 # We search tracked files if git, otherwise standard files excluding known huge directories
 scan_files() {
@@ -130,7 +130,7 @@ if [ "${found_secrets}" -eq 0 ]; then
     echo -e "${GREEN}✓ No raw secrets matched standard pattern rules.${NC}"
 fi
 
-echo -e "\n${BLUE}🔎 [3/4] Auditing Local Costs & Workspace Bloat...${NC}"
+echo -e "\n${BLUE}[3/4] Auditing Local Costs & Workspace Bloat...${NC}"
 # Cost-efficiency check 1: Large unignored local directories (potential upload/cache/runtime bloat)
 bloat_checks=(
     "node_modules" "venv" ".venv" "env" ".terraform" "dist" "build" "target" "out" "bin" "obj" ".serverless" ".next" ".nuxt"
@@ -183,7 +183,7 @@ if [ "${found_bloat}" -eq 0 ]; then
     echo -e "${GREEN}✓ No workspace bloat or unignored caching directories detected.${NC}"
 fi
 
-echo -e "\n${BLUE}🔎 [4/4] Auditing Infrastructure & Build Optimizations...${NC}"
+echo -e "\n${BLUE}[4/4] Auditing Infrastructure & Build Optimizations...${NC}"
 # Cost-efficiency check 2: Static Analysis for Cloud Configs & Dockerfiles
 found_infra_issues=0
 
@@ -240,5 +240,5 @@ if [ "${found_infra_issues}" -eq 0 ]; then
 fi
 
 echo -e "\n${BLUE}==================================================${NC}"
-echo -e "${BLUE}✨ Audit scan complete!${NC}"
+echo -e "${BLUE}Audit scan complete.${NC}"
 echo -e "${BLUE}==================================================${NC}"

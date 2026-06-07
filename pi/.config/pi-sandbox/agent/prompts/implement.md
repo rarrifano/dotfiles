@@ -1,10 +1,10 @@
 ---
-description: Full implementation workflow - scout gathers context, planner creates plan, worker implements
+description: Full implementation workflow - gather context, plan, then implement
 ---
-Use the subagent tool with the chain parameter to execute this workflow:
+Work through this directly:
 
-1. First, use the "scout" agent to find all code relevant to: $@
-2. Then, use the "planner" agent to create an implementation plan for "$@" using the context from the previous step (use {previous} placeholder)
-3. Finally, use the "worker" agent to implement the plan from the previous step (use {previous} placeholder)
+1. Find all code relevant to: $@
+2. Form a clear implementation plan and present it
+3. Implement the plan
 
-Execute this as a chain, passing output between steps via {previous}.
+Do everything in this conversation — no delegation.

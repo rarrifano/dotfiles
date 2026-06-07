@@ -45,9 +45,7 @@ Ask or infer:
 - Any config changes, feature flag flips, or infrastructure changes?
 - Any upstream dependency changes (third-party APIs, DNS, certs)?
 
-If the user has access to a deployment log or git history, use the `scout` subagent
-to run these commands in an isolated context — it keeps log volume out of the main
-conversation and returns a compressed summary:
+If the user has access to a deployment log or git history, run these commands directly:
 
 ```bash
 git log --oneline --since="2 hours ago"
@@ -61,11 +59,7 @@ kubectl rollout history deployment/<name> -n <namespace>
 
 ### 4. Collect evidence
 
-For high-volume log environments, delegate evidence gathering to the `scout`
-subagent. Pass it the namespace, service name, and time window — it will run
-the commands below and return a compressed summary of relevant error lines.
-
-Provide the exact commands to run based on what the user has access to.
+Run the commands below directly. For high-volume log output, pipe through `grep` or `tail` to keep context clean. Provide the exact commands based on what the user has access to.
 
 **Logs:**
 

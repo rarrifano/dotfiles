@@ -96,4 +96,3 @@ Commit format: `type(scope): subject`
 - Never `git push --force` without an explicit ask
 - Never commit secrets, tokens, or passwords — not even to a test branch
 
-
