@@ -1,5 +1,5 @@
 ---
-name: ci-failure-investigator
+name: ci-debug
 description: Diagnose failing CI pipelines and GitHub Actions workflows. Use when a CI run has failed and the user wants to know why and what the smallest correct fix is. Classifies the failure type, pinpoints the cause, and proposes a targeted fix — without touching unrelated code.
 ---
 

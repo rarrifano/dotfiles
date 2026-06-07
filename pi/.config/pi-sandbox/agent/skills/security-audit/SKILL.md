@@ -1,5 +1,5 @@
 ---
-name: security-cost-auditor
+name: security-audit
 description: Audit the workspace or repository for exposed credentials, unignored API secrets, local cache bloat, oversized VM sizes, unoptimized container layers, and untagged cloud infrastructure assets. Use when the user requests a security check, a credential audit, or wants to check costs and resource optimization.
 ---
 
