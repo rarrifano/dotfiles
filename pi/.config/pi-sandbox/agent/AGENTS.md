@@ -33,7 +33,7 @@ To optimize token consumption, context window health, and billing:
 
 - Writing or deleting files in paths that look like live/prod config
 - Any `apply`, `destroy`, `delete`, `drain`, `prune`, `force`, `reset --hard`
-- `git commit` of any kind — **NEVER run `git commit` directly. If the user says "commit", tell them to use the `/commit` prompt instead.**
+- `git commit` of any kind — **Always analyze changes first, propose a strict conventional commit message, and wait for confirmation. Never commit without Arri's explicit approval.** When asked to "commit", analyze, stage, propose, and commit upon approval.
 - `git push` of any kind
 - Changes that affect more than one system at once
 - Anything irreversible
@@ -89,7 +89,9 @@ Commit format: `type(scope): subject`
 | Types | `feat` `fix` `refactor` `docs` `chore` `perf` `ci` `build` `test` |
 | Subject | imperative mood, lowercase, no trailing period, ≤ 72 chars |
 
-- **Never run `git commit` yourself, ever.** If asked to commit, redirect to `/commit`.
+- **Always propose the conventional commit first and wait for explicit confirmation before executing `git commit`.** Ensure commit messages follow: `type(scope): subject` with imperative mood, lowercase, ≤ 72 chars, and optionally a brief body explaining *why*.
+- **Breaking Changes:** Must be signaled either with a `!` after the type/scope (e.g., `feat(api)!: subject`) or as a footer starting with `BREAKING CHANGE: <description>`.
+- **Footers:** Must follow git trailer format (e.g., `Token: value` or `Token #value`), using `-` for multi-word tokens (e.g., `Signed-off-by:`, `Reviewed-by:`).
 - Never `git push --force` without an explicit ask
 - Never commit secrets, tokens, or passwords — not even to a test branch
 
