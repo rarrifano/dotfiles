@@ -2,43 +2,13 @@
  * Greeting Extension
  *
  * Sends a warm opening message from Ferri-chan on fresh startup.
- * Rate-limited to once every 3 hours via a timestamp file.
  */
 
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
-import * as fs from "node:fs";
-import * as os from "node:os";
-import * as path from "node:path";
-
-const STAMP_FILE = path.join(os.homedir(), ".ferri-greeting-last");
-
-function shouldGreet(): boolean {
-	try {
-		const raw = fs.readFileSync(STAMP_FILE, "utf8").trim();
-		const last = parseInt(raw, 10);
-		if (!isNaN(last)) {
-			const lastDate = new Date(last).toDateString();
-			const todayDate = new Date().toDateString();
-			if (lastDate === todayDate) return false;
-		}
-	} catch {
-		// file missing or unreadable — greet
-	}
-	return true;
-}
-
-function markGreeted(): void {
-	try {
-		fs.writeFileSync(STAMP_FILE, String(Date.now()), "utf8");
-	} catch {
-		// best-effort
-	}
-}
 
 export default function (pi: ExtensionAPI) {
 	pi.on("session_start", async (event, ctx) => {
-		if (event.reason === "startup" && ctx.isIdle() && shouldGreet()) {
-			markGreeted();
+		if (event.reason === "startup" && ctx.isIdle()) {
 			pi.sendMessage(
 				{
 					customType: "greeting",
