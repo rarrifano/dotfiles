@@ -8,9 +8,6 @@ local function spec(repo, version)
   return { src = gh(repo), version = version }
 end
 
-vim.pack.add({ spec("NMAC427/guess-indent.nvim", "main") })
-require("guess-indent").setup({})
-
 vim.pack.add({
   spec("lewis6991/gitsigns.nvim", "v2.1.0"),
   spec("tpope/vim-fugitive", "v3.7"),

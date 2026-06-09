@@ -8,8 +8,25 @@ local function spec(repo, version)
   return { src = gh(repo), version = version }
 end
 
-vim.pack.add({ spec("j-hui/fidget.nvim", "v1.6.1") })
-require("fidget").setup({})
+-- Native LSP progress in the statusline / notifications
+do
+  local progress_timer = nil
+  vim.api.nvim_create_autocmd("LspProgress", {
+    group = vim.api.nvim_create_augroup("lsp-progress", { clear = true }),
+    callback = function()
+      local msg = vim.lsp.status()
+      if msg and msg ~= "" then
+        vim.notify(msg, vim.log.levels.INFO, { title = "LSP", timeout = 1500 })
+      end
+      if progress_timer then
+        progress_timer:stop()
+      end
+      progress_timer = vim.defer_fn(function()
+        vim.cmd("redrawstatus")
+      end, 200)
+    end,
+  })
+end
 
 vim.pack.add({
   spec("neovim/nvim-lspconfig", "v2.9.0"),

@@ -11,7 +11,6 @@ end
 local plugins = {
 	spec("nvim-lua/plenary.nvim", "v0.1.4"),
 	spec("nvim-telescope/telescope.nvim", "v0.2.2"),
-	spec("nvim-telescope/telescope-ui-select.nvim", "master"),
 }
 if vim.fn.executable("make") == 1 then
 	table.insert(plugins, spec("nvim-telescope/telescope-fzf-native.nvim", "main"))
@@ -19,14 +18,98 @@ end
 
 vim.pack.add(plugins)
 
-require("telescope").setup({
-	extensions = {
-		["ui-select"] = { require("telescope.themes").get_dropdown() },
-	},
-})
+require("telescope").setup({})
 
 pcall(require("telescope").load_extension, "fzf")
-pcall(require("telescope").load_extension, "ui-select")
+
+-- Native vim.ui.select with fuzzy filtering via matchfuzzypos
+vim.ui.select = function(items, opts, on_choice)
+	opts = opts or {}
+	local prompt = (opts.prompt or "Select") .. "> "
+	local format = opts.format_item or tostring
+
+	local lines = vim.tbl_map(format, items)
+	local filtered = { indices = vim.fn.range(1, #items) }
+
+	local buf = vim.api.nvim_create_buf(false, true)
+	local width = math.min(60, vim.o.columns - 4)
+	local height = math.min(#items + 2, 15)
+	local win = vim.api.nvim_open_win(buf, true, {
+		relative = "editor",
+		row = math.floor((vim.o.lines - height) / 2),
+		col = math.floor((vim.o.columns - width) / 2),
+		width = width,
+		height = height,
+		style = "minimal",
+		border = "rounded",
+		title = " " .. (opts.prompt or "Select") .. " ",
+		title_pos = "center",
+	})
+
+	local query = ""
+	local cursor_idx = 1
+
+	local function render()
+		if #query > 0 then
+			local results = vim.fn.matchfuzzypos(lines, query)
+			filtered.indices = vim.tbl_map(function(i) return i + 1 end, results[2])
+		else
+			filtered.indices = vim.fn.range(1, #items)
+		end
+		cursor_idx = math.min(cursor_idx, math.max(1, #filtered.indices))
+
+		local display = { prompt .. query }
+		for i, idx in ipairs(filtered.indices) do
+			local prefix = i == cursor_idx and "> " or "  "
+			display[#display + 1] = prefix .. lines[idx]
+		end
+		vim.api.nvim_buf_set_lines(buf, 0, -1, false, display)
+		vim.api.nvim_win_set_cursor(win, { cursor_idx + 1, 0 })
+	end
+
+	local function confirm()
+		local idx = filtered.indices[cursor_idx]
+		vim.api.nvim_win_close(win, true)
+		on_choice(idx and items[idx] or nil, idx)
+	end
+
+	local function cancel()
+		vim.api.nvim_win_close(win, true)
+		on_choice(nil, nil)
+	end
+
+	render()
+	vim.keymap.set("i", "<CR>",  confirm, { buffer = buf, nowait = true })
+	vim.keymap.set("i", "<C-y>", confirm, { buffer = buf, nowait = true })
+	vim.keymap.set("i", "<Esc>", cancel,  { buffer = buf, nowait = true })
+	vim.keymap.set("i", "<C-c>", cancel, { buffer = buf, nowait = true })
+	vim.keymap.set("i", "<C-n>", function()
+		cursor_idx = math.min(cursor_idx + 1, math.max(1, #filtered.indices))
+		render()
+	end, { buffer = buf, nowait = true })
+	vim.keymap.set("i", "<C-p>", function()
+		cursor_idx = math.max(cursor_idx - 1, 1)
+		render()
+	end, { buffer = buf, nowait = true })
+	vim.keymap.set("i", "<BS>", function()
+		query = query:sub(1, -2)
+		cursor_idx = 1
+		render()
+	end, { buffer = buf, nowait = true })
+
+	vim.api.nvim_create_autocmd("InsertCharPre", {
+		buffer = buf,
+		once = false,
+		callback = function()
+			query = query .. vim.v.char
+			vim.v.char = ""
+			cursor_idx = 1
+			render()
+		end,
+	})
+
+	vim.cmd("startinsert")
+end
 
 local builtin = require("telescope.builtin")
 
