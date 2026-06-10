@@ -91,6 +91,10 @@ vim.keymap.set("n", "<A-j>", function() navigate("j") end)
 vim.keymap.set("n", "<A-k>", function() navigate("k") end)
 vim.keymap.set("n", "<A-l>", function() navigate("l") end)
 
+-- Save & reload
+vim.keymap.set("n", "<leader>w", "<cmd>w<CR>", { desc = "Save file" })
+vim.keymap.set("n", "<leader>R", "<cmd>ReloadConfig<CR>", { desc = "Reload Neovim config" })
+
 -- Clipboard
 vim.keymap.set({ "n", "v" }, "<leader>y", '"+y', { desc = "Yank to clipboard" })
 vim.keymap.set("n", "<leader>Y", '"+Y', { desc = "Yank line to clipboard" })

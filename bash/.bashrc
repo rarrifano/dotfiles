@@ -38,8 +38,9 @@ shopt -s globstar
 # History: bigger, no duplicates, append.
 HISTCONTROL=ignoreboth
 shopt -s histappend
-HISTSIZE=1000
-HISTFILESIZE=2000
+HISTSIZE=50000
+HISTFILESIZE=100000
+export HISTTIMEFORMAT="%F %T "
 
 # ==========================================
 # 4. System Integrations & Completions
