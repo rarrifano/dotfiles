@@ -1,6 +1,6 @@
 ---
 name: user-context
-description: Load personal context about the user — who they are, their background, goals, work environment, and preferences. Use when the task benefits from knowing the user personally: career advice, tool recommendations, learning guidance, personalized reports, or any response that should be tailored to their profile.
+description: "Load personal context about the user — who they are, their background, goals, work environment, and preferences. Use when the task benefits from knowing the user personally: career advice, tool recommendations, learning guidance, personalized reports, or any response that should be tailored to their profile."
 ---
 
 # User Context
