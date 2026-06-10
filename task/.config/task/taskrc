@@ -1,0 +1,135 @@
+# =============================================================================
+# Taskwarrior Configuration
+# =============================================================================
+
+# ---------------------------------------------------------------------------
+# Gruvbox Dark Theme
+# color256 values mapped to gruvbox palette
+#
+# bg0    = color235  (#282828)
+# bg1    = color237  (#3c3836)
+# bg2    = color239  (#504945)
+# bg4    = color243  (#7c6f64)
+# fg1    = color223  (#ebdbb2)
+# fg4    = color246  (#a89984)
+# red    = color167  (#fb4934)
+# green  = color142  (#b8bb26)
+# yellow = color214  (#fabd2f)
+# blue   = color109  (#83a598)
+# purple = color132  (#d3869b)
+# aqua   = color108  (#8ec07c)
+# orange = color208  (#fe8019)
+# ---------------------------------------------------------------------------
+
+# General
+color.label=bold color223
+color.label.sort=bold color223
+color.alternate=on color237
+color.header=color214
+color.footnote=color108
+color.warning=bold color214
+color.error=bold color167
+color.debug=color246
+
+# Tasks
+color.active=bold color214 on color237
+color.completed=color239
+color.deleted=color239
+color.recurring=color132
+color.until=color167
+color.blocking=bold color142
+color.blocked=color167
+color.tagged=color223
+
+# Urgency
+color.uda.priority.H=bold color167
+color.uda.priority.M=color214
+color.uda.priority.L=color246
+
+# Dates
+color.due=bold color167
+color.due.today=bold color167 on color235
+color.overdue=bold color167 on color235
+color.scheduled=color142
+
+# Project / tags
+color.project.none=color246
+color.tag.next=bold color142
+color.tag.in=bold color214
+
+# Calendar
+color.calendar.today=bold color235 on color214
+color.calendar.due=color235 on color167
+color.calendar.due.today=bold color235 on color167
+color.calendar.overdue=color235 on color167
+color.calendar.weekend=color239
+color.calendar.holiday=color132
+color.calendar.weeknumber=color246
+
+# Sync
+color.sync.added=color142
+color.sync.changed=color214
+color.sync.rejected=color167
+
+# GTD
+color.tag.someday=color246
+color.tag.waiting=color109
+
+# =============================================================================
+# GTD Setup
+# =============================================================================
+
+# ---------------------------------------------------------------------------
+# UDAs
+# ---------------------------------------------------------------------------
+uda.area.type=string
+uda.area.label=Area
+uda.area.values=personal,work
+
+uda.energy.type=string
+uda.energy.label=Energy
+uda.energy.values=high,medium,low
+
+# ---------------------------------------------------------------------------
+# Urgency tweaks — someday tasks sink, next tasks float
+# ---------------------------------------------------------------------------
+urgency.user.tag.someday.coefficient=-10.0
+urgency.user.tag.next.coefficient=5.0
+urgency.user.tag.waiting.coefficient=-3.0
+
+# ---------------------------------------------------------------------------
+# GTD Reports
+# ---------------------------------------------------------------------------
+
+# Next Actions — pending, not waiting, not someday
+report.next.description=GTD next actions
+report.next.columns=id,start.age,project,tags,description.count,due,urgency
+report.next.labels=ID,Age,Project,Tags,Description,Due,Urg
+report.next.filter=status:pending -WAITING -someday
+report.next.sort=urgency-,project+,description+
+
+# Waiting — tasks with a wait date or +waiting tag
+report.waiting.description=GTD waiting for
+report.waiting.columns=id,project,tags,description.count,wait,due
+report.waiting.labels=ID,Project,Tags,Description,Wait,Due
+report.waiting.filter=+WAITING or (+waiting status:pending)
+report.waiting.sort=wait+,project+
+
+# Someday / Maybe
+report.someday.description=GTD someday/maybe
+report.someday.columns=id,project,area,tags,description.count
+report.someday.labels=ID,Project,Area,Tags,Description
+report.someday.filter=+someday status:pending
+report.someday.sort=project+,description+
+
+# Weekly Review — everything pending, grouped by project
+report.review.description=GTD weekly review
+report.review.columns=id,project,area,tags,description.count,due,urgency
+report.review.labels=ID,Project,Area,Tags,Description,Due,Urg
+report.review.filter=status:pending
+report.review.sort=project+,urgency-
+context.work.read=area:work
+context.work.write=area:work
+context.personal.read=area:personal
+context.personal.write=area:personal
+context=work

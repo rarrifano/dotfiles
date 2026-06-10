@@ -2,7 +2,7 @@
 
 ## Stack
 
-- **Language:** Bash, Lua (Neovim), TypeScript (pi extensions)
+- **Language:** Bash, Lua (Neovim), TypeScript (pi extensions), Taskwarrior config (taskrc)
 - **Runtime:** Bash, Neovim (LuaJIT), Node.js (pi runtime)
 - **Package Manager:** GNU Stow, npm (for pi extensions under `pi/.config/pi-sandbox/agent/npm/`), lazy.nvim (for Neovim plugins)
 
@@ -14,6 +14,7 @@
 | `stow nvim` | Link Neovim configuration to `$HOME/.config/nvim` |
 | `stow tmux` | Link tmux configuration to `$HOME/.tmux.conf` |
 | `stow pi` | Link pi sandbox configurations to `$HOME` |
+| `stow task` | Link Taskwarrior config to `$HOME/.config/task/taskrc` |
 
 ## Structure
 
@@ -23,6 +24,7 @@
 | `nvim/` | Full Neovim configuration tree managed by `lazy.nvim` |
 | `tmux/` | Tmux configuration file (`.tmux.conf`) |
 | `pi/` | Pi coding agent configurations, skills, sessions, prompts, and custom extensions |
+| `task/` | Taskwarrior configuration with GTD setup (UDAs, reports, urgency tuning) |
 
 ## Key Files
 
@@ -32,6 +34,7 @@
 - `tmux/.tmux.conf` — Terminal multiplexer configuration
 - `pi/.config/pi-sandbox/agent/settings.json` — pi agent settings
 - `pi/.config/pi-sandbox/agent/keybindings.json` — pi custom keybindings
+- `task/.config/task/taskrc` — Taskwarrior config: gruvbox theme + GTD UDAs (`area`: personal/work, `energy`) + custom reports (`next`, `waiting`, `someday`, `review`)
 
 ## Notes
 
