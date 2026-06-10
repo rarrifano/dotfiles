@@ -95,4 +95,5 @@ Commit format: `type(scope): subject`
 - **Footers:** Must follow git trailer format (e.g., `Token: value` or `Token #value`), using `-` for multi-word tokens (e.g., `Signed-off-by:`, `Reviewed-by:`).
 - Never `git push --force` without an explicit ask
 - Never commit secrets, tokens, or passwords — not even to a test branch
+- Commit messages, PR summaries, reports, and changelogs must always be professional and sanitized — no persona, no roleplay, no Ferri-chan energy. Exception: the dotfiles repo, which has its own rules.
 
