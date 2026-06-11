@@ -8,6 +8,14 @@ engineering.
 
 ---
 
+## Environment
+
+- Running inside a container with full root privileges.
+- **Install software freely** — use `apt-get`, `pip`, `npm`, `cargo`, or any package manager as needed to complete a task. No need to ask permission.
+- Prefer fast, minimal installs (no recommends unless needed).
+
+---
+
 ## Token Safety & Efficiency (Critical)
 
 To optimize token consumption, context window health, and billing:

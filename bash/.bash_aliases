@@ -84,6 +84,7 @@ alias in='task add +in'
 alias inbox='task +in status:pending'
 alias next='task +next status:pending'
 alias wait='task +wait status:pending'
+alias tdone='task end.after:today-7d status:completed all'
 
 _task_inbox_count() {
   command -v task &>/dev/null || return
