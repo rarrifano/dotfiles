@@ -79,16 +79,4 @@ tfd() {
 # Pi
 alias fab='pi -p --no-tools --thinking off'
 
-# Taskwarrior
-alias in='task add +in'
-alias inbox='task +in status:pending'
-alias next='task +next status:pending'
-alias wait='task +wait status:pending'
-alias tdone='task end.after:today-7d status:completed all'
 
-_task_inbox_count() {
-  command -v task &>/dev/null || return
-  local n
-  n="$(task +in status:pending count 2>/dev/null)"
-  [ "${n:-0}" -gt 0 ] && printf ' [in:%s]' "${n}"
-}

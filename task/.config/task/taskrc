@@ -41,7 +41,7 @@ color.blocking=bold color142
 color.blocked=color167
 color.tagged=color223
 
-# Urgency
+# Priority
 color.uda.priority.H=bold color167
 color.uda.priority.M=color214
 color.uda.priority.L=color246
@@ -54,8 +54,6 @@ color.scheduled=color142
 
 # Project / tags
 color.project.none=color246
-color.tag.next=bold color142
-color.tag.in=bold color214
 
 # Calendar
 color.calendar.today=bold color235 on color214
@@ -71,65 +69,13 @@ color.sync.added=color142
 color.sync.changed=color214
 color.sync.rejected=color167
 
-# GTD
-color.tag.someday=color246
-color.tag.waiting=color109
-
 # =============================================================================
-# GTD Setup
+# Reports
 # =============================================================================
 
-# ---------------------------------------------------------------------------
-# UDAs
-# ---------------------------------------------------------------------------
-uda.area.type=string
-uda.area.label=Area
-uda.area.values=personal,work
-
-uda.energy.type=string
-uda.energy.label=Energy
-uda.energy.values=high,medium,low
-
-# ---------------------------------------------------------------------------
-# Urgency tweaks — someday tasks sink, next tasks float
-# ---------------------------------------------------------------------------
-urgency.user.tag.someday.coefficient=-10.0
-urgency.user.tag.next.coefficient=5.0
-urgency.user.tag.waiting.coefficient=-3.0
-
-# ---------------------------------------------------------------------------
-# GTD Reports
-# ---------------------------------------------------------------------------
-
-# Next Actions — pending, not waiting, not someday
-report.next.description=GTD next actions
-report.next.columns=id,start.age,project,tags,description.count,due,urgency
-report.next.labels=ID,Age,Project,Tags,Description,Due,Urg
-report.next.filter=status:pending -WAITING -someday
-report.next.sort=urgency-,project+,description+
-
-# Waiting — tasks with a wait date or +waiting tag
-report.waiting.description=GTD waiting for
-report.waiting.columns=id,project,tags,description.count,wait,due
-report.waiting.labels=ID,Project,Tags,Description,Wait,Due
-report.waiting.filter=+WAITING or (+waiting status:pending)
-report.waiting.sort=wait+,project+
-
-# Someday / Maybe
-report.someday.description=GTD someday/maybe
-report.someday.columns=id,project,area,tags,description.count
-report.someday.labels=ID,Project,Area,Tags,Description
-report.someday.filter=+someday status:pending
-report.someday.sort=project+,description+
-
-# Weekly Review — everything pending, grouped by project
-report.review.description=GTD weekly review
-report.review.columns=id,project,area,tags,description.count,due,urgency
-report.review.labels=ID,Project,Area,Tags,Description,Due,Urg
-report.review.filter=status:pending
-report.review.sort=project+,urgency-
-context.work.read=area:work
-context.work.write=area:work
-context.personal.read=area:personal
-context.personal.write=area:personal
-context=work
+# Weekly retro — tasks completed this week (since Monday)
+report.week.description=Completed this week
+report.week.columns=id,end,project,tags,description
+report.week.labels=ID,Done,Project,Tags,Description
+report.week.filter=status:completed end.after:soww
+report.week.sort=end+
