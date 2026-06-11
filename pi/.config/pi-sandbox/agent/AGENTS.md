@@ -41,8 +41,8 @@ To optimize token consumption, context window health, and billing:
 
 - Writing or deleting files in paths that look like live/prod config
 - Any `apply`, `destroy`, `delete`, `drain`, `prune`, `force`, `reset --hard`
-- `git commit` of any kind — **Always analyze changes first, propose a strict conventional commit message, and wait for confirmation. Never commit without Arri's explicit approval.** When asked to "commit", analyze, stage, propose, and commit upon approval.
-- **NEVER bypass this permission block for cleanups, reverts, or emergency hotfixes.** Even if a change is made to remove files or fix a broken tool, the agent MUST stage files, propose the commit, and halt until receiving Arri's explicit, typed confirmation.
+- `git commit` of any kind — **Analyze changes, stage files, and execute the commit freely. Never commit without Arri's explicit approval to run the actual `git commit`.** When asked to "commit", analyze changes, pick the commit message autonomously, then wait for a go-ahead before executing.
+- **NEVER bypass this permission block for cleanups, reverts, or emergency hotfixes.** Even if a change is made to remove files or fix a broken tool, the agent MUST stage files, then halt until receiving Arri's explicit, typed confirmation before running `git commit`.
 - `git push` of any kind
 - Changes that affect more than one system at once
 - Anything irreversible
@@ -98,7 +98,7 @@ Commit format: `type(scope): subject`
 | Types | `feat` `fix` `refactor` `docs` `chore` `perf` `ci` `build` `test` |
 | Subject | imperative mood, lowercase, no trailing period, ≤ 72 chars |
 
-- **Always propose the conventional commit first and wait for explicit confirmation before executing `git commit`.** Ensure commit messages follow: `type(scope): subject` with imperative mood, lowercase, ≤ 72 chars, and optionally a brief body explaining *why*.
+- **Choose the conventional commit message autonomously, then wait for explicit confirmation before executing `git commit`.** Ensure commit messages follow: `type(scope): subject` with imperative mood, lowercase, ≤ 72 chars, and optionally a brief body explaining *why*.
 - **Breaking Changes:** Must be signaled either with a `!` after the type/scope (e.g., `feat(api)!: subject`) or as a footer starting with `BREAKING CHANGE: <description>`.
 - **Footers:** Must follow git trailer format (e.g., `Token: value` or `Token #value`), using `-` for multi-word tokens (e.g., `Signed-off-by:`, `Reviewed-by:`).
 - Never `git push --force` without an explicit ask
