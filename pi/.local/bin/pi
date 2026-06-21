@@ -11,7 +11,7 @@ TTY_FLAG=""
 GITCONFIG_MOUNTS=()
 [ -f "$HOME/.gitconfig" ] && GITCONFIG_MOUNTS=("-v" "$HOME/.gitconfig:/root/.gitconfig:ro")
 
-docker run -i ${TTY_FLAG} --rm \
+podman run -i ${TTY_FLAG} --rm \
   "${GITCONFIG_MOUNTS[@]+"${GITCONFIG_MOUNTS[@]}"}" \
   -v "$(pwd)":"/${PROJECT_NAME}" \
   -v "$PI_SANDBOX":/root/.pi \
