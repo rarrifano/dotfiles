@@ -12,18 +12,29 @@ esac
 # ==========================================
 # 2. Environment Variables & PATH
 # ==========================================
+# XDG base directories
+export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
+export XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
+export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
+export XDG_STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
+
 # PATH: add local bin directories.
 [ -d "$HOME/bin" ] && PATH="$HOME/bin:$PATH"
 [ -d "$HOME/.local/bin" ] && PATH="$HOME/.local/bin:$PATH"
 
 # Go configuration
 [ -d /usr/local/go/bin ] && PATH="/usr/local/go/bin:$PATH"
-export GOPATH="${XDG_DATA_HOME:-$HOME/.local/share}/go"
+export GOPATH="${XDG_DATA_HOME}/go"
 [ -d "${GOPATH}/bin" ] && PATH="${GOPATH}/bin:$PATH"
 
-# Default Editors for C-x C-e and system utilities
-export EDITOR="vi"
-export VISUAL="vi"
+# Default editors — prefer nvim, fall back to vi
+if command -v nvim &>/dev/null; then
+  export EDITOR="nvim"
+  export VISUAL="nvim"
+else
+  export EDITOR="vi"
+  export VISUAL="vi"
+fi
 
 # Docker rootless socket
 export DOCKER_HOST="unix:///run/user/$(id -u)/docker.sock"
@@ -43,12 +54,8 @@ HISTFILESIZE=100000
 export HISTTIMEFORMAT="%F %T "
 
 # ==========================================
-# 4. System Integrations & Completions
+# 4. System Integrations
 # ==========================================
-if ! shopt -oq posix; then
-  [ -f /usr/share/bash-completion/bash_completion ] && . /usr/share/bash-completion/bash_completion
-  [ -f /etc/bash_completion ] && . /etc/bash_completion
-fi
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
 # ==========================================
@@ -80,8 +87,26 @@ alias l='ls -CF'
 set -o emacs
 
 # ==========================================
-# 8. Sourcing Local Files & Customizations
+# 8. Completions
+# ==========================================
+# Load system completions after PATH and tool managers are ready
+if ! shopt -oq posix; then
+  [ -f /usr/share/bash-completion/bash_completion ] && . /usr/share/bash-completion/bash_completion
+  [ -f /etc/bash_completion ] && . /etc/bash_completion
+fi
+
+# ==========================================
+# 9. Sourcing Local Files & Customizations
 # ==========================================
 # These are sourced at the end so they can override settings above.
 [ -f ~/.bash_aliases ] && . ~/.bash_aliases
 [ -f ~/.bashrc.local ] && . ~/.bashrc.local
+
+# mise — only load if installed
+if command -v mise &>/dev/null; then
+  eval "$(mise activate bash)"
+  eval "$(mise completion bash)"
+elif [ -x "$HOME/.local/bin/mise" ]; then
+  eval "$("$HOME/.local/bin/mise" activate bash)"
+  eval "$("$HOME/.local/bin/mise" completion bash)"
+fi
