@@ -18,6 +18,8 @@ vim.o.splitbelow = true
 vim.o.inccommand = "split"
 vim.o.scrolloff = 10
 vim.o.confirm = true
+vim.o.wrap = false
+vim.o.cursorline = true
 vim.o.autoread = true
 vim.o.completeopt = "menuone,noselect,popup"
 

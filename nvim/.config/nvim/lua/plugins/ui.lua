@@ -1,12 +1,7 @@
 -- ui
 
-local function gh(repo)
-  return "https://github.com/" .. repo
-end
-
-local function spec(repo, version)
-  return { src = gh(repo), version = version }
-end
+local util = require("util")
+local spec = util.spec
 
 vim.pack.add({
   spec("lewis6991/gitsigns.nvim", "v2.1.0"),

@@ -1,33 +1,28 @@
 -- conform
 
-local function gh(repo)
-  return "https://github.com/" .. repo
-end
+local util = require("util")
 
-vim.pack.add({ { src = gh("stevearc/conform.nvim"), version = "v9.1.0" } })
+vim.pack.add({ { src = util.gh("stevearc/conform.nvim"), version = "v9.1.0" } })
 
 require("conform").setup({
   notify_on_error = false,
   format_on_save = function(bufnr)
-    local enabled_filetypes = {
-      lua    = true,
-      go     = true,
-      python = true,
-    }
-    if enabled_filetypes[vim.bo[bufnr].filetype] then
+    if vim.bo[bufnr].filetype == "lua" then
       return { timeout_ms = 500 }
     end
   end,
-  default_format_opts = {
-    lsp_format = "fallback",
-  },
+  default_format_opts = {},
   formatters_by_ft = {
-    lua = { "stylua" },
-    go = { "goimports" }, -- organises imports + formats
-    python = { "ruff_organize_imports", "ruff_format" },
+    lua        = { "stylua" },
+    python     = { "ruff_format" },
+    sh         = { "shfmt" },
+    bash       = { "shfmt" },
+    yaml       = { "prettier" },
+    json       = { "prettier" },
+    terraform  = { "terraform_fmt" },
   },
 })
 
-vim.keymap.set({ "n", "v" }, "<leader>f", function()
+vim.keymap.set({ "n", "v" }, "<leader>cf", function()
   require("conform").format({ async = true })
-end, { desc = "[F]ormat buffer" })
+end, { desc = "[C]ode [F]ormat buffer" })

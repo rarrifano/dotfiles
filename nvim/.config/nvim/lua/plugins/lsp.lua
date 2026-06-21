@@ -1,197 +1,75 @@
 -- lsp
 
-local function gh(repo)
-  return "https://github.com/" .. repo
-end
+local util = require("util")
+local spec = util.spec
 
-local function spec(repo, version)
-  return { src = gh(repo), version = version }
-end
-
--- Native LSP progress in the statusline / notifications
-do
-  local progress_timer = nil
-  vim.api.nvim_create_autocmd("LspProgress", {
-    group = vim.api.nvim_create_augroup("lsp-progress", { clear = true }),
-    callback = function()
-      local msg = vim.lsp.status()
-      if msg and msg ~= "" then
-        vim.notify(msg, vim.log.levels.INFO, { title = "LSP", timeout = 1500 })
-      end
-      if progress_timer then
-        progress_timer:stop()
-      end
-      progress_timer = vim.defer_fn(function()
-        vim.cmd("redrawstatus")
-      end, 200)
-    end,
-  })
-end
-
+-- Provides server defaults (cmd, filetypes, root_markers) without the
+-- deprecated require('lspconfig') framework
 vim.pack.add({
-  spec("neovim/nvim-lspconfig", "v2.9.0"),
-  spec("mason-org/mason.nvim", "v2.3.0"),
-  spec("mason-org/mason-lspconfig.nvim", "v2.2.0"),
-  spec("WhoIsSethDaniel/mason-tool-installer.nvim", "main"),
+  spec("neovim/nvim-lspconfig", "v2.4.0"),
 })
 
--- LSP servers: configured and enabled via vim.lsp
-local lsp_servers = {
-  lua_ls = {
-    on_init = function(client)
-      -- formatting delegated to stylua
-      client.server_capabilities.documentFormattingProvider = false
-
-      if client.workspace_folders then
-        local path = client.workspace_folders[1].name
-        if
-          path ~= vim.fn.stdpath("config")
-          and (vim.uv.fs_stat(path .. "/.luarc.json") or vim.uv.fs_stat(path .. "/.luarc.jsonc"))
-        then
-          return
-        end
-      end
-
-      client.config.settings.Lua = vim.tbl_deep_extend("force", client.config.settings.Lua, {
-        runtime = {
-          version = "LuaJIT",
-          path = { "lua/?.lua", "lua/?/init.lua" },
-        },
-        workspace = {
-          checkThirdParty = false,
-          library = vim.tbl_extend("force", vim.api.nvim_get_runtime_file("", true), {
-            "${3rd}/luv/library",
-            "${3rd}/busted/library",
-          }),
-        },
-      })
-    end,
-    settings = {
-      Lua = {
-        format = { enable = false },
-      },
-    },
-  },
-  pyright = {
-    settings = {
-      pyright = {
-        -- Using ruff for import sorting and organizing
-        disableOrganizeImports = true,
-      },
-      python = {
-        analysis = {
-          -- Ignore hints that conflict with or duplicate ruff diagnostics
-          ignore = { "*" },
-        },
-      },
-    },
-  },
-  ruff = {
-    on_attach = function(client, bufnr)
-      -- Disable hover in favor of Pyright
-      client.server_capabilities.hoverProvider = false
-    end,
-  },
-
-  gopls = {
-    settings = {
-      gopls = {
-        hints = {
-          assignVariableTypes    = true,
-          compositeLiteralFields = true,
-          functionTypeParameters = true,
-          parameterNames         = true,
-          rangeVariableTypes     = true,
-        },
-      },
-    },
-  },
-
-  terraformls = {},
-
-  yamlls = {
-    settings = {
-      yaml = {
-        validate   = true,
-        completion = true,
-        hover      = true,
-        schemas = {
-          -- GitHub Actions
-          ["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*.{yml,yaml}",
-          -- Docker Compose
-          ["https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json"] = {
-            "docker-compose*.{yml,yaml}",
-            "compose*.{yml,yaml}",
-          },
-          -- Kubernetes (explicit paths to avoid false positives on all yaml)
-          kubernetes = {
-            "k8s/**/*.{yml,yaml}",
-            "manifests/**/*.{yml,yaml}",
-            "*.k8s.yaml",
-          },
-        },
-      },
-    },
-  },
-}
-
--- Mason-only tools: formatters/linters, not LSP servers
-local mason_tools = {
-  "stylua",
-  "goimports",
-}
-
-require("mason").setup({})
-require("mason-tool-installer").setup({
-  ensure_installed = vim.list_extend(vim.tbl_keys(lsp_servers), mason_tools),
-})
-
-for name, server in pairs(lsp_servers) do
-  vim.lsp.config(name, server)
-  vim.lsp.enable(name)
-end
-
+-- Keymaps applied when an LSP attaches to a buffer
 vim.api.nvim_create_autocmd("LspAttach", {
-  group = vim.api.nvim_create_augroup("lsp-attach", { clear = true }),
   callback = function(event)
-    local map = function(keys, func, desc, mode)
-      vim.keymap.set(mode or "n", keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
+    local buf = event.buf
+    local map = function(keys, fn, desc)
+      vim.keymap.set("n", keys, fn, { buffer = buf, desc = desc })
     end
 
-    map("grn", vim.lsp.buf.rename, "[R]e[n]ame")
-    map("gra", vim.lsp.buf.code_action, "[G]oto Code [A]ction", { "n", "x" })
-    map("grD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
-
-    local client = vim.lsp.get_client_by_id(event.data.client_id)
-    if not client then
-      return
-    end
-
-    if client:supports_method("textDocument/documentHighlight", event.buf) then
-      local group = vim.api.nvim_create_augroup("lsp-highlight", { clear = false })
-      vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
-        buffer = event.buf,
-        group = group,
-        callback = vim.lsp.buf.document_highlight,
-      })
-      vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
-        buffer = event.buf,
-        group = group,
-        callback = vim.lsp.buf.clear_references,
-      })
-      vim.api.nvim_create_autocmd("LspDetach", {
-        group = vim.api.nvim_create_augroup("lsp-detach", { clear = true }),
-        callback = function(event2)
-          vim.lsp.buf.clear_references()
-          vim.api.nvim_clear_autocmds({ group = "lsp-highlight", buffer = event2.buf })
-        end,
-      })
-    end
-
-    if client:supports_method("textDocument/inlayHint", event.buf) then
-      map("<leader>th", function()
-        vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = event.buf }))
-      end, "[T]oggle Inlay [H]ints")
-    end
+    map("gd",         vim.lsp.buf.definition,     "Go to definition")
+    map("gD",         vim.lsp.buf.declaration,    "Go to declaration")
+    map("gr",         vim.lsp.buf.references,     "Go to references")
+    map("gi",         vim.lsp.buf.implementation, "Go to implementation")
+    map("K",          vim.lsp.buf.hover,          "Hover docs")
+    map("<leader>rn", vim.lsp.buf.rename,         "Rename symbol")
+    map("<leader>ca", vim.lsp.buf.code_action,    "Code action")
+    map("<leader>cd", vim.diagnostic.open_float,  "Show diagnostics")
+    map("[d",         vim.diagnostic.goto_prev,   "Previous diagnostic")
+    map("]d",         vim.diagnostic.goto_next,   "Next diagnostic")
   end,
+})
+
+-- Server configs (overrides on top of nvim-lspconfig defaults)
+vim.lsp.config("terraformls", {})
+
+vim.lsp.config("yamlls", {
+  settings = {
+    yaml = {
+      schemaStore = { enable = true, url = "https://www.schemastore.org/api/json/catalog.json" },
+      schemas = {
+        kubernetes = { "*.k8s.yaml", "*.k8s.yml", "k8s/**/*.yaml", "k8s/**/*.yml" },
+      },
+    },
+  },
+})
+
+vim.lsp.config("bashls", {})
+
+vim.lsp.config("jsonls", {
+  settings = {
+    json = {
+      validate = { enable = true },
+    },
+  },
+})
+
+vim.lsp.config("pyright", {
+  settings = {
+    python = {
+      analysis = {
+        typeCheckingMode        = "basic",
+        autoSearchPaths         = true,
+        useLibraryCodeForTypes  = true,
+      },
+    },
+  },
+})
+
+vim.lsp.enable({
+  "terraformls",
+  "yamlls",
+  "bashls",
+  "jsonls",
+  "pyright",
 })
