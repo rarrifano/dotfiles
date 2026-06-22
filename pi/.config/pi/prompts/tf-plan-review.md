@@ -1,7 +1,7 @@
 ---
 description: Review a terraform plan output for risks before applying
 ---
-Review the terraform plan output below (or run `terraform plan` and review it).
+Review the terraform plan output below (from the GitHub Actions pipeline).
 
 Check for:
 - Any `forces replacement` — will destroy and recreate; flag explicitly
