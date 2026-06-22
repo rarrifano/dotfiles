@@ -42,6 +42,8 @@ RUN apt-get update -qq && \
         # devops
         gnupg \
         taskwarrior \
+        # gh CLI dep (added via keyring below)
+        apt-transport-https \
     && rm -rf /var/lib/apt/lists/*
 
 # ── Host CA certificates ───────────────────────────────────────────────────────
@@ -49,6 +51,15 @@ COPY ca-certs/ /usr/local/share/ca-certificates/
 RUN if [ -n "$(ls /usr/local/share/ca-certificates/*.crt 2>/dev/null)" ]; then \
         update-ca-certificates; \
     fi
+
+# ── gh CLI ───────────────────────────────────────────────────────────────────
+RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg \
+        -o /usr/share/keyrings/githubcli-archive-keyring.gpg && \
+    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" \
+        > /etc/apt/sources.list.d/github-cli.list && \
+    apt-get update -qq && \
+    apt-get install -y --no-install-recommends gh && \
+    rm -rf /var/lib/apt/lists/*
 
 # ── yq ────────────────────────────────────────────────────────────────────────
 ARG YQ_VERSION=v4.44.3

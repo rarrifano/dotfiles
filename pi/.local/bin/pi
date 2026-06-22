@@ -65,6 +65,11 @@ if [[ -f "${HOME}/.config/task/gruvbox.theme" ]]; then
     MOUNT_ARGS+=(-v "${HOME}/.config/task/gruvbox.theme:/root/.config/task/gruvbox.theme:ro")
 fi
 
+# gh CLI config — ro so the container inherits host credentials
+if [[ -d "${HOME}/.config/gh" ]]; then
+    MOUNT_ARGS+=(-v "${HOME}/.config/gh:/root/.config/gh:ro")
+fi
+
 # working directory — mount under the host directory's basename
 HOST_DIRNAME="$(basename "${WORK_DIR}")"
 MOUNT_ARGS+=(-v "${WORK_DIR}:/${HOST_DIRNAME}")
