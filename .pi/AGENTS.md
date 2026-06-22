@@ -1,19 +1,38 @@
 # Dotfiles — Project Context
 
-## Layout
-GNU Stow managed. Each top-level dir is a stow package (tmux/, pi/, nvim/, etc.).
-Symlinks land in $HOME. Never edit files in $HOME directly — always edit here.
+> Full context is in `./AGENTS.md` at the repo root. Read it first.
 
-## Stow
-- `stow <package>` — link a package
-- `stow -D <package>` — unlink
-- `stow -R <package>` — relink (after rename/move)
+## TL;DR
 
-## Pi container
-- Launcher: `pi/.local/bin/pi`
-- Agent config: `~/.config/pi/` (host) → mounted as `/root/.pi/agent` in container
-- Image: `pi-agent:latest` (built separately, not in this repo)
+GNU Stow managed. Each top-level dir is a stow package (bash, kitty, mise,
+nvim, pi, task, tmux). Symlinks land in `$HOME`.
 
-## Never touch
-- `*.lock` files without being asked
-- Stow-generated symlinks in $HOME
+**Never edit files in `$HOME` directly — always edit here.**
+
+## Stow commands
+
+```bash
+stow --restow --target="$HOME" <package>   # apply / re-apply
+stow --delete --target="$HOME" <package>   # remove symlinks
+```
+
+## pi container
+
+```bash
+pi              # launch agent (mounts cwd into container)
+pi-build        # rebuild pi-agent:latest image
+```
+
+## Toolchain
+
+```bash
+mise install    # install all runtimes + LSP servers
+mise outdated   # check for updates
+```
+
+## Constraints
+
+- No CI, no IaC, no secrets in code
+- Do not modify `*.lock` files without being asked
+- Do not touch stow-generated symlinks in `$HOME`
+- `auth.json` and `sessions/` are gitignored — never expose them
