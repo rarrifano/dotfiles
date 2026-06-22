@@ -6,15 +6,12 @@ Personal dotfiles managed with [GNU Stow](https://www.gnu.org/software/stow/).
 
 ```
 dotfiles/
-├── bash/       → ~/.bashrc
-├── kitty/      → ~/.config/kitty/
+├── bash/       → ~/.bashrc, ~/.bash_aliases
+├── kitty/      → ~/.config/kitty/kitty.conf
+├── mise/       → ~/.config/mise/config.toml   (dev toolchain)
 ├── nvim/       → ~/.config/nvim/
-├── pi/         → ~/.config/pi/  (pi coding agent — skills, prompts, themes)
-├── tmux/       → ~/.tmux.conf
-├── mise/       → ~/.config/mise/config.toml  (dev toolchain)
-└── scripts/
-    ├── bootstrap.sh        # full machine setup (packages + stow + mise)
-    └── install-packages.sh # apt packages only
+├── pi/         → ~/.config/pi/                (pi coding agent — skills, prompts, extensions)
+└── tmux/       → ~/.tmux.conf
 ```
 
 ## Quick start (new machine)
@@ -22,10 +19,11 @@ dotfiles/
 ```bash
 git clone <repo-url> ~/dotfiles
 cd ~/dotfiles
-./scripts/bootstrap.sh
+# symlink all packages at once
+stow --restow --target="$HOME" bash kitty mise nvim pi tmux
+# install dev toolchain
+mise install
 ```
-
-> Add `--dry-run` to preview all actions without making changes.
 
 ## Manual stow
 
@@ -53,8 +51,8 @@ mise outdated  # check for updates
 
 | Tool | Purpose |
 |------|---------|
-| `node` (LTS) | pyright, yamlls, jsonls, prettier, bashls |
-| `python` | ruff, pyright runtime |
+| `node` (LTS) | pyright, yamlls, jsonls, prettier, bash-language-server |
+| `python` 3.13 | ruff, pyright runtime |
 | `go` | personal Go projects |
 | `stylua` | Lua formatter |
 | `shfmt` | Shell formatter |
@@ -68,6 +66,7 @@ mise outdated  # check for updates
 | `tflint` | Terraform linter |
 | `actionlint` | GitHub Actions linter |
 | `lua-language-server` | Lua LSP |
+| `usage` | mise task completion + help |
 
 ## Neovim
 
@@ -86,3 +85,16 @@ mise outdated  # check for updates
 | Shell | bash |
 | Font | JetBrains Mono |
 | Colorscheme | Gruvbox Dark (consistent across all layers) |
+
+## pi coding agent
+
+Config lives in `pi/.config/pi/` and symlinks to `~/.config/pi/`.
+
+| Path | Purpose |
+|------|---------|
+| `AGENTS.md` | Global agent behaviour instructions |
+| `APPEND_SYSTEM.md` | System prompt append (Ferris persona) |
+| `keybindings.json` | Custom TUI keybindings |
+| `extensions/` | Custom pi extensions (`git-checkpoint`, `hide-cursor`) |
+| `prompts/` | Reusable prompt templates (`commit`, `pr`, `review`, `debug`, `explain`, `postmortem`, `runbook`, `test`, `tf-plan-review`) |
+| `skills/` | Agent skills (`gh-actions`, `gmud-checklist`, `k8s-debug`, `persona-sync`, `tf-workflow`, `user-context`) |
