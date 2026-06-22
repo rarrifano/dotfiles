@@ -11,7 +11,7 @@ dotfiles/
 ├── nvim/       → ~/.config/nvim/
 ├── pi/         → ~/.config/pi/  (coding agent config)
 ├── tmux/       → ~/.tmux.conf
-├── mise.toml   → dev toolchain (LSPs, formatters, runtimes)
+├── mise/       → ~/.config/mise/config.toml  (dev toolchain)
 └── scripts/
     ├── bootstrap.sh        # full machine setup (packages + stow + mise)
     └── install-packages.sh # apt packages only
@@ -44,7 +44,7 @@ stow --delete --target="$HOME" nvim
 
 ## Dev toolchain
 
-All LSP servers, formatters, and language runtimes are declared in [`mise.toml`](./mise.toml) and managed by [mise](https://mise.jdx.dev).
+All LSP servers, formatters, and language runtimes are declared in [`mise/.config/mise/config.toml`](./mise/.config/mise/config.toml) and managed by [mise](https://mise.jdx.dev).
 
 ```bash
 mise install   # install everything

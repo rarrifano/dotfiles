@@ -1,4 +1,4 @@
-# mise.toml — dev toolchain for Neovim LSP/formatting stack
+# mise — dev toolchain for Neovim LSP/formatting stack
 # Install everything: mise install
 # https://mise.jdx.dev
 
@@ -6,7 +6,8 @@
 
 # ── Runtimes ──────────────────────────────────────────────────────────────────
 node    = "lts"       # required by: pyright, yamlls, jsonls, prettier, bashls
-python  = "latest"    # required by: ruff, pyright runtime
+python  = "3.13"      # required by: ruff, pyright runtime
+go      = "latest"    # required by: personal Go projects (gorg, gtd)
 
 # ── Formatters ────────────────────────────────────────────────────────────────
 stylua  = "latest"    # lua formatter
@@ -14,17 +15,17 @@ shfmt   = "latest"    # sh/bash formatter
 ruff    = "latest"    # python formatter + linter
 
 # ── LSP servers (npm-based) ───────────────────────────────────────────────────
-"npm:prettier"                          = "latest"   # yaml/json formatter
-"npm:pyright"                           = "latest"   # python LSP
-"npm:bash-language-server"              = "latest"   # bashls
-"npm:yaml-language-server"             = "latest"   # yamlls
-"npm:vscode-langservers-extracted"     = "latest"   # jsonls
+"npm:prettier"                      = "latest"   # yaml/json formatter
+"npm:pyright"                       = "latest"   # python LSP
+"npm:bash-language-server"          = "latest"   # bashls
+"npm:yaml-language-server"         = "latest"   # yamlls
+"npm:vscode-langservers-extracted" = "latest"   # jsonls
 
 # ── LSP servers (aqua/github release) ─────────────────────────────────────────
-"aqua:hashicorp/terraform-ls"          = "latest"   # terraformls
-"aqua:rhysd/actionlint"                = "latest"   # github actions linter
-"aqua:terraform-linters/tflint"        = "latest"   # terraform linter
-"aqua:LuaLS/lua-language-server"       = "latest"   # lua_ls (nvim config + lua files)
+"aqua:hashicorp/terraform-ls"      = "latest"   # terraformls
+"aqua:rhysd/actionlint"            = "latest"   # github actions linter
+"aqua:terraform-linters/tflint"    = "latest"   # terraform linter
+"aqua:LuaLS/lua-language-server"   = "latest"   # lua_ls
 
 # ── mise plugins ──────────────────────────────────────────────────────────────
 usage   = "latest"   # mise task completion + mise help
