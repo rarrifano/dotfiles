@@ -9,7 +9,7 @@ dotfiles/
 ├── bash/       → ~/.bashrc
 ├── kitty/      → ~/.config/kitty/
 ├── nvim/       → ~/.config/nvim/
-├── pi/         → ~/.config/pi/  (coding agent config)
+├── pi/         → ~/.config/pi/  (pi coding agent — skills, prompts, themes)
 ├── tmux/       → ~/.tmux.conf
 ├── mise/       → ~/.config/mise/config.toml  (dev toolchain)
 └── scripts/
@@ -55,6 +55,7 @@ mise outdated  # check for updates
 |------|---------|
 | `node` (LTS) | pyright, yamlls, jsonls, prettier, bashls |
 | `python` | ruff, pyright runtime |
+| `go` | personal Go projects |
 | `stylua` | Lua formatter |
 | `shfmt` | Shell formatter |
 | `ruff` | Python formatter + linter |
@@ -64,6 +65,8 @@ mise outdated  # check for updates
 | `yaml-language-server` | YAML LSP |
 | `vscode-langservers-extracted` | JSON LSP |
 | `terraform-ls` | Terraform LSP |
+| `tflint` | Terraform linter |
+| `actionlint` | GitHub Actions linter |
 | `lua-language-server` | Lua LSP |
 
 ## Neovim
