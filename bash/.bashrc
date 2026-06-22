@@ -61,12 +61,7 @@ export HISTTIMEFORMAT="%F %T "
 # ==========================================
 # 5. Prompt & Terminal Appearance
 # ==========================================
-parse_git_branch() { git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'; }
-if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-    PS1='\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[01;31m\]$(parse_git_branch)\[\033[00m\]\$ '
-else
-    PS1='\u@\h:\w$(parse_git_branch)\$ '
-fi
+PS1='\$ '
 [ -r /etc/debian_chroot ] && debian_chroot=$(cat /etc/debian_chroot) && PS1='($debian_chroot)$PS1'
 
 # ==========================================

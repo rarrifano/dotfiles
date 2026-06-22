@@ -1,0 +1,10 @@
+# Local auth and machine-specific binaries
+/auth.json
+/bin/
+
+# Session transcripts
+/sessions/
+
+# Local caches and agent data
+/agent/
+*.log

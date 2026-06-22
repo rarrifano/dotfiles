@@ -1,0 +1,32 @@
+{
+  "lastChangelogVersion": "0.79.9",
+  "theme": "gruvbox",
+  "defaultProvider": "github-copilot",
+  "defaultModel": "claude-sonnet-4.6",
+  "extensions": [
+    "./extensions/hide-cursor.ts"
+  ],
+  "packages": [
+    "npm:pi-web-access"
+  ],
+  "editorPaddingX": 1,
+  "hideThinkingBlock": true,
+  "collapseChangelog": true,
+  "quietStartup": true,
+  "enableInstallTelemetry": false,
+  "defaultProjectTrust": "ask",
+  "treeFilterMode": "no-tools",
+  "defaultThinkingLevel": "low",
+  "compaction": {
+    "enabled": true,
+    "reserveTokens": 16384,
+    "keepRecentTokens": 24000
+  },
+  "retry": {
+    "enabled": true,
+    "maxRetries": 3,
+    "baseDelayMs": 2000
+  },
+  "steeringMode": "one-at-a-time",
+  "followUpMode": "one-at-a-time"
+}

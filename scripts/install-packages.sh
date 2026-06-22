@@ -14,6 +14,7 @@ PACKAGES=(
     curl
     fzf
     unzip
+    fonts-jetbrains-mono
 )
 
 echo "==> Updating package index..."
@@ -23,3 +24,4 @@ echo "==> Installing packages: ${PACKAGES[*]}"
 apt-get install -y --no-install-recommends "${PACKAGES[@]}"
 
 echo "==> Done!"
+
