@@ -1,0 +1,76 @@
+# Gruvbox Dark Theme for Taskwarrior
+# Based on the Gruvbox palette by morhetz
+# https://github.com/morhetz/gruvbox
+#
+# Color reference (color256):
+#   bg     = color235  (#282828)
+#   bg1    = color237  (#3c3836)
+#   bg2    = color239  (#504945)
+#   bg3    = color241  (#665c54)
+#   bg4    = color243  (#7c6f64)
+#   fg     = color223  (#ebdbb2)
+#   fg1    = color187  (#d5c4a1)
+#   fg2    = color186  (#bdae93)
+#   red    = color167  (#cc241d / #fb4934 bright)
+#   green  = color142  (#98971a / #b8bb26 bright)
+#   yellow = color214  (#d79921 / #fabd2f bright)
+#   blue   = color109  (#458588 / #83a598 bright)
+#   purple = color132  (#b16286 / #d3869b bright)
+#   aqua   = color108  (#689d6a / #8ec07c bright)
+#   orange = color208  (#d65d0e / #fe8019 bright)
+#   gray   = color245  (#928374)
+
+# ── General colours ────────────────────────────────────────────────────────────
+color.label=color223
+color.label.sort=bold color214
+color.alternate=on color237
+color.header=bold color214
+color.footnote=color245
+color.warning=bold color167
+color.error=bold color223 on color167
+color.message=color142
+
+# ── Active / selected ──────────────────────────────────────────────────────────
+color.active=bold color214 on color237
+
+# ── Task urgency / priority ────────────────────────────────────────────────────
+color.urgency.next=bold color214
+color.urgency.blocking=bold color208
+color.urgency.blocked=color245
+
+# ── Priority levels ────────────────────────────────────────────────────────────
+color.priority.H=bold color167
+color.priority.M=color214
+color.priority.L=color108
+
+# ── Due dates ─────────────────────────────────────────────────────────────────
+color.due=bold color167
+color.due.today=bold color223 on color167
+color.overdue=bold color223 on color167
+
+# ── Task states ────────────────────────────────────────────────────────────────
+color.completed=color245
+color.deleted=color241
+color.recurring=color132
+color.until=color132
+
+# ── Tags & projects ────────────────────────────────────────────────────────────
+color.tag.next=bold color214
+color.project.none=color245
+
+# ── Sync / undo ────────────────────────────────────────────────────────────────
+color.sync.added=color142
+color.sync.changed=color214
+color.sync.rejected=color167
+
+color.undo.before=color167
+color.undo.after=color142
+
+# ── Calendar ──────────────────────────────────────────────────────────────────
+color.calendar.today=bold color223 on color214
+color.calendar.due=bold color223 on color167
+color.calendar.due.today=bold color223 on color167
+color.calendar.overdue=bold color223 on color167
+color.calendar.weekend=color237
+color.calendar.holiday=bold color132
+color.calendar.weeknumber=color245
