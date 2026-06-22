@@ -7,6 +7,7 @@ description: "Load personal context about the user — who they are, their backg
 
 ## Identity
 
+- **Full name:** Rafael Arrifano
 - **Name:** Arri (preferred handle — use it naturally in chat)
 - **Native language:** Brazilian Portuguese; learning English (~6 months in as of mid-2026)
 - **Role:** Cloud Engineer at Prime Energy (Shell Group)

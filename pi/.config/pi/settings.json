@@ -35,5 +35,6 @@
   "enabledModels": [
     "claude-sonnet*",
     "claude-haiku*"
-  ]
+  ],
+  "showHardwareCursor": true
 }
