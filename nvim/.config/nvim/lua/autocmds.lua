@@ -1,5 +1,25 @@
 -- autocmds
 
+-- Register custom YAML sub-filetypes so yamlls can attach to them
+vim.filetype.add({
+  pattern = {
+    ["docker%-compose.*%.ya?ml"] = "yaml.docker-compose",
+    [".+%.ya?ml"]                = function(path, _)
+      local f = io.open(path, "r")
+      if f then
+        local head = f:read(2048) or ""
+        f:close()
+        if head:match("stages:%s*%[") or head:match("%-%-%-%s*stages:") then
+          return "yaml.gitlab"
+        end
+        if head:match('Chart%.yaml') or head:match('helm') then
+          return "yaml.helm-values"
+        end
+      end
+    end,
+  },
+})
+
 -- Highlight on yank
 vim.api.nvim_create_autocmd("TextYankPost", {
   desc = "Highlight when yanking (copying) text",

@@ -8,7 +8,13 @@ vim.pack.add({
 
 local fzf = require("fzf-lua")
 
-fzf.setup({ "telescope" }) -- telescope-style keymaps + layout
+fzf.setup({
+  "telescope", -- telescope-style keymaps + layout
+  -- explicitly disable all icons (no nvim-web-devicons / mini.icons needed)
+  file_icons  = false,
+  git_icons   = false,
+  color_icons = false,
+})
 
 -- Override vim.ui.select
 fzf.register_ui_select()

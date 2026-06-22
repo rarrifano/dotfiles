@@ -22,6 +22,7 @@ ruff    = "latest"    # python formatter + linter
 "npm:vscode-langservers-extracted" = "latest"   # jsonls
 
 # ── LSP servers (aqua/github release) ─────────────────────────────────────────
+"aqua:hashicorp/terraform"         = "latest"   # terraform CLI (required by terraform_fmt)
 "aqua:hashicorp/terraform-ls"      = "latest"   # terraformls
 "aqua:rhysd/actionlint"            = "latest"   # github actions linter
 "aqua:terraform-linters/tflint"    = "latest"   # terraform linter
