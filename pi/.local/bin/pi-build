@@ -41,6 +41,7 @@ RUN apt-get update -qq && \
         jq \
         # devops
         gnupg \
+        taskwarrior \
     && rm -rf /var/lib/apt/lists/*
 
 # ── Host CA certificates ───────────────────────────────────────────────────────

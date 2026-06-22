@@ -54,6 +54,17 @@ if [[ -f "${HOME}/.gitconfig" ]]; then
     MOUNT_ARGS+=(-v "${HOME}/.gitconfig:/root/.gitconfig:ro")
 fi
 
+# taskwarrior — rw data, ro config and theme
+if [[ -d "${HOME}/.local/share/task" ]]; then
+    MOUNT_ARGS+=(-v "${HOME}/.local/share/task:/root/.local/share/task")
+fi
+if [[ -f "${HOME}/.config/task/taskrc" ]]; then
+    MOUNT_ARGS+=(-v "${HOME}/.config/task/taskrc:/root/.config/task/taskrc:ro")
+fi
+if [[ -f "${HOME}/.config/task/gruvbox.theme" ]]; then
+    MOUNT_ARGS+=(-v "${HOME}/.config/task/gruvbox.theme:/root/.config/task/gruvbox.theme:ro")
+fi
+
 # working directory — mount under the host directory's basename
 HOST_DIRNAME="$(basename "${WORK_DIR}")"
 MOUNT_ARGS+=(-v "${WORK_DIR}:/${HOST_DIRNAME}")
@@ -70,6 +81,7 @@ exec podman run --rm "${TTY_ARGS[@]}" \
     "${DISPLAY_ARGS[@]+"${DISPLAY_ARGS[@]}"}" \
     "${MOUNT_ARGS[@]+"${MOUNT_ARGS[@]}"}" \
     -e "PI_CODING_AGENT_DIR=/root/.pi/agent" \
+    -e "TASKRC=/root/.config/task/taskrc" \
     -e "TERM=${TERM:-xterm-256color}" \
     -e "COLORTERM=${COLORTERM:-truecolor}" \
     --workdir "/${HOST_DIRNAME}" \

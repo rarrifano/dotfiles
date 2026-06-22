@@ -5,7 +5,8 @@
   "defaultModel": "claude-sonnet-4.6",
   "extensions": [
     "./extensions/hide-cursor.ts",
-    "./extensions/git-checkpoint.ts"
+    "./extensions/git-checkpoint.ts",
+    "./extensions/taskwarrior.ts"
   ],
   "packages": [
     "npm:pi-web-access"
