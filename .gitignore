@@ -17,6 +17,13 @@ pi/.config/pi/npm/
 # pi session history (conversation logs -- no value in version control)
 pi/.config/pi/sessions/
 
+# pi trust config (local machine-specific paths)
+pi/.config/pi/trust.json
+
+# report-builder skill -- deps are reproducible via npm install
+pi/.config/pi/skills/report-builder/scripts/node_modules/
+pi/.config/pi/skills/report-builder/scripts/package-lock.json
+
 # Logs and local env files
 *.log
 .env

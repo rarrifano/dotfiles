@@ -1,0 +1,8 @@
+{
+  "name": "report-builder-scripts",
+  "version": "1.0.0",
+  "description": "Helper scripts for the report-builder skill",
+  "dependencies": {
+    "mammoth": "^1.8.0"
+  }
+}
