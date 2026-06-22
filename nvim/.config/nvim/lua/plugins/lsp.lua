@@ -66,10 +66,29 @@ vim.lsp.config("pyright", {
   },
 })
 
+vim.lsp.config("lua_ls", {
+  settings = {
+    Lua = {
+      runtime = { version = "LuaJIT" },
+      workspace = {
+        checkThirdParty = false,
+        -- make lua_ls aware of nvim runtime + all installed plugins
+        library = vim.list_extend(
+          vim.api.nvim_get_runtime_file("", true),
+          { vim.fn.stdpath("config") }
+        ),
+      },
+      diagnostics = { globals = { "vim" } },
+      telemetry = { enable = false },
+    },
+  },
+})
+
 vim.lsp.enable({
   "terraformls",
   "yamlls",
   "bashls",
   "jsonls",
   "pyright",
+  "lua_ls",
 })

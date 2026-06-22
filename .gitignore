@@ -12,6 +12,10 @@ Thumbs.db
 
 # pi package cache
 pi/.config/pi-sandbox/agent/npm/
+pi/.config/pi/npm/
+
+# pi session history (conversation logs -- no value in version control)
+pi/.config/pi/sessions/
 
 # Logs and local env files
 *.log

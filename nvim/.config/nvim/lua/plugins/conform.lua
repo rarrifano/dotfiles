@@ -4,10 +4,12 @@ local util = require("util")
 
 vim.pack.add({ { src = util.gh("stevearc/conform.nvim"), version = "v9.1.0" } })
 
+local fmt_fts = { lua = true, python = true, sh = true, bash = true, yaml = true, json = true, terraform = true }
+
 require("conform").setup({
   notify_on_error = false,
   format_on_save = function(bufnr)
-    if vim.bo[bufnr].filetype == "lua" then
+    if fmt_fts[vim.bo[bufnr].filetype] then
       return { timeout_ms = 500 }
     end
   end,

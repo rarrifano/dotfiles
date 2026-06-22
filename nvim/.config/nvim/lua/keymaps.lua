@@ -101,3 +101,25 @@ vim.keymap.set({ "n", "v" }, "<leader>y", '"+y', { desc = "Yank to clipboard" })
 vim.keymap.set("n", "<leader>Y", '"+Y', { desc = "Yank line to clipboard" })
 vim.keymap.set({ "n", "v" }, "<leader>p", '"+p', { desc = "Paste from clipboard after" })
 vim.keymap.set({ "n", "v" }, "<leader>P", '"+P', { desc = "Paste from clipboard before" })
+
+-- DevOps linters
+local function lint_terraform()
+  vim.cmd("split | terminal tflint --chdir " .. vim.fn.shellescape(vim.fn.expand("%:p:h")))
+  vim.cmd("startinsert")
+end
+
+local function lint_actions()
+  local file = vim.fn.expand("%:p")
+  if file == "" then
+    vim.notify("No file active!", vim.log.levels.WARN)
+    return
+  end
+  vim.cmd("split | terminal actionlint " .. vim.fn.shellescape(file))
+  vim.cmd("startinsert")
+end
+
+vim.api.nvim_create_user_command("LintTF",      lint_terraform, { desc = "Run tflint on current terraform dir" })
+vim.api.nvim_create_user_command("LintActions", lint_actions,   { desc = "Run actionlint on current workflow file" })
+
+vim.keymap.set("n", "<leader>lt", "<cmd>LintTF<CR>",      { desc = "[L]int [T]erraform" })
+vim.keymap.set("n", "<leader>la", "<cmd>LintActions<CR>", { desc = "[L]int [A]ctions workflow" })

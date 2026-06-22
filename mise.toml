@@ -22,6 +22,9 @@ ruff    = "latest"    # python formatter + linter
 
 # ── LSP servers (aqua/github release) ─────────────────────────────────────────
 "aqua:hashicorp/terraform-ls"          = "latest"   # terraformls
+"aqua:rhysd/actionlint"                = "latest"   # github actions linter
+"aqua:terraform-linters/tflint"        = "latest"   # terraform linter
+"aqua:LuaLS/lua-language-server"       = "latest"   # lua_ls (nvim config + lua files)
 
 # ── mise plugins ──────────────────────────────────────────────────────────────
 usage   = "latest"   # mise task completion + mise help
