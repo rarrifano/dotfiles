@@ -61,10 +61,30 @@ export HISTTIMEFORMAT="%F %T "
 # ==========================================
 # 5. Prompt & Terminal Appearance
 # ==========================================
-PS1='\$ '
-[ -r /etc/debian_chroot ] && debian_chroot=$(cat /etc/debian_chroot) && PS1='($debian_chroot)$PS1'
+__ps1_git() {
+  git rev-parse --abbrev-ref HEAD 2>/dev/null
+}
 
-# ==========================================
+__ps1_build() {
+  local exit=$?
+  local r='' bold='' ok='' err='' dim='' box=''
+  if [ "${TERM:-dumb}" != dumb ] && [ -t 1 ]; then
+    r='\[\e[0m\]'; bold='\[\e[1m\]'; dim='\[\e[2m\]'
+    case "${TERM}" in *256color*|*kitty*|alacritty|xterm-ghostty)
+      ok='\[\e[38;5;142m\]'; err='\[\e[38;5;167m\]'; box='\[\e[38;5;243m\]'
+      ;;
+    *) ok='\[\e[32m\]'; err='\[\e[31m\]'; box='\[\e[2m\]' ;;
+    esac
+  fi
+  local pc; [ $exit -eq 0 ] && pc="$ok" || pc="$err"
+  local prefix=""
+  [ -r /etc/debian_chroot ] && prefix="${dim}($(cat /etc/debian_chroot))${r} "
+  [ -n "${CONTAINER_ID:-}" ] && prefix="${box}[${CONTAINER_ID}]${r} "
+  local branch; branch=$(__ps1_git)
+  local git_part=""; [ -n "$branch" ] && git_part="${dim}(${branch})${r} "
+  PS1="${prefix}${bold}\W${r} ${git_part}${pc}\$${r} "
+}
+PROMPT_COMMAND='__ps1_build'
 # 6. Default Aliases & Colors
 # ==========================================
 if [ -x /bin/dircolors ]; then
@@ -75,6 +95,9 @@ fi
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
+
+# podman as docker drop-in
+command -v podman &>/dev/null && ! command -v docker &>/dev/null && alias docker='podman'
 
 # ==========================================
 # 7. Readline Mode

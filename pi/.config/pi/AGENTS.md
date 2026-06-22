@@ -20,3 +20,22 @@
 ## Error Handling
 - If a command fails, diagnose before retrying.
 - Show the actual error output, not just "it failed".
+
+## Stack
+- IaC: Terraform (modules, remote state, workspaces)
+- Orchestration: Kubernetes (kubectl, Helm, Kustomize)
+- CI/CD: GitHub Actions
+- Shell: Bash -- CLI-first, no GUI tooling
+- Dotfiles: GNU Stow, managed at ~/dotfiles
+
+## Hard Constraints
+- Production deploys: Thursdays only (ITIL/GMUD change window)
+- All infra changes require a GMUD ticket before apply
+- Never run terraform apply, kubectl delete, or any destructive cloud command without explicit confirmation
+- Secrets never in code -- always via vault/sealed secrets/env injection
+
+## Conventions
+- Terraform: modules in modules/, environments in environments/<env>/
+- Always run terraform fmt and terraform validate before plan
+- K8s: Kustomize base + overlays pattern preferred over raw manifests
+- CI: jobs should be idempotent and re-runnable without side effects

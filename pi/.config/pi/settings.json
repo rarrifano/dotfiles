@@ -4,7 +4,8 @@
   "defaultProvider": "github-copilot",
   "defaultModel": "claude-sonnet-4.6",
   "extensions": [
-    "./extensions/hide-cursor.ts"
+    "./extensions/hide-cursor.ts",
+    "./extensions/git-checkpoint.ts"
   ],
   "packages": [
     "npm:pi-web-access"
@@ -28,5 +29,10 @@
     "baseDelayMs": 2000
   },
   "steeringMode": "one-at-a-time",
-  "followUpMode": "one-at-a-time"
+  "followUpMode": "one-at-a-time",
+  "shellCommandPrefix": "source ~/.bashrc 2>/dev/null || true;",
+  "enabledModels": [
+    "claude-sonnet*",
+    "claude-haiku*"
+  ]
 }

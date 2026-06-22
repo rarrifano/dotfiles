@@ -15,6 +15,7 @@ PACKAGES=(
     fzf
     unzip
     fonts-jetbrains-mono
+    fonts-noto-color-emoji
 )
 
 echo "==> Updating package index..."
