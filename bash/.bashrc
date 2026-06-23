@@ -71,9 +71,9 @@ __ps1_build() {
   if [ "${TERM:-dumb}" != dumb ] && [ -t 1 ]; then
     r='\[\e[0m\]'; bold='\[\e[1m\]'; dim='\[\e[2m\]'
     case "${TERM}" in *256color*|*kitty*|alacritty|xterm-ghostty)
-      ok='\[\e[38;5;142m\]'; err='\[\e[38;5;167m\]'; box='\[\e[38;5;243m\]'
+      ok='\[\e[38;5;142m\]'; err='\[\e[38;5;167m\]'; box='\[\e[38;5;243m\]'; alert='\[\e[38;5;208m\]'
       ;;
-    *) ok='\[\e[32m\]'; err='\[\e[31m\]'; box='\[\e[2m\]' ;;
+    *) ok='\[\e[32m\]'; err='\[\e[31m\]'; box='\[\e[2m\]'; alert='\[\e[33m\]' ;;
     esac
   fi
   local pc; [ $exit -eq 0 ] && pc="$ok" || pc="$err"
@@ -82,7 +82,9 @@ __ps1_build() {
   [ -n "${CONTAINER_ID:-}" ] && prefix="${box}[${CONTAINER_ID}]${r} "
   local branch; branch=$(__ps1_git)
   local git_part=""; [ -n "$branch" ] && git_part="${dim}(${branch})${r} "
-  PS1="${prefix}${bold}\W${r} ${git_part}${pc}\$${r} "
+  local inbox_count; inbox_count=$(task project:inbox status:pending count 2>/dev/null || echo 0)
+  local inbox_part=""; [ "${inbox_count:-0}" -gt 0 ] && inbox_part="${bold}${alert}[${inbox_count}]${r} "
+  PS1="${prefix}${bold}\W${r} ${git_part}${inbox_part}${pc}\$${r} "
 }
 PROMPT_COMMAND='__ps1_build'
 # 6. Default Aliases & Colors

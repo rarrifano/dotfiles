@@ -12,4 +12,4 @@ Format:
 
 Types: feat, fix, refactor, docs, test, chore, perf
 Keep the subject line under 72 characters.
-Output only the commit message, nothing else.
+After writing the commit message, ask the user if they want to proceed with the commit. If they confirm, run `git commit -m "<subject>" -m "<body>"` using the exact message you wrote.

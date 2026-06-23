@@ -58,6 +58,34 @@ color.until=color132
 color.tag.next=bold color214
 color.project.none=color245
 
+# ── Tagged / blocked / scheduled ─────────────────────────────────────────────
+color.tagged=color109
+color.blocked=color245 on color237
+color.blocking=bold color208 on color237
+color.scheduled=color108 on color237
+
+# ── Burndown chart ─────────────────────────────────────────────────────────────
+color.burndown.pending=color167 on color237
+color.burndown.started=color214 on color237
+color.burndown.done=color142 on color237
+
+# ── History chart ─────────────────────────────────────────────────────────────
+color.history.add=color235 on color167
+color.history.delete=color235 on color214
+color.history.done=color235 on color142
+
+# ── Summary ───────────────────────────────────────────────────────────────────
+color.summary.background=color223 on color235
+color.summary.bar=color235 on color142
+
+# ── UDA priority ──────────────────────────────────────────────────────────────
+color.uda.priority.H=bold color167
+color.uda.priority.M=color214
+color.uda.priority.L=color108
+
+# ── Debug ─────────────────────────────────────────────────────────────────────
+color.debug=color109
+
 # ── Sync / undo ────────────────────────────────────────────────────────────────
 color.sync.added=color142
 color.sync.changed=color214

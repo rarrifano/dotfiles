@@ -125,6 +125,13 @@ alias dkcd='docker compose down'
 alias dkcl='docker compose logs -f'
 
 # ──────────────────────────────────────────
+# GTD — Taskwarrior
+# ──────────────────────────────────────────
+ib() { task add project:inbox "$@"; }  # capture to inbox: ib 'something'
+alias inbox='task project:inbox list'  # review inbox
+alias triage='task project:inbox list' # alias for the GTD-minded
+
+# ──────────────────────────────────────────
 # Misc utilities
 # ──────────────────────────────────────────
 alias path='echo $PATH | tr ":" "\n"'          # pretty-print PATH
