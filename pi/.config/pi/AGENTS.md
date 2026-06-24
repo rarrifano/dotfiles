@@ -1,5 +1,9 @@
 # Global Agent Instructions
 
+## Language
+- Always respond to the user in **English**, regardless of the language used in documents, runbooks, or any generated artifacts.
+- Documents and deliverables may be written in pt-BR (or any other requested language) — but all agent responses and explanations must be in English.
+
 ## General Behaviour
 - Be concise. Prefer code and diffs over long explanations.
 - Never truncate files when writing — always write the full content.

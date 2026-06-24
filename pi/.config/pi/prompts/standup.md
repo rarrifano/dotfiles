@@ -4,8 +4,8 @@ description: Gera daily standup em pt-BR com base nas tasks do Taskwarrior
 
 Use a ferramenta `taskwarrior` para buscar:
 
-1. Tarefas concluídas ontem: `end.after:$(date -d '1 day ago' +%Y-%m-%d) status:completed list`
-2. Tarefas pendentes para hoje: `status:pending list` ou `next`
+1. Tarefas concluídas ontem: `all status:completed` — depois filtre pelo campo `Done` as tasks concluídas nas últimas 24h
+2. Tarefas pendentes para hoje: `next`
 
 Com base no retorno, gere um **daily standup** em **português brasileiro (pt-BR)**, curto e direto, no formato:
 
