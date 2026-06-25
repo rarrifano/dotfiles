@@ -1,17 +1,11 @@
 # ~/.bashrc
 
-# ==========================================
-# 1. Interactive Shell Check
-# ==========================================
-# Non-interactive shell? Exit now.
+# Interactive Shell Check
 case $- in
-    *i*) ;;
-      *) return;;
+*i*) ;;
+*) return ;;
 esac
 
-# ==========================================
-# 2. Environment Variables & PATH
-# ==========================================
 # XDG base directories
 export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 export XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
@@ -39,9 +33,6 @@ fi
 # Docker rootless socket
 export DOCKER_HOST="unix:///run/user/$(id -u)/docker.sock"
 
-# ==========================================
-# 3. Shell Options & History
-# ==========================================
 # Shell options: update window size, recursive globbing.
 shopt -s checkwinsize
 shopt -s globstar
@@ -53,14 +44,10 @@ HISTSIZE=50000
 HISTFILESIZE=100000
 export HISTTIMEFORMAT="%F %T "
 
-# ==========================================
 # 4. System Integrations
-# ==========================================
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
-# ==========================================
 # 5. Prompt & Terminal Appearance
-# ==========================================
 __ps1_git() {
   git rev-parse --abbrev-ref HEAD 2>/dev/null
 }
@@ -69,54 +56,58 @@ __ps1_build() {
   local exit=$?
   local r='' bold='' ok='' err='' dim='' box=''
   if [ "${TERM:-dumb}" != dumb ] && [ -t 1 ]; then
-    r='\[\e[0m\]'; bold='\[\e[1m\]'; dim='\[\e[2m\]'
-    case "${TERM}" in *256color*|*kitty*|alacritty|xterm-ghostty)
-      ok='\[\e[38;5;142m\]'; err='\[\e[38;5;167m\]'; box='\[\e[38;5;243m\]'; alert='\[\e[38;5;208m\]'
+    r='\[\e[0m\]'
+    bold='\[\e[1m\]'
+    dim='\[\e[2m\]'
+    case "${TERM}" in *256color* | *kitty* | alacritty | xterm-ghostty)
+      ok='\[\e[38;5;142m\]'
+      err='\[\e[38;5;167m\]'
+      box='\[\e[38;5;243m\]'
+      alert='\[\e[38;5;208m\]'
       ;;
-    *) ok='\[\e[32m\]'; err='\[\e[31m\]'; box='\[\e[2m\]'; alert='\[\e[33m\]' ;;
+    *)
+      ok='\[\e[32m\]'
+      err='\[\e[31m\]'
+      box='\[\e[2m\]'
+      alert='\[\e[33m\]'
+      ;;
     esac
   fi
-  local pc; [ $exit -eq 0 ] && pc="$ok" || pc="$err"
+  local pc
+  [ $exit -eq 0 ] && pc="$ok" || pc="$err"
   local prefix=""
   [ -r /etc/debian_chroot ] && prefix="${dim}($(cat /etc/debian_chroot))${r} "
   [ -n "${CONTAINER_ID:-}" ] && prefix="${box}[${CONTAINER_ID}]${r} "
-  local branch; branch=$(__ps1_git)
-  local git_part=""; [ -n "$branch" ] && git_part="${dim}(${branch})${r} "
-  local inbox_count; inbox_count=$(task project:inbox status:pending count 2>/dev/null || echo 0)
-  local inbox_part=""; [ "${inbox_count:-0}" -gt 0 ] && inbox_part="${bold}${alert}[${inbox_count}]${r} "
+  local branch
+  branch=$(__ps1_git)
+  local git_part=""
+  [ -n "$branch" ] && git_part="${dim}(${branch})${r} "
+  local inbox_count
+  inbox_count=$(task project:inbox status:pending count 2>/dev/null || echo 0)
+  local inbox_part=""
+  [ "${inbox_count:-0}" -gt 0 ] && inbox_part="${bold}${alert}[${inbox_count}]${r} "
   PS1="${prefix}${bold}\W${r} ${git_part}${inbox_part}${pc}\$${r} "
 }
 PROMPT_COMMAND='__ps1_build'
-# 6. Default Aliases & Colors
-# ==========================================
+
 if [ -x /bin/dircolors ]; then
-    test -r ~/.dircolors && eval "$(/bin/dircolors -b ~/.dircolors)" || eval "$(/bin/dircolors -b)"
-    alias ls='ls --color=auto'
-    alias grep='grep --color=auto'
+  test -r ~/.dircolors && eval "$(/bin/dircolors -b ~/.dircolors)" || eval "$(/bin/dircolors -b)"
+  alias ls='ls --color=auto'
+  alias grep='grep --color=auto'
 fi
-alias la='ls -A'
-alias l='ls -CF'
 
 # podman as docker drop-in
 command -v podman &>/dev/null && ! command -v docker &>/dev/null && alias docker='podman'
 
-# ==========================================
-# 7. Readline Mode
-# ==========================================
+# Readline Mode
 set -o emacs
 
-# ==========================================
-# 8. Completions
-# ==========================================
 # Load system completions after PATH and tool managers are ready
 if ! shopt -oq posix; then
   [ -f /usr/share/bash-completion/bash_completion ] && . /usr/share/bash-completion/bash_completion
   [ -f /etc/bash_completion ] && . /etc/bash_completion
 fi
 
-# ==========================================
-# 9. Sourcing Local Files & Customizations
-# ==========================================
 # These are sourced at the end so they can override settings above.
 [ -f ~/.bash_aliases ] && . ~/.bash_aliases
 [ -f ~/.bashrc.local ] && . ~/.bashrc.local
@@ -130,16 +121,12 @@ elif [ -x "$HOME/.local/bin/mise" ]; then
   eval "$("$HOME/.local/bin/mise" completion bash)"
 fi
 
-# ==========================================
-# 10. fzf Integration
-# ==========================================
 # Key bindings: CTRL-R (history), CTRL-T (files), ALT-C (cd into dir)
 # Shell completion: trigger with ** + TAB (e.g. vim **<TAB>)
 if command -v fzf &>/dev/null; then
-  # Debian/Ubuntu ship keybindings + completion here
-  [ -f /usr/share/doc/fzf/examples/key-bindings.bash ] && \
+  [ -f /usr/share/doc/fzf/examples/key-bindings.bash ] &&
     . /usr/share/doc/fzf/examples/key-bindings.bash
-  [ -f /usr/share/bash-completion/completions/fzf ] && \
+  [ -f /usr/share/bash-completion/completions/fzf ] &&
     . /usr/share/bash-completion/completions/fzf
 
   # Use fd for fzf file listing if available (respects .gitignore)

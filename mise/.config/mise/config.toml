@@ -4,29 +4,29 @@
 
 [tools]
 
-# ── Runtimes ──────────────────────────────────────────────────────────────────
+# Runtimes
 node    = "lts"       # required by: pyright, yamlls, jsonls, prettier, bashls
 python  = "3.13"      # required by: ruff, pyright runtime
 go      = "latest"    # required by: personal Go projects (gorg, gtd)
 
-# ── Formatters ────────────────────────────────────────────────────────────────
+# Formatters
 stylua  = "latest"    # lua formatter
 shfmt   = "latest"    # sh/bash formatter
 ruff    = "latest"    # python formatter + linter
 
-# ── LSP servers (npm-based) ───────────────────────────────────────────────────
+# LSP servers (npm-based)
 "npm:prettier"                      = "latest"   # yaml/json formatter
 "npm:pyright"                       = "latest"   # python LSP
 "npm:bash-language-server"          = "latest"   # bashls
 "npm:yaml-language-server"         = "latest"   # yamlls
 "npm:vscode-langservers-extracted" = "latest"   # jsonls
 
-# ── LSP servers (aqua/github release) ─────────────────────────────────────────
+# LSP servers (aqua/github release)
 "aqua:hashicorp/terraform"         = "latest"   # terraform CLI (required by terraform_fmt)
 "aqua:hashicorp/terraform-ls"      = "latest"   # terraformls
 "aqua:rhysd/actionlint"            = "latest"   # github actions linter
 "aqua:terraform-linters/tflint"    = "latest"   # terraform linter
 "aqua:LuaLS/lua-language-server"   = "latest"   # lua_ls
 
-# ── mise plugins ──────────────────────────────────────────────────────────────
+# mise plugins
 usage   = "latest"   # mise task completion + mise help

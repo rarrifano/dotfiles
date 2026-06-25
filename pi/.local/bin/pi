@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# ── Config ────────────────────────────────────────────────────────────────────
+# Config
 IMAGE="${PI_IMAGE:-pi-agent:latest}"
 AGENT_DIR="${PI_AGENT_DIR:-${HOME}/.config/pi}"
 WORK_DIR="${PI_WORKDIR:-$(pwd)}"
 
-# ── Clipboard detection ───────────────────────────────────────────────────────
+# Clipboard detection
 DISPLAY_ARGS=()
 
 if [[ -n "${WAYLAND_DISPLAY:-}" ]]; then
@@ -39,7 +39,7 @@ if [[ ${#DISPLAY_ARGS[@]} -eq 0 ]]; then
     echo "[pi-run] warn: no clipboard socket detected — Ctrl+V image paste will not work" >&2
 fi
 
-# ── Mounts ────────────────────────────────────────────────────────────────────
+# Mounts
 MOUNT_ARGS=()
 
 # .pi/agent/ — rw so pi can write settings, sessions, etc.
@@ -74,7 +74,7 @@ fi
 HOST_DIRNAME="$(basename "${WORK_DIR}")"
 MOUNT_ARGS+=(-v "${WORK_DIR}:/${HOST_DIRNAME}")
 
-# ── Launch ────────────────────────────────────────────────────────────────────
+# Launch
 TTY_ARGS=()
 if [[ -t 0 && -t 1 ]]; then
     TTY_ARGS=(-it)

@@ -1,12 +1,12 @@
 # Taskwarrior configuration
 # Managed by GNU Stow — edit at ~/dotfiles/task/.config/task/taskrc
 
-# ── Data location ─────────────────────────────────────────────────────────────
+# Data location
 data.location=~/.local/share/task
 
-# ── Theme ─────────────────────────────────────────────────────────────────────
+# Theme
 include ~/.config/task/gruvbox.theme
 
-# ── General ───────────────────────────────────────────────────────────────────
+# General
 color=on
 news.version=2.6.0

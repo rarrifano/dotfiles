@@ -2,51 +2,51 @@
 
 -- Register custom YAML sub-filetypes so yamlls can attach to them
 vim.filetype.add({
-  pattern = {
-    ["docker%-compose.*%.ya?ml"] = "yaml.docker-compose",
-    [".+%.ya?ml"]                = function(path, _)
-      local f = io.open(path, "r")
-      if f then
-        local head = f:read(2048) or ""
-        f:close()
-        if head:match("stages:%s*%[") or head:match("%-%-%-%s*stages:") then
-          return "yaml.gitlab"
-        end
-        if head:match('Chart%.yaml') or head:match('helm') then
-          return "yaml.helm-values"
-        end
-      end
-    end,
-  },
+	pattern = {
+		["docker%-compose.*%.ya?ml"] = "yaml.docker-compose",
+		[".+%.ya?ml"] = function(path, _)
+			local f = io.open(path, "r")
+			if f then
+				local head = f:read(2048) or ""
+				f:close()
+				if head:match("stages:%s*%[") or head:match("%-%-%-%s*stages:") then
+					return "yaml.gitlab"
+				end
+				if head:match("Chart%.yaml") or head:match("helm") then
+					return "yaml.helm-values"
+				end
+			end
+		end,
+	},
 })
 
 -- Highlight on yank
 vim.api.nvim_create_autocmd("TextYankPost", {
-  desc = "Highlight when yanking (copying) text",
-  group = vim.api.nvim_create_augroup("highlight-yank", { clear = true }),
-  callback = function()
-    vim.hl.on_yank()
-  end,
+	desc = "Highlight when yanking (copying) text",
+	group = vim.api.nvim_create_augroup("highlight-yank", { clear = true }),
+	callback = function()
+		vim.hl.on_yank()
+	end,
 })
 
 -- Per-filetype indent overrides
 vim.api.nvim_create_autocmd("FileType", {
-  pattern = { "go", "python" },
-  callback = function()
-    vim.opt_local.shiftwidth = 4
-    vim.opt_local.tabstop = 4
-    vim.opt_local.softtabstop = 4
-  end,
+	pattern = { "go", "python" },
+	callback = function()
+		vim.opt_local.shiftwidth = 4
+		vim.opt_local.tabstop = 4
+		vim.opt_local.softtabstop = 4
+	end,
 })
 
 -- Auto-reload files changed on disk
 -- autoread alone only kicks in on a handful of events; checktime forces the check
 vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold", "CursorHoldI" }, {
-  desc = "Reload file if changed on disk",
-  group = vim.api.nvim_create_augroup("auto-reload", { clear = true }),
-  callback = function()
-    if vim.fn.mode() ~= "c" then
-      vim.cmd("checktime")
-    end
-  end,
+	desc = "Reload file if changed on disk",
+	group = vim.api.nvim_create_augroup("auto-reload", { clear = true }),
+	callback = function()
+		if vim.fn.mode() ~= "c" then
+			vim.cmd("checktime")
+		end
+	end,
 })
