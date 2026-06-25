@@ -7,7 +7,10 @@ vim.pack.add({
 	spec("lewis6991/gitsigns.nvim", "v2.1.0"),
 	spec("tpope/vim-fugitive", "v3.7"),
 })
-require("gitsigns").setup()
+-- Defer gitsigns setup — not needed until a buffer is open
+vim.schedule(function()
+	require("gitsigns").setup()
+end)
 
 vim.cmd.colorscheme("retrobox")
 

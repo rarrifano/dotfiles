@@ -14,7 +14,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 	callback = function(event)
 		local buf = event.buf
 		local map = function(keys, fn, desc)
-			vim.keymap.set("n", keys, fn, { buffer = buf, desc = desc })
+			vim.keymap.set("n", keys, fn, { buf = buf, desc = desc })
 		end
 
 		map("gd", vim.lsp.buf.definition, "Go to definition")
@@ -25,8 +25,8 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		map("<leader>rn", vim.lsp.buf.rename, "Rename symbol")
 		map("<leader>ca", vim.lsp.buf.code_action, "Code action")
 		map("<leader>cd", vim.diagnostic.open_float, "Show diagnostics")
-		map("[d", vim.diagnostic.goto_prev, "Previous diagnostic")
-		map("]d", vim.diagnostic.goto_next, "Next diagnostic")
+		map("[d", function() vim.diagnostic.jump({ count = -1, on_jump = function(diag, buf) vim.diagnostic.open_float() end }) end, "Previous diagnostic")
+		map("]d", function() vim.diagnostic.jump({ count = 1, on_jump = function(diag, buf) vim.diagnostic.open_float() end }) end, "Next diagnostic")
 	end,
 })
 

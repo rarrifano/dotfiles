@@ -5,7 +5,7 @@ vim.o.relativenumber = true
 vim.o.mouse = "a"
 vim.o.mousemodel = "extend"
 vim.o.showmode = false
-vim.o.termguicolors = true
+-- termguicolors: auto-enabled since nvim 0.10 when terminal supports truecolor
 
 vim.o.undofile = true
 vim.o.ignorecase = true

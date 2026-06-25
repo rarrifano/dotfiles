@@ -10,64 +10,67 @@ WORK_DIR="${PI_WORKDIR:-$(pwd)}"
 DISPLAY_ARGS=()
 
 if [[ -n "${WAYLAND_DISPLAY:-}" ]]; then
-    # Wayland: pass socket from XDG_RUNTIME_DIR
-    WAYLAND_SOCKET="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/${WAYLAND_DISPLAY}"
-    if [[ -S "${WAYLAND_SOCKET}" ]]; then
-        DISPLAY_ARGS+=(
-            -e "WAYLAND_DISPLAY=${WAYLAND_DISPLAY}"
-            -e "XDG_RUNTIME_DIR=/tmp/xdg-runtime"
-            -v "${WAYLAND_SOCKET}:/tmp/xdg-runtime/${WAYLAND_DISPLAY}:ro"
-        )
-    else
-        echo "[pi-run] warn: WAYLAND_DISPLAY set but socket not found at ${WAYLAND_SOCKET}" >&2
-    fi
+  # Wayland: pass socket from XDG_RUNTIME_DIR
+  WAYLAND_SOCKET="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/${WAYLAND_DISPLAY}"
+  if [[ -S "${WAYLAND_SOCKET}" ]]; then
+    DISPLAY_ARGS+=(
+      -e "WAYLAND_DISPLAY=${WAYLAND_DISPLAY}"
+      -e "XDG_RUNTIME_DIR=/tmp/xdg-runtime"
+      -v "${WAYLAND_SOCKET}:/tmp/xdg-runtime/${WAYLAND_DISPLAY}:ro"
+    )
+  else
+    echo "[pi-run] warn: WAYLAND_DISPLAY set but socket not found at ${WAYLAND_SOCKET}" >&2
+  fi
 fi
 
 if [[ -n "${DISPLAY:-}" ]]; then
-    # X11: pass display socket
-    if [[ -d /tmp/.X11-unix ]]; then
-        DISPLAY_ARGS+=(
-            -e "DISPLAY=${DISPLAY}"
-            -v /tmp/.X11-unix:/tmp/.X11-unix:ro
-        )
-    else
-        echo "[pi-run] warn: DISPLAY set but /tmp/.X11-unix not found" >&2
-    fi
+  # X11: pass display socket
+  if [[ -d /tmp/.X11-unix ]]; then
+    DISPLAY_ARGS+=(
+      -e "DISPLAY=${DISPLAY}"
+      -v /tmp/.X11-unix:/tmp/.X11-unix:ro
+    )
+  else
+    echo "[pi-run] warn: DISPLAY set but /tmp/.X11-unix not found" >&2
+  fi
 fi
 
 if [[ ${#DISPLAY_ARGS[@]} -eq 0 ]]; then
-    echo "[pi-run] warn: no clipboard socket detected — Ctrl+V image paste will not work" >&2
+  echo "[pi-run] warn: no clipboard socket detected — Ctrl+V image paste will not work" >&2
 fi
+
+# Ollama — add host.containers.internal so the extension can reach the host
+OLLAMA_ARGS=(--add-host=host.containers.internal:host-gateway)
 
 # Mounts
 MOUNT_ARGS=()
 
 # .pi/agent/ — rw so pi can write settings, sessions, etc.
 if [[ -d "${AGENT_DIR}" ]]; then
-    MOUNT_ARGS+=(-v "${AGENT_DIR}:/root/.pi/agent")
+  MOUNT_ARGS+=(-v "${AGENT_DIR}:/root/.pi/agent")
 else
-    echo "[pi-run] warn: agent dir not found at ${AGENT_DIR}" >&2
+  echo "[pi-run] warn: agent dir not found at ${AGENT_DIR}" >&2
 fi
 
 # git config — ro so the container inherits host identity
 if [[ -f "${HOME}/.gitconfig" ]]; then
-    MOUNT_ARGS+=(-v "${HOME}/.gitconfig:/root/.gitconfig:ro")
+  MOUNT_ARGS+=(-v "${HOME}/.gitconfig:/root/.gitconfig:ro")
 fi
 
 # taskwarrior — rw data, ro config and theme
 if [[ -d "${HOME}/.local/share/task" ]]; then
-    MOUNT_ARGS+=(-v "${HOME}/.local/share/task:/root/.local/share/task")
+  MOUNT_ARGS+=(-v "${HOME}/.local/share/task:/root/.local/share/task")
 fi
 if [[ -f "${HOME}/.config/task/taskrc" ]]; then
-    MOUNT_ARGS+=(-v "${HOME}/.config/task/taskrc:/root/.config/task/taskrc:ro")
+  MOUNT_ARGS+=(-v "${HOME}/.config/task/taskrc:/root/.config/task/taskrc:ro")
 fi
 if [[ -f "${HOME}/.config/task/gruvbox.theme" ]]; then
-    MOUNT_ARGS+=(-v "${HOME}/.config/task/gruvbox.theme:/root/.config/task/gruvbox.theme:ro")
+  MOUNT_ARGS+=(-v "${HOME}/.config/task/gruvbox.theme:/root/.config/task/gruvbox.theme:ro")
 fi
 
 # gh CLI config — ro so the container inherits host credentials
 if [[ -d "${HOME}/.config/gh" ]]; then
-    MOUNT_ARGS+=(-v "${HOME}/.config/gh:/root/.config/gh:ro")
+  MOUNT_ARGS+=(-v "${HOME}/.config/gh:/root/.config/gh:ro")
 fi
 
 # working directory — mount under the host directory's basename
@@ -77,12 +80,24 @@ MOUNT_ARGS+=(-v "${WORK_DIR}:/${HOST_DIRNAME}")
 # Launch
 TTY_ARGS=()
 if [[ -t 0 && -t 1 ]]; then
-    TTY_ARGS=(-it)
+  TTY_ARGS=(-it)
 else
-    TTY_ARGS=(-i)
+  TTY_ARGS=(-i)
 fi
 
+#exec podman run --rm "${TTY_ARGS[@]}" \
+#  "${DISPLAY_ARGS[@]+"${DISPLAY_ARGS[@]}"}" \
+#  "${MOUNT_ARGS[@]+"${MOUNT_ARGS[@]}"}" \
+#  -e "PI_CODING_AGENT_DIR=/root/.pi/agent" \
+#  -e "TASKRC=/root/.config/task/taskrc" \
+#  -e "TERM=${TERM:-xterm-256color}" \
+#  -e "COLORTERM=${COLORTERM:-truecolor}" \
+#  --workdir "/${HOST_DIRNAME}" \
+#  "${IMAGE}" \
+#  "$@"
+
 exec podman run --rm "${TTY_ARGS[@]}" \
+    "${OLLAMA_ARGS[@]+"${OLLAMA_ARGS[@]}"}" \
     "${DISPLAY_ARGS[@]+"${DISPLAY_ARGS[@]}"}" \
     "${MOUNT_ARGS[@]+"${MOUNT_ARGS[@]}"}" \
     -e "PI_CODING_AGENT_DIR=/root/.pi/agent" \

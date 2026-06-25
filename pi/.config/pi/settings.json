@@ -1,12 +1,13 @@
 {
   "lastChangelogVersion": "0.80.2",
   "theme": "gruvbox",
-  "defaultProvider": "github-copilot",
-  "defaultModel": "claude-sonnet-4.6",
+  "defaultProvider": "ollama",
+  "defaultModel": "qwen2.5-coder:7b-instruct",
   "extensions": [
     "./extensions/hide-cursor.ts",
     "./extensions/git-checkpoint.ts",
-    "./extensions/taskwarrior.ts"
+    "./extensions/taskwarrior.ts",
+    "./extensions/ollama.ts"
   ],
   "packages": [
     "npm:pi-web-access"

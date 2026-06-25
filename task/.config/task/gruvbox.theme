@@ -102,3 +102,9 @@ color.calendar.overdue=bold color223 on color167
 color.calendar.weekend=color237
 color.calendar.holiday=bold color132
 color.calendar.weeknumber=color245
+
+# GTD tags
+color.tag.next=bold color142
+color.tag.waiting=color245
+color.tag.someday=color239
+color.tag.inbox=bold color214

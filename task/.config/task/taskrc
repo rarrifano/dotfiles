@@ -10,3 +10,46 @@ include ~/.config/task/gruvbox.theme
 # General
 color=on
 news.version=2.6.0
+
+# ── GTD ──────────────────────────────────────────────────────────────────────
+
+# Urgency tweaks
+urgency.user.tag.next.coefficient=5.0
+urgency.user.tag.waiting.coefficient=-3.0
+urgency.user.tag.someday.coefficient=-5.0
+urgency.user.tag.inbox.coefficient=1.0
+
+# report: inbox — captured, not yet processed
+report.inbox.description=GTD Inbox — unprocessed captures
+report.inbox.columns=id,project,description,entry.age,tags
+report.inbox.labels=ID,Project,Description,Age,Tags
+report.inbox.filter=status:pending +inbox
+report.inbox.sort=entry+
+
+# report: next — next actions ready to do
+report.next.description=GTD Next Actions
+report.next.columns=id,project,description,due,tags
+report.next.labels=ID,Project,Description,Due,Tags
+report.next.filter=status:pending +next
+report.next.sort=project+,urgency-
+
+# report: waiting — delegated / blocked
+report.waiting.description=GTD Waiting For
+report.waiting.columns=id,project,description,wait,tags
+report.waiting.labels=ID,Project,Description,Wait,Tags
+report.waiting.filter=status:pending +waiting
+report.waiting.sort=project+,wait+
+
+# report: someday — someday/maybe backlog
+report.someday.description=GTD Someday/Maybe
+report.someday.columns=id,project,description,entry.age,tags
+report.someday.labels=ID,Project,Description,Age,Tags
+report.someday.filter=status:pending +someday
+report.someday.sort=project+,entry+
+
+# report: review — weekly review, all active tasks by project
+report.review.description=GTD Weekly Review
+report.review.columns=id,project,description,due,tags,urgency
+report.review.labels=ID,Project,Description,Due,Tags,Urg
+report.review.filter=status:pending -someday -waiting
+report.review.sort=project+,urgency-
