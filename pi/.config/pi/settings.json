@@ -1,8 +1,8 @@
 {
   "lastChangelogVersion": "0.80.2",
   "theme": "gruvbox",
-  "defaultProvider": "ollama",
-  "defaultModel": "qwen2.5-coder:7b-instruct",
+  "defaultProvider": "github-copilot",
+  "defaultModel": "claude-sonnet-4.6",
   "extensions": [
     "./extensions/hide-cursor.ts",
     "./extensions/git-checkpoint.ts",
@@ -35,7 +35,8 @@
   "shellCommandPrefix": "source ~/.bashrc 2>/dev/null || true;",
   "enabledModels": [
     "claude-sonnet*",
-    "claude-haiku*"
+    "claude-haiku*",
+    "llama3.1*"
   ],
   "showHardwareCursor": true
 }
