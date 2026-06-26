@@ -11,6 +11,8 @@ dotfiles/
 ├── mise/       → ~/.config/mise/config.toml   (dev toolchain)
 ├── nvim/       → ~/.config/nvim/
 ├── pi/         → ~/.config/pi/                (pi coding agent — skills, prompts, extensions)
+├── scripts/    → ~/.local/bin/                (utility scripts)
+├── task/       → ~/.config/task/ + ~/.local/share/task/hooks/
 └── tmux/       → ~/.tmux.conf
 ```
 
@@ -20,7 +22,7 @@ dotfiles/
 git clone <repo-url> ~/dotfiles
 cd ~/dotfiles
 # symlink all packages at once
-stow --restow --target="$HOME" bash kitty mise nvim pi tmux
+stow --restow --target="$HOME" bash kitty mise nvim pi scripts task tmux
 # install dev toolchain
 mise install
 ```
@@ -83,7 +85,7 @@ mise outdated  # check for updates
 | Terminal emulator | Kitty (Wayland native) |
 | Multiplexer | tmux |
 | Shell | bash |
-| Font | JetBrains Mono |
+| Font | Hack |
 | Colorscheme | Gruvbox Dark (consistent across all layers) |
 
 ## pi coding agent
@@ -95,6 +97,6 @@ Config lives in `pi/.config/pi/` and symlinks to `~/.config/pi/`.
 | `AGENTS.md` | Global agent behaviour instructions |
 | `APPEND_SYSTEM.md` | System prompt append (Ferris persona) |
 | `keybindings.json` | Custom TUI keybindings |
-| `extensions/` | Custom pi extensions (`git-checkpoint`, `hide-cursor`) |
-| `prompts/` | Reusable prompt templates (`commit`, `pr`, `review`, `debug`, `explain`, `postmortem`, `runbook`, `test`, `tf-plan-review`) |
-| `skills/` | Agent skills (`gh-actions`, `gmud-checklist`, `k8s-debug`, `persona-sync`, `tf-workflow`, `user-context`) |
+| `extensions/` | Custom pi extensions (`hide-cursor`, `taskwarrior`) |
+| `prompts/` | Reusable prompt templates (`commit`, `pr`, `review`, `debug`, `explain`, `standup`, `weekly-report`, `postmortem`, `runbook`, `test`, `tf-plan-review`, `init`) |
+| `skills/` | Agent skills (`gh-actions`, `gmud-checklist`, `k8s-debug`, `meeting-prep`, `persona-sync`, `report-builder`, `tf-workflow`, `user-context`) |

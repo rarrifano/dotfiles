@@ -62,7 +62,6 @@ dotfiles/
 │   │   ├── settings.json          # pi settings (model, theme, extensions…)
 │   │   ├── keybindings.json       # TUI keybindings
 │   │   ├── extensions/            # TypeScript pi extensions
-│   │   │   ├── git-checkpoint.ts  # Non-destructive stash before each turn
 │   │   │   ├── hide-cursor.ts     # Hide hardware cursor in TUI
 │   │   │   └── taskwarrior.ts     # Taskwarrior tool integration
 │   │   ├── prompts/               # Reusable /prompt templates
@@ -71,7 +70,7 @@ dotfiles/
 │   │   │   ├── review.md          # Code review
 │   │   │   ├── debug.md           # Debugging guide
 │   │   │   ├── explain.md         # Explanation request
-│   │   │   ├── daily.md           # Daily standup
+│   │   │   ├── standup.md         # Daily standup
 │   │   │   ├── weekly-report.md   # Weekly activity report
 │   │   │   ├── postmortem.md      # Incident postmortem
 │   │   │   ├── runbook.md         # Runbook generation
@@ -84,16 +83,22 @@ dotfiles/
 │   │   │   ├── k8s-debug/         # Kubernetes debugging
 │   │   │   ├── report-builder/    # .docx report generation (pandoc + style-tables.js)
 │   │   │   ├── tf-workflow/       # Terraform workflow
+│   │   │   ├── meeting-prep/      # PE IT Sync Up meeting prep
 │   │   │   ├── user-context/      # Personal user profile
 │   │   │   └── persona-sync/      # Sync Ferri-chan persona
 │   │   └── themes/
 │   │       └── gruvbox.json       # Custom gruvbox pi theme
 │   └── .local/bin/
 │       ├── pi                     # Container launcher (podman run)
-│       └── pi-build               # Container image builder
+│       ├── pi-build               # Container image builder
+│       └── pi-update              # Rebuild image to latest pi version
+├── scripts/
+│   └── .local/bin/
+│       └── ollama-webui           # Launch Open WebUI + Ollama via Podman
 ├── task/
 │   └── .config/task/
-│       └── gruvbox.theme          # Taskwarrior gruvbox colour theme
+│       ├── gruvbox.theme          # Taskwarrior gruvbox colour theme
+│       └── taskrc                 # Taskwarrior config + GTD reports
 ├── tmux/
 │   └── .tmux.conf
 ├── .pi/

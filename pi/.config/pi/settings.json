@@ -5,7 +5,8 @@
   "defaultModel": "claude-sonnet-4.6",
   "extensions": [
     "./extensions/hide-cursor.ts",
-    "./extensions/taskwarrior.ts"
+    "./extensions/taskwarrior.ts",
+    "./extensions/rewind-footer.ts"
   ],
   "packages": [
     "npm:pi-web-access",

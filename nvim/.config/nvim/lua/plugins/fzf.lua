@@ -23,7 +23,7 @@ vim.schedule(function()
 	fzf.register_ui_select()
 end)
 
---- Lazy wrapper: calls fzf-lua method only when the keymap is triggered.
+-- Lazy wrapper: calls fzf-lua method only when the keymap is triggered.
 local function fzf_call(method, opts)
 	return function()
 		require("fzf-lua")[method](opts)

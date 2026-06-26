@@ -15,6 +15,7 @@
 - Match the conventions already present in the file being edited.
 - Leave no debugging artefacts (console.log, print, TODO) unless explicitly asked.
 - Keep functions small and single-purpose.
+- Comments: plain and simple only — no decorative lines, banners, or separators (no `---`, `===`, `***`, or similar). One short line that describes what follows.
 
 ## Shell & Commands
 - Prefer non-destructive commands; add `--dry-run` or `-n` where available.
