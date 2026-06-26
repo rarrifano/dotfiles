@@ -4,9 +4,14 @@
 read -r original
 read -r modified
 
-# If any GTD state tag is present and inbox is present, strip inbox
-if echo "$modified" | grep -qE '"(next|waiting|someday)"' && echo "$modified" | grep -q '"inbox"'; then
-    modified=$(echo "$modified" | sed 's/"inbox",\s*//g; s/,\s*"inbox"//g; s/\["inbox"\]/[]/g')
+# Use jq for safe JSON manipulation — sed on raw JSON is fragile
+if command -v jq &>/dev/null; then
+    has_gtd=$(echo "$modified" | jq 'any(.tags[]?; . == "next" or . == "waiting" or . == "someday")')
+    has_inbox=$(echo "$modified" | jq 'any(.tags[]?; . == "inbox")')
+
+    if [ "$has_gtd" = "true" ] && [ "$has_inbox" = "true" ]; then
+        modified=$(echo "$modified" | jq '.tags = [.tags[]? | select(. != "inbox")]')
+    fi
 fi
 
 echo "$modified"

@@ -2,7 +2,7 @@
 set -euo pipefail
 
 CONTAINER_NAME="ollama-webui"
-WEBUI_IMAGE="${WEBUI_IMAGE:-ghcr.io/open-webui/open-webui:main}"
+WEBUI_IMAGE="${WEBUI_IMAGE:-ghcr.io/open-webui/open-webui:v0.6.15}"
 WEBUI_PORT="${WEBUI_PORT:-3000}"
 WEBUI_VOLUME="${WEBUI_VOLUME:-open-webui}"
 OLLAMA_PORT="${OLLAMA_PORT:-11434}"

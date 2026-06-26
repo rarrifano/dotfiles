@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+CONTAINER_NAME="ollama"
+OLLAMA_IMAGE="${OLLAMA_IMAGE:-docker.io/ollama/ollama:0.9.6}"
+OLLAMA_PORT="${OLLAMA_PORT:-11434}"
+OLLAMA_VOLUME="${OLLAMA_VOLUME:-ollama}"
+
+# Check if already running
+if podman ps --format '{{.Names}}' | grep -q "^${CONTAINER_NAME}$"; then
+    echo "[ollama-run] already running — http://localhost:${OLLAMA_PORT}" >&2
+    exit 0
+fi
+
+# Remove stopped container if it exists
+if podman ps -a --format '{{.Names}}' | grep -q "^${CONTAINER_NAME}$"; then
+    echo "[ollama-run] removing stopped container..." >&2
+    podman rm "${CONTAINER_NAME}" >/dev/null
+fi
+
+echo "[ollama-run] starting Ollama on port ${OLLAMA_PORT}..." >&2
+
+podman run -d \
+    --name "${CONTAINER_NAME}" \
+    -p "${OLLAMA_PORT}:11434" \
+    -v "${OLLAMA_VOLUME}:/root/.ollama" \
+    "${OLLAMA_IMAGE}"
+
+echo "[ollama-run] ready — http://localhost:${OLLAMA_PORT}" >&2

@@ -10,23 +10,23 @@ python  = "3.13"      # required by: ruff, pyright runtime
 go      = "latest"    # required by: personal Go projects (gorg, gtd)
 
 # Formatters
-stylua  = "latest"    # lua formatter
-shfmt   = "latest"    # sh/bash formatter
-ruff    = "latest"    # python formatter + linter
+stylua  = "2.1.0"    # lua formatter
+shfmt   = "3.11.0"   # sh/bash formatter
+ruff    = "0.11.13"  # python formatter + linter
 
 # LSP servers (npm-based)
-"npm:prettier"                      = "latest"   # yaml/json formatter
-"npm:pyright"                       = "latest"   # python LSP
-"npm:bash-language-server"          = "latest"   # bashls
-"npm:yaml-language-server"         = "latest"   # yamlls
-"npm:vscode-langservers-extracted" = "latest"   # jsonls
+"npm:prettier"                      = "3.5.3"    # yaml/json formatter
+"npm:pyright"                       = "1.1.402"  # python LSP
+"npm:bash-language-server"          = "5.6.0"    # bashls
+"npm:yaml-language-server"         = "1.15.0"  # yamlls
+"npm:vscode-langservers-extracted" = "4.10.0"  # jsonls
 
 # LSP servers (aqua/github release)
-"aqua:hashicorp/terraform"         = "latest"   # terraform CLI (required by terraform_fmt)
-"aqua:hashicorp/terraform-ls"      = "latest"   # terraformls
-"aqua:rhysd/actionlint"            = "latest"   # github actions linter
-"aqua:terraform-linters/tflint"    = "latest"   # terraform linter
-"aqua:LuaLS/lua-language-server"   = "latest"   # lua_ls
+"aqua:hashicorp/terraform"         = "1.12.2"  # terraform CLI (required by terraform_fmt)
+"aqua:hashicorp/terraform-ls"      = "0.36.4"  # terraformls
+"aqua:rhysd/actionlint"            = "1.7.7"   # github actions linter
+"aqua:terraform-linters/tflint"    = "0.57.0"  # terraform linter
+"aqua:LuaLS/lua-language-server"   = "3.14.0"  # lua_ls
 
 # mise plugins
 usage   = "latest"   # mise task completion + mise help

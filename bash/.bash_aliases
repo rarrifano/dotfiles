@@ -32,9 +32,14 @@ alias psg='ps aux | grep -v grep | grep'
 alias ports='ss -tulnp'
 
 # Editor shortcuts
-alias v='$EDITOR'
-alias vi='$EDITOR'
-alias vim='$EDITOR'
+if command -v nvim &>/dev/null; then
+  alias v='nvim'
+  alias vi='nvim'
+  alias vim='nvim'
+else
+  alias v='vi'
+  alias vim='vi'
+fi
 
 # Git
 alias g='git'
@@ -46,7 +51,7 @@ alias gl='git log --oneline --graph --decorate --all'
 alias tf='terraform'
 alias tfi='terraform init'
 alias tfp='terraform plan'
-alias tfa='terraform apply'
+alias tfa='terraform plan && terraform apply'
 alias tfd='terraform destroy'
 alias tff='terraform fmt -recursive'
 alias tfv='terraform validate'

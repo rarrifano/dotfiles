@@ -82,13 +82,24 @@ __ps1_build() {
   branch=$(__ps1_git)
   local git_part=""
   [ -n "$branch" ] && git_part="${dim}(${branch})${r} "
-  local inbox_count
-  inbox_count=$(task project:inbox status:pending count 2>/dev/null || echo 0)
   local inbox_part=""
-  [ "${inbox_count:-0}" -gt 0 ] && inbox_part="${bold}${alert}[${inbox_count}]${r} "
+  if [ "${__PS1_INBOX_COUNT:-0}" -gt 0 ]; then
+    inbox_part="${bold}${alert}[${__PS1_INBOX_COUNT}]${r} "
+  fi
   PS1="${prefix}${bold}\W${r} ${git_part}${inbox_part}${pc}\$${r} "
 }
-PROMPT_COMMAND='__ps1_build'
+# Refresh inbox count at most once every 30 seconds to avoid forking task on
+# every prompt render.
+__ps1_inbox_refresh() {
+  local now
+  now=$(date +%s)
+  if [ $(( now - ${__PS1_INBOX_TS:-0} )) -ge 30 ]; then
+    __PS1_INBOX_COUNT=$(task project:inbox status:pending count 2>/dev/null || echo 0)
+    __PS1_INBOX_TS=$now
+  fi
+}
+
+PROMPT_COMMAND='__ps1_inbox_refresh; __ps1_build'
 
 if [ -x /bin/dircolors ]; then
   test -r ~/.dircolors && eval "$(/bin/dircolors -b ~/.dircolors)" || eval "$(/bin/dircolors -b)"
