@@ -7,7 +7,6 @@
     "./extensions/hide-cursor.ts",
     "./extensions/git-checkpoint.ts",
     "./extensions/taskwarrior.ts",
-    "./extensions/ollama.ts"
   ],
   "packages": [
     "npm:pi-web-access"
@@ -19,7 +18,7 @@
   "enableInstallTelemetry": false,
   "defaultProjectTrust": "ask",
   "treeFilterMode": "no-tools",
-  "defaultThinkingLevel": "minimal",
+  "defaultThinkingLevel": "off",
   "compaction": {
     "enabled": true,
     "reserveTokens": 16384,
@@ -35,8 +34,7 @@
   "shellCommandPrefix": "source ~/.bashrc 2>/dev/null || true;",
   "enabledModels": [
     "claude-sonnet*",
-    "claude-haiku*",
-    "llama3.1*"
+    "claude-haiku*"
   ],
   "showHardwareCursor": true
 }

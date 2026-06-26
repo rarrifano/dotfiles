@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# on-modify hook: auto-remove +inbox when a GTD state tag is added (next/waiting/someday)
+
+read -r original
+read -r modified
+
+# If any GTD state tag is present and inbox is present, strip inbox
+if echo "$modified" | grep -qE '"(next|waiting|someday)"' && echo "$modified" | grep -q '"inbox"'; then
+    modified=$(echo "$modified" | sed 's/"inbox",\s*//g; s/,\s*"inbox"//g; s/\["inbox"\]/[]/g')
+fi
+
+echo "$modified"
