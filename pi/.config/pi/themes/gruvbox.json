@@ -70,9 +70,9 @@
     "syntaxOperator": "orange",
     "syntaxPunctuation": "fg4",
 
-    "thinkingOff": "orange",
+    "thinkingOff": "bg3",
     "thinkingMinimal": "blue",
-    "thinkingLow": "aqua",
+    "thinkingLow": "green",
     "thinkingMedium": "yellow",
     "thinkingHigh": "orange",
     "thinkingXhigh": "red",

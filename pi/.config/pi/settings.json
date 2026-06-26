@@ -6,7 +6,7 @@
   "extensions": [
     "./extensions/hide-cursor.ts",
     "./extensions/git-checkpoint.ts",
-    "./extensions/taskwarrior.ts",
+    "./extensions/taskwarrior.ts"
   ],
   "packages": [
     "npm:pi-web-access"

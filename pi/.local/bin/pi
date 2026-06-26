@@ -39,9 +39,6 @@ if [[ ${#DISPLAY_ARGS[@]} -eq 0 ]]; then
   echo "[pi-run] warn: no clipboard socket detected — Ctrl+V image paste will not work" >&2
 fi
 
-# Ollama — add host.containers.internal so the extension can reach the host
-OLLAMA_ARGS=(--add-host=host.containers.internal:host-gateway)
-
 # Mounts
 MOUNT_ARGS=()
 
@@ -97,7 +94,6 @@ fi
 #  "$@"
 
 exec podman run --rm "${TTY_ARGS[@]}" \
-    "${OLLAMA_ARGS[@]+"${OLLAMA_ARGS[@]}"}" \
     "${DISPLAY_ARGS[@]+"${DISPLAY_ARGS[@]}"}" \
     "${MOUNT_ARGS[@]+"${MOUNT_ARGS[@]}"}" \
     -e "PI_CODING_AGENT_DIR=/root/.pi/agent" \
