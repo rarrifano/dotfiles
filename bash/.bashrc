@@ -64,12 +64,14 @@ __ps1_build() {
       err='\[\e[38;5;167m\]'
       box='\[\e[38;5;243m\]'
       alert='\[\e[38;5;208m\]'
+      warn='\[\e[38;5;167m\]'
       ;;
     *)
       ok='\[\e[32m\]'
       err='\[\e[31m\]'
       box='\[\e[2m\]'
       alert='\[\e[33m\]'
+      warn='\[\e[31m\]'
       ;;
     esac
   fi
@@ -83,8 +85,13 @@ __ps1_build() {
   local git_part=""
   [ -n "$branch" ] && git_part="${dim}(${branch})${r} "
   local inbox_part=""
-  if [ "${__PS1_INBOX_COUNT:-0}" -gt 0 ]; then
-    inbox_part="${bold}${alert}[${__PS1_INBOX_COUNT}]${r} "
+  local count=${__PS1_INBOX_COUNT:-0}
+  if [ "$count" -gt 10 ]; then
+    inbox_part="${bold}${warn}[${count}]${r} "
+  elif [ "$count" -gt 5 ]; then
+    inbox_part="${bold}${alert}[${count}]${r} "
+  elif [ "$count" -gt 0 ]; then
+    inbox_part="${bold}${ok}[${count}]${r} "
   fi
   PS1="${prefix}${bold}\W${r} ${git_part}${inbox_part}${pc}\$${r} "
 }

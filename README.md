@@ -21,9 +21,15 @@ dotfiles/
 ```bash
 git clone <repo-url> ~/dotfiles
 cd ~/dotfiles
-# symlink all packages at once
+./bootstrap.sh
+```
+
+The script installs `stow` and `mise` if missing, symlinks all packages, and runs `mise install`. Re-running it is safe.
+
+To do it manually instead:
+
+```bash
 stow --restow --target="$HOME" bash kitty mise nvim pi scripts task tmux
-# install dev toolchain
 mise install
 ```
 
