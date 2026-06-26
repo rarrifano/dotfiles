@@ -42,7 +42,7 @@ export default function (pi: ExtensionAPI) {
           const rawRewind = statuses.get("rewind") ?? "";
           const rewindStatus = rawRewind.replace(/\x1b\[[\d;]*m/g, "").replace(/^◆\s*/, "").trim();
 
-          // --- Line 1: cwd (branch) [session]            N checkpoints ---
+          // Line 1: cwd (branch) [session] and rewind checkpoint count flush-right
           let pwd = formatCwd(ctx.cwd ?? "");
           if (branch) pwd += ` (${branch})`;
 
@@ -61,7 +61,7 @@ export default function (pi: ExtensionAPI) {
             pwdLine = truncateToWidth(left1 + pad + right1, width, theme.fg("dim", "..."));
           }
 
-          // --- Line 2: token stats + model (replicate default footer) ---
+          // Line 2: token stats + model (replicate default footer)
           let totalInput = 0, totalOutput = 0, totalCacheRead = 0,
               totalCacheWrite = 0, totalCost = 0;
           let latestCacheHitRate: number | undefined;
@@ -120,7 +120,7 @@ export default function (pi: ExtensionAPI) {
 
           const lines = [pwdLine, statsLineStyled];
 
-          // --- Line 3: remaining extension statuses (everything except rewind) ---
+          // Line 3: remaining extension statuses (everything except rewind)
           const otherStatuses = Array.from(statuses.entries())
             .filter(([key]) => key !== "rewind")
             .sort(([a], [b]) => a.localeCompare(b))
