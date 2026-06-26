@@ -1,58 +1,42 @@
 # ~/.bash_aliases — sourced by .bashrc
-# Sensible defaults: navigation, safety, git, k8s, terraform, docker, misc
 
-# ──────────────────────────────────────────
 # Navigation
-# ──────────────────────────────────────────
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
-alias -- -='cd -'                 # go back to previous directory
+alias -- -='cd -'
 alias ~='cd ~'
 
-# ──────────────────────────────────────────
 # Listing (ls / eza)
-# ──────────────────────────────────────────
 if command -v eza &>/dev/null; then
   alias ls='eza --group-directories-first'
   alias ll='eza -lh --group-directories-first --git'
   alias la='eza -lha --group-directories-first --git'
   alias lt='eza --tree --level=2'
 else
-  # fallback — colour already set in .bashrc
+  # fallback
   alias ll='ls -lhF'
   alias la='ls -lhAF'
   alias lt='find . -maxdepth 2 | sort'
 fi
 
-# ──────────────────────────────────────────
 # Safety nets
-# ──────────────────────────────────────────
-alias rm='rm -i'
-alias cp='cp -i'
-alias mv='mv -i'
 alias mkdir='mkdir -pv'
 
-# ──────────────────────────────────────────
 # Disk / system
-# ──────────────────────────────────────────
 alias df='df -h'
 alias du='du -h'
-alias duh='du -sh *'              # sizes of items in current dir
+alias duh='du -sh *'
 alias free='free -h'
 alias psg='ps aux | grep -v grep | grep'
 alias ports='ss -tulnp'
 
-# ──────────────────────────────────────────
 # Editor shortcuts
-# ──────────────────────────────────────────
 alias v='$EDITOR'
 alias vi='$EDITOR'
 alias vim='$EDITOR'
 
-# ──────────────────────────────────────────
 # Git
-# ──────────────────────────────────────────
 alias g='git'
 alias gs='git status -sb'
 alias ga='git add'
@@ -72,9 +56,7 @@ alias gbr='git branch -vv'
 alias gst='git stash'
 alias gstp='git stash pop'
 
-# ──────────────────────────────────────────
 # Terraform
-# ──────────────────────────────────────────
 alias tf='terraform'
 alias tfi='terraform init'
 alias tfp='terraform plan'
@@ -86,9 +68,7 @@ alias tfo='terraform output'
 alias tfs='terraform state'
 alias tfw='terraform workspace'
 
-# ──────────────────────────────────────────
 # Kubernetes
-# ──────────────────────────────────────────
 alias k='kubectl'
 alias kg='kubectl get'
 alias kd='kubectl describe'
@@ -107,9 +87,7 @@ alias kgd='kubectl get deployment'
 alias kgi='kubectl get ingress'
 alias ktop='kubectl top pods'
 
-# ──────────────────────────────────────────
 # Docker / Podman
-# ──────────────────────────────────────────
 alias dk='docker'
 alias dkp='docker ps'
 alias dkpa='docker ps -a'
@@ -124,17 +102,13 @@ alias dkcu='docker compose up -d'
 alias dkcd='docker compose down'
 alias dkcl='docker compose logs -f'
 
-# ──────────────────────────────────────────
 # GTD — Taskwarrior
-# ──────────────────────────────────────────
-ib() { task add project:inbox "$@"; }  # capture to inbox: ib 'something'
-alias inbox='task project:inbox list'  # review inbox
-alias triage='task project:inbox list' # alias for the GTD-minded
+ib() { task add project:inbox "$@"; }
+alias inbox='task project:inbox list'
+alias triage='task project:inbox list'
 
-# ──────────────────────────────────────────
 # Misc utilities
-# ──────────────────────────────────────────
-alias path='echo $PATH | tr ":" "\n"'          # pretty-print PATH
+alias path='echo $PATH | tr ":" "\n"'
 alias now='date +"%Y-%m-%d %H:%M:%S"'
 alias week='date +%V'
 alias myip='curl -s https://ifconfig.me && echo'
@@ -142,5 +116,5 @@ alias reload='source ~/.bashrc'
 alias cls='clear'
 alias h='history'
 alias hg='history | grep'
-alias jq='jq --tab'                             # prettier jq output
+alias jq='jq --tab'
 alias watch='watch -n1'

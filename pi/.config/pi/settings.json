@@ -5,20 +5,20 @@
   "defaultModel": "claude-sonnet-4.6",
   "extensions": [
     "./extensions/hide-cursor.ts",
-    "./extensions/git-checkpoint.ts",
     "./extensions/taskwarrior.ts"
   ],
   "packages": [
-    "npm:pi-web-access"
+    "npm:pi-web-access",
+    "npm:pi-rewind"
   ],
   "editorPaddingX": 1,
-  "hideThinkingBlock": true,
+  "hideThinkingBlock": false,
   "collapseChangelog": true,
   "quietStartup": true,
   "enableInstallTelemetry": false,
   "defaultProjectTrust": "ask",
   "treeFilterMode": "no-tools",
-  "defaultThinkingLevel": "minimal",
+  "defaultThinkingLevel": "off",
   "compaction": {
     "enabled": true,
     "reserveTokens": 16384,
@@ -36,5 +36,9 @@
     "claude-sonnet*",
     "claude-haiku*"
   ],
-  "showHardwareCursor": true
+  "showHardwareCursor": true,
+  "warnings": {
+    "anthropicExtraUsage": true
+  },
+  "doubleEscapeAction": "tree"
 }
