@@ -98,7 +98,7 @@ dotfiles/
 ├── task/
 │   └── .config/task/
 │       ├── gruvbox.theme          # Taskwarrior gruvbox colour theme
-│       └── taskrc                 # Taskwarrior config + GTD reports
+│       └── taskrc                 # Taskwarrior config + custom reports
 ├── tmux/
 │   └── .tmux.conf
 ├── .pi/

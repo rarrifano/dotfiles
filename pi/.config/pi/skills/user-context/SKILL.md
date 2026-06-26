@@ -18,7 +18,6 @@ description: "Load personal context about the user — who they are, their backg
 - **Employer:** Prime Energy (Shell Group) — Cloud Engineering team
 - **Tools in use:** Jira (corporate), personal GTD via Taskwarrior, pi coding agent as daily assistant
 - **Workflow pain point:** Prefers CLI-native personal GTD but must maintain visibility in Jira for manager/team
-- **Other projects explored:** `gorg` (personal Go-based task/GTD CLI), `gtd` (Jira-sync GTD tool concept)
 
 ## Learning & Growth
 

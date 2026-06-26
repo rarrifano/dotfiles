@@ -7,7 +7,7 @@
 # Runtimes
 node    = "lts"       # required by: pyright, yamlls, jsonls, prettier, bashls
 python  = "3.13"      # required by: ruff, pyright runtime
-go      = "1.26"      # required by: personal Go projects (gorg, gtd)
+go      = "1.26"      # required by: personal Go projects
 
 # Formatters
 stylua  = "2.1.0"    # lua formatter
