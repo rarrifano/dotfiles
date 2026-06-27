@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+IMAGE="${PI_IMAGE:-pi-agent-ask:latest}"
+VERSION="${1:-}"
+
+if [[ -z "${VERSION}" ]]; then
+    echo "==> Fetching latest pi version..."
+    VERSION="$(curl -fsSL https://registry.npmjs.org/@earendil-works/pi-coding-agent/latest | grep -o '"version":"[^"]*"' | cut -d'"' -f4)"
+    echo "==> Latest: ${VERSION}"
+fi
+
+BUILD_CTX="$(mktemp -d)"
+trap 'rm -rf "${BUILD_CTX}"' EXIT
+
+mkdir -p "${BUILD_CTX}/ca-certs"
+if compgen -G "/usr/local/share/ca-certificates/*.crt" > /dev/null 2>&1; then
+    cp /usr/local/share/ca-certificates/*.crt "${BUILD_CTX}/ca-certs/"
+    echo "==> Bundling $(ls "${BUILD_CTX}/ca-certs/" | wc -l) host CA cert(s) into image..."
+else
+    echo "==> No host CA certs found, skipping"
+fi
+
+echo "==> Building ${IMAGE} with pi@${VERSION} (lightweight)..."
+cat > "${BUILD_CTX}/Containerfile" <<'CONTAINERFILE'
+FROM node:24-alpine
+
+RUN apk add --no-cache \
+        bash \
+        curl \
+        ca-certificates \
+        git \
+        jq \
+        vim \
+        wl-clipboard \
+        xclip
+
+# Host CA certificates
+COPY ca-certs/ /usr/local/share/ca-certificates/
+RUN if ls /usr/local/share/ca-certificates/*.crt > /dev/null 2>&1; then \
+        update-ca-certificates; \
+    fi
+
+ARG PI_VERSION=0.0.0-unset
+RUN npm install -g --ignore-scripts \
+        "@earendil-works/pi-coding-agent@${PI_VERSION}" && \
+    npm cache clean --force
+
+ENV NODE_EXTRA_CA_CERTS=/etc/ssl/certs/ca-certificates.crt
+WORKDIR /root
+ENTRYPOINT ["pi"]
+CONTAINERFILE
+
+podman build \
+    --build-arg "PI_VERSION=${VERSION}" \
+    -t "${IMAGE}" \
+    -f "${BUILD_CTX}/Containerfile" \
+    "${BUILD_CTX}"
+
+echo "==> Done! ${IMAGE} is ready (pi@${VERSION})"

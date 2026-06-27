@@ -1,0 +1,76 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Minimal pi launcher — chat only, no volume mounts
+IMAGE="${PI_IMAGE:-pi-agent-ask:latest}"
+AGENT_DIR="${PI_AGENT_DIR:-${HOME}/.config/pi}"
+
+# Clipboard detection
+DISPLAY_ARGS=()
+
+if [[ -n "${WAYLAND_DISPLAY:-}" ]]; then
+  WAYLAND_SOCKET="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/${WAYLAND_DISPLAY}"
+  if [[ -S "${WAYLAND_SOCKET}" ]]; then
+    DISPLAY_ARGS+=(
+      -e "WAYLAND_DISPLAY=${WAYLAND_DISPLAY}"
+      -e "XDG_RUNTIME_DIR=/tmp/xdg-runtime"
+      -v "${WAYLAND_SOCKET}:/tmp/xdg-runtime/${WAYLAND_DISPLAY}:ro"
+    )
+  else
+    echo "[ask] warn: WAYLAND_DISPLAY set but socket not found at ${WAYLAND_SOCKET}" >&2
+  fi
+fi
+
+if [[ -n "${DISPLAY:-}" ]]; then
+  if [[ -d /tmp/.X11-unix ]]; then
+    DISPLAY_ARGS+=(
+      -e "DISPLAY=${DISPLAY}"
+      -v /tmp/.X11-unix:/tmp/.X11-unix:ro
+    )
+  else
+    echo "[ask] warn: DISPLAY set but /tmp/.X11-unix not found" >&2
+  fi
+fi
+
+if [[ ${#DISPLAY_ARGS[@]} -eq 0 ]]; then
+  echo "[ask] warn: no clipboard socket detected — Ctrl+V image paste will not work" >&2
+fi
+
+# Agent dir — rw for settings and sessions
+MOUNT_ARGS=()
+if [[ -d "${AGENT_DIR}" ]]; then
+  MOUNT_ARGS+=(-v "${AGENT_DIR}:/root/.pi/agent")
+else
+  echo "[ask] warn: agent dir not found at ${AGENT_DIR}" >&2
+fi
+
+TTY_ARGS=()
+
+if command -v mdcat &>/dev/null && [[ -t 1 ]]; then
+  podman run --rm "${TTY_ARGS[@]}" \
+    "${DISPLAY_ARGS[@]+"${DISPLAY_ARGS[@]}"}" \
+    "${MOUNT_ARGS[@]+"${MOUNT_ARGS[@]}"}" \
+    -e "VISUAL=vim" \
+    -e "EDITOR=vim" \
+    -e "PI_CODING_AGENT_DIR=/root/.pi/agent" \
+    -e "TERM=xterm-256color" \
+    -e "COLORTERM=${COLORTERM:-truecolor}" \
+    --workdir /root \
+    "${IMAGE}" \
+    --provider github-copilot --model claude-haiku-4.5 --thinking off --no-tools --no-session --mode text -p \
+    "$@" 2>/dev/null | mdcat | perl -ne '$|=1; for(split//){print; select(undef,undef,undef,0.008)}'
+  exit "${PIPESTATUS[0]}"
+fi
+
+exec podman run --rm "${TTY_ARGS[@]}" \
+  "${DISPLAY_ARGS[@]+"${DISPLAY_ARGS[@]}"}" \
+  "${MOUNT_ARGS[@]+"${MOUNT_ARGS[@]}"}" \
+  -e "VISUAL=vim" \
+  -e "EDITOR=vim" \
+  -e "PI_CODING_AGENT_DIR=/root/.pi/agent" \
+  -e "TERM=xterm-256color" \
+  -e "COLORTERM=${COLORTERM:-truecolor}" \
+  --workdir /root \
+  "${IMAGE}" \
+  --provider github-copilot --model claude-haiku-4.5 --thinking off --no-tools --no-session --mode text -p \
+  "$@" 2>/dev/null
