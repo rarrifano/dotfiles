@@ -7,13 +7,11 @@ Personal dotfiles managed with [GNU Stow](https://www.gnu.org/software/stow/).
 ```
 dotfiles/
 ├── bash/       → ~/.bashrc, ~/.bash_aliases
-├── git/        → ~/.gitconfig, ~/.config/git/ignore
-├── kitty/      → ~/.config/kitty/kitty.conf, launch_shell.sh, pass_keys.py
+├── kitty/      → ~/.config/kitty/kitty.conf, pass_keys.py
 ├── mise/       → ~/.config/mise/config.toml   (dev toolchain)
 ├── nvim/       → ~/.config/nvim/
 ├── pi/         → ~/.config/pi/                (pi coding agent — skills, prompts, extensions)
-├── scripts/    → ~/.local/bin/                (utility scripts)
-├── task/       → ~/.config/task/ + ~/.local/share/task/hooks/
+├── task/       → ~/.config/task/
 └── tmux/       → ~/.tmux.conf
 ```
 
@@ -30,7 +28,7 @@ The script installs `stow` and `mise` if missing, symlinks all packages, and run
 To do it manually instead:
 
 ```bash
-stow --restow --target="$HOME" bash git kitty mise nvim pi scripts task tmux
+stow --restow --target="$HOME" bash kitty mise nvim pi task tmux
 mise install
 ```
 
@@ -106,15 +104,13 @@ Config lives in `pi/.config/pi/` and symlinks to `~/.config/pi/`.
 | `AGENTS.md`        | Global agent behaviour instructions                                                                                                                             |
 | `APPEND_SYSTEM.md` | System prompt append (Ferris persona)                                                                                                                           |
 | `keybindings.json` | Custom TUI keybindings                                                                                                                                          |
-| `extensions/`      | Custom pi extensions (`hide-cursor`, `taskwarrior`)                                                                                                             |
+| `extensions/`      | Custom pi extensions (`hide-cursor`, `rewind-footer`, `taskwarrior`)                                                                                           |
 | `prompts/`         | Reusable prompt templates (`commit`, `pr`, `review`, `debug`, `explain`, `standup`, `weekly-report`, `postmortem`, `runbook`, `test`, `tf-plan-review`, `init`) |
 | `skills/`          | Agent skills (`gh-actions`, `gmud-checklist`, `k8s-debug`, `meeting-prep`, `persona-sync`, `report-builder`, `tf-workflow`, `user-context`)                     |
 
 ## Git
 
-`git/.gitconfig` → `~/.gitconfig` and `git/.config/git/ignore` → `~/.config/git/ignore`.
-
-The config sets sensible global defaults (editor, pull strategy, diff algorithm, branch name, etc.) but contains **no machine-specific identity**. Create `~/.gitconfig.local` on each machine for identity and credentials — it is included automatically but never committed:
+Git identity is **not tracked** in this repo — configure it per machine via `~/.gitconfig.local`:
 
 ```ini
 # ~/.gitconfig.local  (never commit this)
