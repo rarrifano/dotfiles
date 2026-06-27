@@ -21,15 +21,6 @@ export XDG_STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
 export GOPATH="${XDG_DATA_HOME}/go"
 [ -d "${GOPATH}/bin" ] && PATH="${GOPATH}/bin:$PATH"
 
-# Default editors — prefer nvim, fall back to vi
-if command -v nvim &>/dev/null; then
-  export EDITOR="nvim"
-  export VISUAL="nvim"
-else
-  export EDITOR="vi"
-  export VISUAL="vi"
-fi
-
 # Docker rootless socket
 export DOCKER_HOST="unix:///run/user/$(id -u)/docker.sock"
 
@@ -48,10 +39,10 @@ export HISTTIMEFORMAT="%F %T "
 # history -a runs every prompt to persist the latest command immediately.
 # history -c + -r (expensive reload) is throttled to once every 30 seconds.
 __history_sync() {
-  builtin history -a  # always persist latest command to disk
+  builtin history -a # always persist latest command to disk
   local now
   now=$(date +%s)
-  if (( now - ${__HIST_SYNC_TS:-0} >= 30 )); then
+  if ((now - ${__HIST_SYNC_TS:-0} >= 30)); then
     builtin history -c
     builtin history -r
     __HIST_SYNC_TS=$now
@@ -114,7 +105,7 @@ __ps1_build() {
 __ps1_inbox_refresh() {
   local now
   now=$(date +%s)
-  if [ $(( now - ${__PS1_INBOX_TS:-0} )) -ge 30 ]; then
+  if [ $((now - ${__PS1_INBOX_TS:-0})) -ge 30 ]; then
     __PS1_INBOX_COUNT=$(task project:inbox status:pending count 2>/dev/null || echo 0)
     __PS1_INBOX_TS=$now
   fi
