@@ -2,7 +2,41 @@
 
 ## Overview
 
-Personal dotfiles for Rafael Arrifano, managed with **GNU Stow**. Each top-level
+Personal dotfiles for Rafael Arrifano, managed with **GNU Stow**.
+
+---
+
+## Target Environments
+
+This repo supports **two distinct use cases** — every change must work correctly on both:
+
+| Environment | OS | Terminal emulator | Multiplexer |
+|---|---|---|---|
+| **Home desktop** | Debian (baremetal) | **Kitty** (Wayland native) | tmux (optional, inside Kitty) |
+| **Work laptop** | Debian on **WSL2** (Windows) | Windows Terminal (host) | **tmux** (primary UX layer) |
+
+### Implications for dotfile changes
+
+- **Kitty config** (`kitty/`) is relevant only on baremetal Linux. Do not assume Kitty is present on WSL.
+- **tmux** (`tmux/.tmux.conf`) is the primary terminal experience on WSL; it must be kept fully functional as a standalone multiplexer.
+- **Shell config** (`bash/`) runs on both — any env detection (e.g. `$WSL_DISTRO_NAME`, `$TERM`, presence of a display server) should gracefully degrade.
+- When a config snippet is only valid on one environment, guard it with a shell conditional:
+  ```bash
+  # baremetal Linux only
+  if [ -z "${WSL_DISTRO_NAME:-}" ]; then
+    ...
+  fi
+
+  # WSL only
+  if [ -n "${WSL_DISTRO_NAME:-}" ]; then
+    ...
+  fi
+  ```
+- **Stow packages to install per environment:**
+  - Baremetal: `bash git kitty mise nvim pi scripts task tmux`
+  - WSL: `bash git mise nvim pi scripts task tmux` (skip `kitty`)
+
+--- Each top-level
 directory is a Stow package that symlinks into `$HOME`. The repo is the single
 source of truth for the entire dev environment: shell, editor (Neovim 0.12+),
 terminal multiplexer (tmux), terminal emulator (Kitty), the pi coding-agent
@@ -37,6 +71,9 @@ dotfiles/
 ├── bash/
 │   ├── .bashrc            # Main shell config, prompt, history, env
 │   └── .bash_aliases      # Aliases (git, kubectl, k9s, docker, misc)
+├── git/
+│   ├── .gitconfig         # Global git config (no identity — use ~/.gitconfig.local)
+│   └── .config/git/ignore # Global gitignore
 ├── kitty/
 │   └── .config/kitty/kitty.conf
 ├── mise/
@@ -115,7 +152,7 @@ dotfiles/
 
 ```bash
 # Symlink all packages
-stow --restow --target="$HOME" bash kitty mise nvim pi task tmux
+stow --restow --target="$HOME" bash git kitty mise nvim pi scripts task tmux
 
 # Install all runtimes and LSP servers
 mise install
@@ -204,6 +241,7 @@ Commits follow conventional commit format (enforced by the `commit.md` prompt).
 | Area | File | Read before… |
 |---|---|---|
 | Shell | `bash/.bashrc`, `bash/.bash_aliases` | editing shell config or aliases |
+| Git | `git/.gitconfig`, `git/.config/git/ignore` | changing git defaults or global ignore |
 | Neovim entry | `nvim/.config/nvim/init.lua` | any nvim change |
 | Neovim LSP | `nvim/.config/nvim/lua/plugins/lsp.lua` | adding/removing LSP servers |
 | Neovim keys | `nvim/.config/nvim/lua/keymaps.lua` | adding keybindings |

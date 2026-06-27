@@ -39,6 +39,8 @@ RUN apt-get update -qq && \
         git \
         unzip \
         jq \
+        # editor
+        vim \
         # devops
         gnupg \
         taskwarrior \
@@ -90,7 +92,7 @@ RUN curl -fsSL "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" \
     rm -rf /tmp/aws /tmp/awscliv2.zip
 
 # pi
-ARG PI_VERSION=0.79.9
+ARG PI_VERSION=0.0.0-unset
 RUN npm install -g --ignore-scripts \
         "@earendil-works/pi-coding-agent@${PI_VERSION}" && \
     npm cache clean --force

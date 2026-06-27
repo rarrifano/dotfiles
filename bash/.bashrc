@@ -37,12 +37,26 @@ export DOCKER_HOST="unix:///run/user/$(id -u)/docker.sock"
 shopt -s checkwinsize
 shopt -s globstar
 
-# History: bigger, no duplicates, append.
-HISTCONTROL=ignoreboth
+# History: bigger, no duplicates, shared across all panes/tabs in real-time.
+HISTCONTROL=ignorespace:erasedups
 shopt -s histappend
 HISTSIZE=50000
 HISTFILESIZE=100000
 export HISTTIMEFORMAT="%F %T "
+
+# Flush current session to disk before every prompt so all panes share history.
+# history -a runs every prompt to persist the latest command immediately.
+# history -c + -r (expensive reload) is throttled to once every 30 seconds.
+__history_sync() {
+  builtin history -a  # always persist latest command to disk
+  local now
+  now=$(date +%s)
+  if (( now - ${__HIST_SYNC_TS:-0} >= 30 )); then
+    builtin history -c
+    builtin history -r
+    __HIST_SYNC_TS=$now
+  fi
+}
 
 # 4. System Integrations
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
@@ -54,7 +68,7 @@ __ps1_git() {
 
 __ps1_build() {
   local exit=$?
-  local r='' bold='' ok='' err='' dim='' box=''
+  local r='' bold='' ok='' err='' dim='' box='' alert='' warn=''
   if [ "${TERM:-dumb}" != dumb ] && [ -t 1 ]; then
     r='\[\e[0m\]'
     bold='\[\e[1m\]'
@@ -106,7 +120,7 @@ __ps1_inbox_refresh() {
   fi
 }
 
-PROMPT_COMMAND='__ps1_inbox_refresh; __ps1_build'
+PROMPT_COMMAND='__history_sync; __ps1_inbox_refresh; __ps1_build'
 
 if [ -x /bin/dircolors ]; then
   test -r ~/.dircolors && eval "$(/bin/dircolors -b ~/.dircolors)" || eval "$(/bin/dircolors -b)"
@@ -118,7 +132,7 @@ fi
 command -v podman &>/dev/null && ! command -v docker &>/dev/null && alias docker='podman'
 
 # Readline Mode
-set -o emacs
+set -o vi
 
 # Load system completions after PATH and tool managers are ready
 if ! shopt -oq posix; then

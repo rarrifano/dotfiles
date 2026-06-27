@@ -19,7 +19,9 @@ export default function (pi: ExtensionAPI) {
     }),
 
     async execute(_toolCallId, params, signal, _onUpdate, _ctx) {
-      const result = await pi.exec("task", params.args.split(" "), {
+      // Shell-aware split: respect quoted strings so descriptions with spaces work
+      const argv = params.args.match(/(?:[^\s"']+|"[^"]*"|'[^']*')+/g) ?? [];
+      const result = await pi.exec("task", argv, {
         signal,
         timeout: 10000,
       });

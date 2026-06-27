@@ -7,7 +7,7 @@
 # Runtimes
 node    = "lts"       # required by: pyright, yamlls, jsonls, prettier, bashls
 python  = "3.13"      # required by: ruff, pyright runtime
-go      = "1.26"      # required by: personal Go projects
+go      = "1.26.4"    # required by: personal Go projects
 
 # Formatters
 stylua  = "2.1.0"    # lua formatter
@@ -28,5 +28,9 @@ ruff    = "0.11.13"  # python formatter + linter
 "aqua:terraform-linters/tflint"    = "0.57.0"  # terraform linter
 "aqua:LuaLS/lua-language-server"   = "3.14.0"  # lua_ls
 
-# mise plugins
+# Terminal rendering
+rust        = "stable"      # required by: cargo:mdcat
+"cargo:mdcat" = "2.7.1"    # markdown renderer — kitty graphics protocol + ANSI fallback
+
+# mise
 usage   = "latest"   # mise task completion + mise help

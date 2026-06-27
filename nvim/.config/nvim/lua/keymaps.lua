@@ -78,26 +78,23 @@ local function navigate(dir)
 		return
 	end
 
-	if not vim.env.TMUX then
+	if vim.env.TMUX then
+		local map = { h = "L", j = "D", k = "U", l = "R" }
+		vim.system({ "tmux", "select-pane", "-" .. map[dir] })
 		return
 	end
 
-	local map = { h = "L", j = "D", k = "U", l = "R" }
-	vim.system({ "tmux", "select-pane", "-" .. map[dir] })
+	if vim.env.KITTY_WINDOW_ID then
+		local map = { h = "left", j = "bottom", k = "top", l = "right" }
+		vim.system({ "kitten", "@", "focus-window", "--match", "neighbor:" .. map[dir] })
+		return
+	end
 end
 
-vim.keymap.set("n", "<A-h>", function()
-	navigate("h")
-end)
-vim.keymap.set("n", "<A-j>", function()
-	navigate("j")
-end)
-vim.keymap.set("n", "<A-k>", function()
-	navigate("k")
-end)
-vim.keymap.set("n", "<A-l>", function()
-	navigate("l")
-end)
+vim.keymap.set("n", "<A-h>", function() navigate("h") end)
+vim.keymap.set("n", "<A-j>", function() navigate("j") end)
+vim.keymap.set("n", "<A-k>", function() navigate("k") end)
+vim.keymap.set("n", "<A-l>", function() navigate("l") end)
 
 -- Save & reload
 vim.keymap.set("n", "<leader>w", "<cmd>w<CR>", { desc = "Save file" })

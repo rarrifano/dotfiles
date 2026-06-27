@@ -85,6 +85,8 @@ fi
 exec podman run --rm "${TTY_ARGS[@]}" \
     "${DISPLAY_ARGS[@]+"${DISPLAY_ARGS[@]}"}" \
     "${MOUNT_ARGS[@]+"${MOUNT_ARGS[@]}"}" \
+    -e "VISUAL=vim" \
+    -e "EDITOR=vim" \
     -e "PI_CODING_AGENT_DIR=/root/.pi/agent" \
     -e "TASKRC=/root/.config/task/taskrc" \
     -e "TERM=${TERM:-xterm-256color}" \

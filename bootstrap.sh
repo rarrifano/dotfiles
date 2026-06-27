@@ -4,7 +4,7 @@ set -euo pipefail
 
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-STOW_PACKAGES=(bash kitty mise nvim pi scripts task tmux)
+STOW_PACKAGES=(bash git kitty mise nvim pi scripts task tmux)
 
 log()  { printf '\e[1;32m==>\e[0m %s\n' "$*"; }
 warn() { printf '\e[1;33m  ->\e[0m %s\n' "$*"; }

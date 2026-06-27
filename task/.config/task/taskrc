@@ -11,8 +11,6 @@ include ~/.config/task/gruvbox.theme
 color=on
 news.version=2.6.0
 
-# ── GTD ──────────────────────────────────────────────────────────────────────
-
 # Urgency tweaks
 urgency.user.tag.next.coefficient=5.0
 urgency.user.tag.waiting.coefficient=-3.0
