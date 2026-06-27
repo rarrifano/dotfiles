@@ -10,14 +10,17 @@ Use a ferramenta `taskwarrior` para buscar:
 Com base no retorno, gere um **daily standup** em **português brasileiro (pt-BR)**, curto e direto, no formato:
 
 **✅ O que fiz ontem:**
+
 - lista das tasks concluídas (use a descrição da task, escrita de forma orientada a resultado)
 - se não houver tasks concluídas, informe honestamente
 
 **🔄 O que vou fazer hoje:**
+
 - lista das tasks pendentes mais relevantes/urgentes (priorize por urgência e due date)
 
 **🚧 Impedimentos:**
-- Nenhum *(deixe assim por padrão — o usuário edita se necessário)*
+
+- Nenhum _(deixe assim por padrão — o usuário edita se necessário)_
 
 **Tom:** direto, sem rodeios. É para um time de engenharia de cloud.
 **Idioma:** 100% português brasileiro.

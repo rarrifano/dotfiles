@@ -10,10 +10,10 @@ Personal dotfiles for Rafael Arrifano, managed with **GNU Stow**.
 
 This repo supports **two distinct use cases** — every change must work correctly on both:
 
-| Environment | OS | Terminal emulator | Multiplexer |
-|---|---|---|---|
-| **Home desktop** | Debian (baremetal) | **Kitty** (Wayland native) | tmux (optional, inside Kitty) |
-| **Work laptop** | Debian on **WSL2** (Windows) | Windows Terminal (host) | **tmux** (primary UX layer) |
+| Environment      | OS                           | Terminal emulator          | Multiplexer                   |
+| ---------------- | ---------------------------- | -------------------------- | ----------------------------- |
+| **Home desktop** | Debian (baremetal)           | **Kitty** (Wayland native) | tmux (optional, inside Kitty) |
+| **Work laptop**  | Debian on **WSL2** (Windows) | Windows Terminal (host)    | **tmux** (primary UX layer)   |
 
 ### Implications for dotfile changes
 
@@ -21,6 +21,7 @@ This repo supports **two distinct use cases** — every change must work correct
 - **tmux** (`tmux/.tmux.conf`) is the primary terminal experience on WSL; it must be kept fully functional as a standalone multiplexer.
 - **Shell config** (`bash/`) runs on both — any env detection (e.g. `$WSL_DISTRO_NAME`, `$TERM`, presence of a display server) should gracefully degrade.
 - When a config snippet is only valid on one environment, guard it with a shell conditional:
+
   ```bash
   # baremetal Linux only
   if [ -z "${WSL_DISTRO_NAME:-}" ]; then
@@ -32,6 +33,7 @@ This repo supports **two distinct use cases** — every change must work correct
     ...
   fi
   ```
+
 - **Stow packages to install per environment:**
   - Baremetal: `bash git kitty mise nvim pi scripts task tmux`
   - WSL: `bash git mise nvim pi scripts task tmux` (skip `kitty`)
@@ -191,7 +193,7 @@ mise upgrade          # upgrade all tools
 ## IaC & Infrastructure
 
 This repo contains **no IaC**. Terraform, Kubernetes, Helm, and GitHub Actions
-skills/prompts exist in the pi config for use in *other* repos. The agent
+skills/prompts exist in the pi config for use in _other_ repos. The agent
 should not look for `.tf` files or `k8s/` dirs here.
 
 ---
@@ -238,18 +240,18 @@ Commits follow conventional commit format (enforced by the `commit.md` prompt).
 
 ## Key Files
 
-| Area | File | Read before… |
-|---|---|---|
-| Shell | `bash/.bashrc`, `bash/.bash_aliases` | editing shell config or aliases |
-| Git | `git/.gitconfig`, `git/.config/git/ignore` | changing git defaults or global ignore |
-| Neovim entry | `nvim/.config/nvim/init.lua` | any nvim change |
-| Neovim LSP | `nvim/.config/nvim/lua/plugins/lsp.lua` | adding/removing LSP servers |
-| Neovim keys | `nvim/.config/nvim/lua/keymaps.lua` | adding keybindings |
-| Toolchain | `mise/.config/mise/config.toml` | adding tools or runtimes |
-| pi settings | `pi/.config/pi/settings.json` | changing agent behaviour |
-| pi persona | `pi/.config/pi/APPEND_SYSTEM.md` | touching the Ferri-chan persona |
-| pi agent rules | `pi/.config/pi/AGENTS.md` | changing global agent instructions |
-| pi container launcher | `pi/.local/bin/pi` | modifying container mounts or env |
-| pi container build | `pi/.local/bin/pi-build` | modifying the image or adding deps |
-| report-builder skill | `pi/.config/pi/skills/report-builder/SKILL.md` | touching report generation |
-| report style script | `pi/.config/pi/skills/report-builder/scripts/style-tables.js` | modifying table styling |
+| Area                  | File                                                          | Read before…                           |
+| --------------------- | ------------------------------------------------------------- | -------------------------------------- |
+| Shell                 | `bash/.bashrc`, `bash/.bash_aliases`                          | editing shell config or aliases        |
+| Git                   | `git/.gitconfig`, `git/.config/git/ignore`                    | changing git defaults or global ignore |
+| Neovim entry          | `nvim/.config/nvim/init.lua`                                  | any nvim change                        |
+| Neovim LSP            | `nvim/.config/nvim/lua/plugins/lsp.lua`                       | adding/removing LSP servers            |
+| Neovim keys           | `nvim/.config/nvim/lua/keymaps.lua`                           | adding keybindings                     |
+| Toolchain             | `mise/.config/mise/config.toml`                               | adding tools or runtimes               |
+| pi settings           | `pi/.config/pi/settings.json`                                 | changing agent behaviour               |
+| pi persona            | `pi/.config/pi/APPEND_SYSTEM.md`                              | touching the Ferri-chan persona        |
+| pi agent rules        | `pi/.config/pi/AGENTS.md`                                     | changing global agent instructions     |
+| pi container launcher | `pi/.local/bin/pi`                                            | modifying container mounts or env      |
+| pi container build    | `pi/.local/bin/pi-build`                                      | modifying the image or adding deps     |
+| report-builder skill  | `pi/.config/pi/skills/report-builder/SKILL.md`                | touching report generation             |
+| report style script   | `pi/.config/pi/skills/report-builder/scripts/style-tables.js` | modifying table styling                |

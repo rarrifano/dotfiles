@@ -104,7 +104,7 @@ Config lives in `pi/.config/pi/` and symlinks to `~/.config/pi/`.
 | `AGENTS.md`        | Global agent behaviour instructions                                                                                                                             |
 | `APPEND_SYSTEM.md` | System prompt append (Ferris persona)                                                                                                                           |
 | `keybindings.json` | Custom TUI keybindings                                                                                                                                          |
-| `extensions/`      | Custom pi extensions (`hide-cursor`, `rewind-footer`, `taskwarrior`)                                                                                           |
+| `extensions/`      | Custom pi extensions (`hide-cursor`, `rewind-footer`, `taskwarrior`)                                                                                            |
 | `prompts/`         | Reusable prompt templates (`commit`, `pr`, `review`, `debug`, `explain`, `standup`, `weekly-report`, `postmortem`, `runbook`, `test`, `tf-plan-review`, `init`) |
 | `skills/`          | Agent skills (`gh-actions`, `gmud-checklist`, `k8s-debug`, `meeting-prep`, `persona-sync`, `report-builder`, `tf-workflow`, `user-context`)                     |
 

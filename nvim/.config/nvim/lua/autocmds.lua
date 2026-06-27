@@ -8,16 +8,19 @@ vim.api.nvim_create_autocmd("BufReadPre", {
 		vim.filetype.add({
 			pattern = {
 				["docker%-compose.*%.ya?ml"] = "yaml.docker-compose",
-				['.+%.ya?ml'] = function(path, _)
-					local f = io.open(path, 'r')
+				[".+%.ya?ml"] = function(path, _)
+					local f = io.open(path, "r")
 					if f then
-						local head = f:read(2048) or ''
+						local head = f:read(2048) or ""
 						f:close()
-						if head:match('stages:%s*%[') or head:match('%-%-%-%s*stages:') then
-							return 'yaml.gitlab'
+						if head:match("stages:%s*%[") or head:match("%-%-%-%s*stages:") then
+							return "yaml.gitlab"
 						end
-						if head:match('apiVersion:') and (head:match('type:%s*library') or head:match('type:%s*application')) then
-							return 'yaml.helm-values'
+						if
+							head:match("apiVersion:")
+							and (head:match("type:%s*library") or head:match("type:%s*application"))
+						then
+							return "yaml.helm-values"
 						end
 					end
 					return nil

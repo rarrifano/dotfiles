@@ -1,9 +1,11 @@
 ---
 description: Summarise what has changed in this session as a git commit message
 ---
+
 Look at the git diff (`git diff HEAD`) and write a conventional commit message.
 
 Format:
+
 ```
 <type>(<scope>): <short summary>
 

@@ -1,6 +1,7 @@
 ---
 description: Fetch the latest PR Terraform plan from GitHub Actions and review it for risks
 ---
+
 Fetch the Terraform plan output from the last PR's GitHub Actions run and review it.
 
 ## Step 1 — Discover the latest PR run

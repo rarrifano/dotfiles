@@ -6,6 +6,7 @@ description: Build a full report, optionally from a model.docx template. Extract
 # Report Builder
 
 Generates a complete report, optionally based on a `.docx` template. Works in two modes:
+
 - **With model.docx** — inherits header, footer, fonts, styles, and brand colors from the template
 - **Without model.docx** — produces a clean standalone `.docx` with sensible default styling
 
@@ -28,6 +29,7 @@ node ~/.pi/agent/skills/report-builder/scripts/extract-template.js <path/to/mode
 ```
 
 This outputs a JSON object with:
+
 - `headings` — all heading levels found in the document
 - `sections` — each section with its heading and any placeholder/sample content
 - `tables` — table count, rows, estimated columns
@@ -38,6 +40,7 @@ If **no model.docx was provided**, skip this step entirely and proceed directly 
 ### 2 — Understand the template (if provided)
 
 If a template was provided, parse the JSON output and identify:
+
 - All section headings and their hierarchy
 - Any placeholder text, brackets `[like this]`, or instructions embedded in the template
 - Table structures that need to be populated
@@ -48,6 +51,7 @@ If **no template**, infer a sensible structure from the report subject and conte
 ### 3 — Gather content from the user
 
 Before writing, ask the user for any information that is missing and cannot be inferred:
+
 - What is the subject / topic of this report?
 - What data, facts, or findings should populate each section?
 - Any specific tone, length requirements, or audience?
@@ -58,6 +62,7 @@ Do **not** ask for information that can be inferred from the template itself.
 ### 4 — Write the full report
 
 Produce the complete report in **Markdown** by default (easy to copy, convert, or paste). Structure it to mirror the template exactly:
+
 - Reproduce every heading at the correct level (`#`, `##`, `###`)
 - Fill every section with real, substantive content — no placeholders
 - Populate all tables with actual data in Markdown table syntax

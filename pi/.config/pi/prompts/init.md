@@ -2,6 +2,7 @@
 description: Bootstrap AGENTS.md and .pi/ context for a new repo
 argument-hint: "[project-name]"
 ---
+
 You are initializing a pi coding-agent context for this repository. Your goal is to deeply understand the project and produce a high-quality `AGENTS.md` file (and optionally `.pi/` scaffolding) so that future sessions have rich context from the first message.
 
 ## Step 1 — Discover the repo
@@ -51,30 +52,39 @@ Create a file at `./AGENTS.md` (project root) using this structure — fill ever
 # Project Context
 
 ## Overview
+
 <!-- One paragraph: what the project does, who uses it, key constraints -->
 
 ## Stack
+
 <!-- Bullet list: language, framework, runtime, key dependencies -->
 
 ## Repository Layout
+
 <!-- Short annotated tree of the most important dirs/files -->
 
 ## Development Workflow
+
 <!-- How to run, test, build locally. Exact commands. -->
 
 ## IaC & Infrastructure
+
 <!-- Terraform layout, K8s structure, cloud provider, environments -->
 
 ## CI/CD
+
 <!-- Workflow files, how deploys are triggered, environments -->
 
 ## Conventions & Style
+
 <!-- Naming, branch strategy, PR/commit conventions, linting -->
 
 ## Hard Constraints
+
 <!-- Production deploy rules, GMUD/change windows, secrets policy, etc. -->
 
 ## Key Files
+
 <!-- Files the agent should always read before touching certain areas -->
 ```
 
@@ -95,6 +105,7 @@ Just create the directories — don't add placeholder files unless there's a cle
 ## Step 5 — Report
 
 After writing the files, print a short summary:
+
 - What stack was detected
 - What was written and where
 - Any gaps you couldn't fill (missing README, unclear structure, etc.)
