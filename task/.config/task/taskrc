@@ -16,20 +16,21 @@ default.command=next
 urgency.user.tag.next.coefficient=5.0
 urgency.user.tag.wait.coefficient=-3.0
 urgency.user.tag.maybe.coefficient=-5.0
+urgency.project.coefficient=0.0
 
 # report: inbox — tasks with no project and no GTD tag (unprocessed)
 report.inbox.description=GTD Inbox — unprocessed captures
 report.inbox.columns=id,description,entry.age,tags
 report.inbox.labels=ID,Description,Age,Tags
-report.inbox.filter=status:pending -next -wait -maybe and project:
+report.inbox.filter=status:pending -next -wait -maybe -project
 report.inbox.sort=entry+
 
 # report: next — next actions ready to do
 report.next.description=GTD Next Actions
-report.next.columns=id,project,description,due,tags
-report.next.labels=ID,Project,Description,Due,Tags
+report.next.columns=id,project,description,due,entry.age,urgency
+report.next.labels=ID,Project,Description,Due,Age,Urgency
 report.next.filter=status:pending +next
-report.next.sort=project+,urgency-
+report.next.sort=urgency-
 
 # report: wait — delegated or blocked tasks
 report.wait.description=GTD Waiting For
@@ -57,6 +58,21 @@ report.review.week.columns=id,project,description,end,tags
 report.review.week.labels=ID,Project,Description,Completed,Tags
 report.review.week.filter=(status:completed end.after:now-7d) or (status:pending -maybe)
 report.review.week.sort=status-,project+,end-
+
+# report: outcomes — all project outcome tasks
+report.outcomes.description=GTD Outcomes
+report.outcomes.columns=id,project,description,entry.age,tags
+report.outcomes.labels=ID,Project,Description,Age,Tags
+report.outcomes.filter=status:pending +project
+report.outcomes.sort=project+,entry+
+
+# report: stalled — projects with no next action or waiting task
+# Usage: cross-reference with `task next` — any project missing from there is stalled
+report.stalled.description=GTD Stalled Projects (no +next or +wait)
+report.stalled.columns=id,project,description,entry.age,tags
+report.stalled.labels=ID,Project,Description,Age,Tags
+report.stalled.filter=status:pending +project -next -wait
+report.stalled.sort=entry+
 
 # report: review.projects — all tasks with a project, grouped by project (check for missing +next)
 report.review.projects.description=GTD Projects Review
