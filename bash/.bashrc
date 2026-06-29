@@ -103,12 +103,7 @@ __ps1_build() {
 # Refresh inbox count at most once every 30 seconds to avoid forking task on
 # every prompt render.
 __ps1_inbox_refresh() {
-  local now
-  now=$(date +%s)
-  if [ $((now - ${__PS1_INBOX_TS:-0})) -ge 30 ]; then
-    __PS1_INBOX_COUNT=$(task project:inbox status:pending count 2>/dev/null || echo 0)
-    __PS1_INBOX_TS=$now
-  fi
+  __PS1_INBOX_COUNT=$(task rc.verbose=nothing status:pending -next -wait -maybe project: count 2>/dev/null || echo 0)
 }
 
 PROMPT_COMMAND='__history_sync; __ps1_inbox_refresh; __ps1_build'

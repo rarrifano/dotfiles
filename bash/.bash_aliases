@@ -2,10 +2,14 @@
 
 # Editor shortcuts
 if command -v nvim &>/dev/null; then
+  export EDITOR='nvim'
+  export VISUAL='nvim'
   alias v='nvim'
   alias vi='nvim'
   alias vim='nvim'
 else
+  export EDITOR='vi'
+  export VISUAL='vi'
   alias v='vi'
   alias vim='vi'
 fi
@@ -17,26 +21,25 @@ alias gp='git push'
 alias gl='git log --oneline --graph --decorate --all'
 
 # GTD — Taskwarrior
-ib() { task add project:inbox "$@"; }
-alias inbox='task project:inbox list'
-alias triage='task project:inbox list'
-weekly-review() {
-  local since
-  since=$(date -d 'last monday' '+%Y-%m-%d' 2>/dev/null || date -v-monday '+%Y-%m-%d')
-  local prompt="/weekly-report"
-  [[ -n "${1:-}" ]] && prompt="/weekly-report ${1}"
-  {
-    echo "# Weekly Review Context"
-    echo "## Period: ${since} → $(date '+%Y-%m-%d')"
-    echo ""
-    echo "## Completed tasks"
-    task completed end.after:"${since}" export 2>/dev/null |
-      jq -r '.[] | "- [\(.project // "no-project")] \(.description)"' 2>/dev/null ||
-      task completed end.after:"${since}" 2>/dev/null
-    echo ""
-    echo "## Active tasks (review)"
-    task review 2>/dev/null || true
-  } | pi -p "${prompt}"
+alias ta='task add'
+alias t='task'
+# kubectl completion for k alias — load kubectl completion then bind to k
+if command -v kubectl &>/dev/null; then
+  source <(kubectl completion bash)
+  complete -o default -o nospace -F __start_kubectl k
+fi
+# terraform completion for tf alias
+if command -v terraform &>/dev/null; then
+  complete -C terraform tf
+fi
+an() {
+  local file="${HOME}/ntb/scratch-$(date +%Y%m%d).md"
+  if [[ $# -eq 0 ]]; then
+    "${EDITOR:-vi}" "$file"
+  else
+    mkdir -p "$(dirname "$file")"
+    echo "$*" >> "$file"
+  fi
 }
 
 # pi with mdcat rendering — check at call time so mise shims are already in PATH

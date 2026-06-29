@@ -10,18 +10,18 @@ include ~/.config/task/gruvbox.theme
 # General
 color=on
 news.version=2.6.0
+default.command=next
 
 # Urgency tweaks
 urgency.user.tag.next.coefficient=5.0
-urgency.user.tag.waiting.coefficient=-3.0
-urgency.user.tag.someday.coefficient=-5.0
-urgency.user.tag.inbox.coefficient=1.0
+urgency.user.tag.wait.coefficient=-3.0
+urgency.user.tag.maybe.coefficient=-5.0
 
-# report: inbox — captured, not yet processed
+# report: inbox — tasks with no project and no GTD tag (unprocessed)
 report.inbox.description=GTD Inbox — unprocessed captures
-report.inbox.columns=id,project,description,entry.age,tags
-report.inbox.labels=ID,Project,Description,Age,Tags
-report.inbox.filter=status:pending +inbox
+report.inbox.columns=id,description,entry.age,tags
+report.inbox.labels=ID,Description,Age,Tags
+report.inbox.filter=status:pending -next -wait -maybe and project:
 report.inbox.sort=entry+
 
 # report: next — next actions ready to do
@@ -31,23 +31,36 @@ report.next.labels=ID,Project,Description,Due,Tags
 report.next.filter=status:pending +next
 report.next.sort=project+,urgency-
 
-# report: waiting — delegated / blocked
-report.waiting.description=GTD Waiting For
-report.waiting.columns=id,project,description,wait,tags
-report.waiting.labels=ID,Project,Description,Wait,Tags
-report.waiting.filter=status:pending +waiting
-report.waiting.sort=project+,wait+
+# report: wait — delegated or blocked tasks
+report.wait.description=GTD Waiting For
+report.wait.columns=id,project,description,tags
+report.wait.labels=ID,Project,Description,Tags
+report.wait.filter=status:pending +wait
+report.wait.sort=project+,entry+
 
-# report: someday — someday/maybe backlog
-report.someday.description=GTD Someday/Maybe
-report.someday.columns=id,project,description,entry.age,tags
-report.someday.labels=ID,Project,Description,Age,Tags
-report.someday.filter=status:pending +someday
-report.someday.sort=project+,entry+
+# report: maybe — someday/maybe backlog
+report.maybe.description=GTD Someday/Maybe
+report.maybe.columns=id,project,description,entry.age,tags
+report.maybe.labels=ID,Project,Description,Age,Tags
+report.maybe.filter=status:pending +maybe
+report.maybe.sort=project+,entry+
 
-# report: review — weekly review, all active tasks by project
-report.review.description=GTD Weekly Review
-report.review.columns=id,project,description,due,tags,urgency
-report.review.labels=ID,Project,Description,Due,Tags,Urg
-report.review.filter=status:pending -someday -waiting
-report.review.sort=project+,urgency-
+# report: proj — all projects (summary view)
+report.proj.description=GTD Projects
+report.proj.filter=status:pending
+report.proj.sort=project+
+report.proj.kind=summary
+
+# report: review.week — weekly review
+report.review.week.description=GTD Weekly Review
+report.review.week.columns=id,project,description,end,tags
+report.review.week.labels=ID,Project,Description,Completed,Tags
+report.review.week.filter=(status:completed end.after:now-7d) or (status:pending -maybe)
+report.review.week.sort=status-,project+,end-
+
+# report: review.projects — all tasks with a project, grouped by project (check for missing +next)
+report.review.projects.description=GTD Projects Review
+report.review.projects.columns=id,project,description,tags
+report.review.projects.labels=ID,Project,Description,Tags
+report.review.projects.filter=status:pending project.any:
+report.review.projects.sort=project+,urgency-
