@@ -20,14 +20,23 @@ alias gs='git status -sb'
 alias gp='git push'
 alias gl='git log --oneline --graph --decorate --all'
 
-# GTD — Taskwarrior
-alias ta='task add'
+# GTD Taskwarrior
 alias t='task'
+alias ti='task inbox'
+alias ta='task add'
+alias tt='task annotate'
+alias tm='task modify'
+alias td='task done'
+alias tn='task next'
+alias tw='task wait'
+alias tp='task +project list'
+
 # kubectl completion for k alias — load kubectl completion then bind to k
 if command -v kubectl &>/dev/null; then
   source <(kubectl completion bash)
   complete -o default -o nospace -F __start_kubectl k
 fi
+
 # terraform completion for tf alias
 if command -v terraform &>/dev/null; then
   complete -C terraform tf
@@ -38,7 +47,7 @@ an() {
     "${EDITOR:-vi}" "$file"
   else
     mkdir -p "$(dirname "$file")"
-    echo "$*" >> "$file"
+    echo "$*" >>"$file"
   fi
 }
 
@@ -72,4 +81,3 @@ alias now='date +"%Y-%m-%d %H:%M:%S"'
 alias path='echo $PATH | tr ":" "\n"'
 alias reload='source ~/.bashrc'
 alias tf='terraform'
-alias week='date +%V'
