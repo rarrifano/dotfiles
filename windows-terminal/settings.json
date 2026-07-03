@@ -1,0 +1,242 @@
+{
+  "$help": "https://aka.ms/terminal-documentation",
+  "$schema": "https://aka.ms/terminal-profiles-schema",
+
+  "defaultProfile": "{81345dd3-0a7b-587a-ab39-231da1fa25d7}",
+  "theme": "Gruvbox",
+  "copyFormatting": "none",
+  "copyOnSelect": false,
+
+  "newTabMenu": [{ "type": "remainingProfiles" }],
+
+  "profiles": {
+    "defaults": {
+      "bellStyle": "none",
+      "startingDirectory": null,
+      "colorScheme": "Gruvbox Dark",
+      "cursorShape": "filledBox",
+      "font": {
+        "face": "Hack",
+        "size": 13
+      }
+    },
+    "list": [
+      {
+        "guid": "{81345dd3-0a7b-587a-ab39-231da1fa25d7}",
+        "name": "Debian",
+        "source": "Microsoft.WSL",
+        "hidden": false
+      },
+      {
+        "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
+        "name": "PowerShell",
+        "commandline": "pwsh.exe",
+        "hidden": false
+      }
+    ]
+  },
+
+  "schemes": [
+    {
+      "name": "Gruvbox Dark",
+      "background": "#282828",
+      "foreground": "#EBDBB2",
+      "cursorColor": "#EBDBB2",
+      "selectionBackground": "#D65D0E",
+      "black": "#282828",
+      "brightBlack": "#928374",
+      "red": "#CC241D",
+      "brightRed": "#FB4934",
+      "green": "#98971A",
+      "brightGreen": "#B8BB26",
+      "yellow": "#D79921",
+      "brightYellow": "#FABD2F",
+      "blue": "#458588",
+      "brightBlue": "#83A598",
+      "purple": "#B16286",
+      "brightPurple": "#D3869B",
+      "cyan": "#689D6A",
+      "brightCyan": "#8EC07C",
+      "white": "#A89984",
+      "brightWhite": "#EBDBB2"
+    }
+  ],
+
+  "actions": [
+    {
+      "command": { "action": "sendInput", "input": "\u001b[13;2u" },
+      "id": "User.sendInput.8882FD6D"
+    },
+    {
+      "command": { "action": "sendInput", "input": "\u001b[13;3u" },
+      "id": "User.sendInput.237E8A98"
+    },
+
+    { "command": "toggleFullscreen", "id": "User.kitty.toggleFullscreen" },
+
+    {
+      "command": { "action": "newWindow" },
+      "id": "User.kitty.newWindowWithCwd"
+    },
+    { "command": "closePane", "id": "User.kitty.closeWindow" },
+    {
+      "command": {
+        "action": "splitPane",
+        "split": "vertical",
+        "splitMode": "duplicate"
+      },
+      "id": "User.kitty.vsplit"
+    },
+    {
+      "command": {
+        "action": "splitPane",
+        "split": "horizontal",
+        "splitMode": "duplicate"
+      },
+      "id": "User.kitty.hsplit"
+    },
+
+    {
+      "command": { "action": "moveFocus", "direction": "left" },
+      "id": "User.kitty.focusLeft"
+    },
+    {
+      "command": { "action": "moveFocus", "direction": "down" },
+      "id": "User.kitty.focusDown"
+    },
+    {
+      "command": { "action": "moveFocus", "direction": "up" },
+      "id": "User.kitty.focusUp"
+    },
+    {
+      "command": { "action": "moveFocus", "direction": "right" },
+      "id": "User.kitty.focusRight"
+    },
+
+    {
+      "command": { "action": "resizePane", "direction": "left" },
+      "id": "User.kitty.resizeLeft"
+    },
+    {
+      "command": { "action": "resizePane", "direction": "right" },
+      "id": "User.kitty.resizeRight"
+    },
+    {
+      "command": { "action": "resizePane", "direction": "up" },
+      "id": "User.kitty.resizeUp"
+    },
+    {
+      "command": { "action": "resizePane", "direction": "down" },
+      "id": "User.kitty.resizeDown"
+    },
+
+    { "command": { "action": "newTab" }, "id": "User.kitty.newTab" },
+    { "command": "closeTab", "id": "User.kitty.closeTab" },
+    { "command": { "action": "nextTab" }, "id": "User.kitty.nextTab" },
+    { "command": { "action": "prevTab" }, "id": "User.kitty.prevTab" },
+    {
+      "command": { "action": "moveTab", "direction": "forward" },
+      "id": "User.kitty.moveTabForward"
+    },
+    {
+      "command": { "action": "moveTab", "direction": "backward" },
+      "id": "User.kitty.moveTabBackward"
+    },
+    { "command": "renameTab", "id": "User.kitty.renameTab" },
+    {
+      "command": { "action": "switchToTab", "index": 0 },
+      "id": "User.kitty.tab1"
+    },
+    {
+      "command": { "action": "switchToTab", "index": 1 },
+      "id": "User.kitty.tab2"
+    },
+    {
+      "command": { "action": "switchToTab", "index": 2 },
+      "id": "User.kitty.tab3"
+    },
+    {
+      "command": { "action": "switchToTab", "index": 3 },
+      "id": "User.kitty.tab4"
+    },
+    {
+      "command": { "action": "switchToTab", "index": 4 },
+      "id": "User.kitty.tab5"
+    },
+    {
+      "command": { "action": "switchToTab", "index": 5 },
+      "id": "User.kitty.tab6"
+    },
+    {
+      "command": { "action": "switchToTab", "index": 6 },
+      "id": "User.kitty.tab7"
+    },
+    {
+      "command": { "action": "switchToTab", "index": 7 },
+      "id": "User.kitty.tab8"
+    },
+    {
+      "command": { "action": "switchToTab", "index": 8 },
+      "id": "User.kitty.tab9"
+    }
+  ],
+
+  "keybindings": [
+    { "id": "Terminal.DuplicatePaneAuto", "keys": "alt+shift+d" },
+    { "id": "User.sendInput.8882FD6D", "keys": "shift+enter" },
+    { "id": "User.sendInput.237E8A98", "keys": "alt+enter" },
+    { "id": "Terminal.FindText", "keys": "ctrl+shift+f" },
+
+    { "id": "User.kitty.toggleFullscreen", "keys": "f11" },
+
+    { "id": "User.kitty.newWindowWithCwd", "keys": "ctrl+shift+n" },
+    { "id": "User.kitty.closeWindow", "keys": "ctrl+shift+w" },
+    { "id": "User.kitty.vsplit", "keys": "ctrl+shift+enter" },
+    { "id": "User.kitty.hsplit", "keys": "ctrl+shift+backspace" },
+
+    { "id": "User.kitty.focusLeft", "keys": "alt+h" },
+    { "id": "User.kitty.focusDown", "keys": "alt+j" },
+    { "id": "User.kitty.focusUp", "keys": "alt+k" },
+    { "id": "User.kitty.focusRight", "keys": "alt+l" },
+
+    { "id": "User.kitty.resizeLeft", "keys": "alt+left" },
+    { "id": "User.kitty.resizeRight", "keys": "alt+right" },
+    { "id": "User.kitty.resizeUp", "keys": "alt+up" },
+    { "id": "User.kitty.resizeDown", "keys": "alt+down" },
+
+    { "id": "User.kitty.newTab", "keys": "ctrl+shift+t" },
+    { "id": "User.kitty.closeTab", "keys": "ctrl+shift+q" },
+    { "id": "User.kitty.nextTab", "keys": "ctrl+shift+]" },
+    { "id": "User.kitty.prevTab", "keys": "ctrl+shift+[" },
+    { "id": "User.kitty.moveTabForward", "keys": "ctrl+shift+." },
+    { "id": "User.kitty.moveTabBackward", "keys": "ctrl+shift+," },
+    { "id": "User.kitty.renameTab", "keys": "ctrl+shift+alt+t" },
+    { "id": "User.kitty.tab1", "keys": "ctrl+1" },
+    { "id": "User.kitty.tab2", "keys": "ctrl+2" },
+    { "id": "User.kitty.tab3", "keys": "ctrl+3" },
+    { "id": "User.kitty.tab4", "keys": "ctrl+4" },
+    { "id": "User.kitty.tab5", "keys": "ctrl+5" },
+    { "id": "User.kitty.tab6", "keys": "ctrl+6" },
+    { "id": "User.kitty.tab7", "keys": "ctrl+7" },
+    { "id": "User.kitty.tab8", "keys": "ctrl+8" },
+    { "id": "User.kitty.tab9", "keys": "ctrl+9" }
+  ],
+
+  "themes": [
+    {
+      "name": "Gruvbox",
+      "tab": {
+        "background": "#3C3836FF",
+        "showCloseButton": "always",
+        "unfocusedBackground": "#282828FF"
+      },
+      "tabRow": {
+        "background": "#282828FF",
+        "unfocusedBackground": "#282828FF"
+      },
+      "window": {
+        "applicationTheme": "dark"
+      }
+    }
+  ]
+}
