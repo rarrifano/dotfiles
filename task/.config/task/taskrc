@@ -66,6 +66,13 @@ report.outcomes.labels=ID,Project,Description,Age,Tags
 report.outcomes.filter=status:pending +project
 report.outcomes.sort=project+,entry+
 
+# report: project — tasks tagged +project (alias-style list view)
+report.project.description=Tasks tagged +project
+report.project.columns=id,project,description,entry.age,tags
+report.project.labels=ID,Project,Description,Age,Tags
+report.project.filter=status:pending +project
+report.project.sort=project+,entry+
+
 # report: stalled — projects with no next action or waiting task
 # Usage: cross-reference with `task next` — any project missing from there is stalled
 report.stalled.description=GTD Stalled Projects (no +next or +wait)

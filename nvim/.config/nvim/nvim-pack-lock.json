@@ -32,7 +32,7 @@
       "src": "https://github.com/NMAC427/guess-indent.nvim"
     },
     "kitty-scrollback.nvim": {
-      "rev": "d52825b2a076586d1af156a066db2d18cd1fd8cb",
+      "rev": "53fd294658941719d7622471f28e70179d6737a6",
       "src": "https://github.com/mikesmithgh/kitty-scrollback.nvim"
     },
     "mason-lspconfig.nvim": {
