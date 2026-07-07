@@ -34,3 +34,4 @@ rust        = "stable"      # required by: cargo:mdcat
 
 # mise
 usage   = "latest"   # mise task completion + mise help
+uv = "latest"
