@@ -30,9 +30,9 @@ alias td='task done'
 alias tn='task next'
 alias tw='task wait'
 alias tp='task +project list'
-alias tdy='task end:yesterday completed'                                                              # done yesterday
-alias tdt='task "end.after:$(date +%Y-%m-%dT00:00:00)" completed'                                    # done today
-alias tdw='task "end.after:$(date -d "last monday" +%Y-%m-%dT00:00:00 2>/dev/null || date -v-monday +%Y-%m-%dT00:00:00)" completed'  # done this week (Mon–today)
+alias tdy='task end:yesterday completed'                                                                                            # done yesterday
+alias tdt='task "end.after:$(date +%Y-%m-%dT00:00:00)" completed'                                                                   # done today
+alias tdw='task "end.after:$(date -d "last monday" +%Y-%m-%dT00:00:00 2>/dev/null || date -v-monday +%Y-%m-%dT00:00:00)" completed' # done this week (Mon–today)
 
 # kubectl completion for k alias — load kubectl completion then bind to k
 if command -v kubectl &>/dev/null; then
@@ -84,3 +84,4 @@ alias now='date +"%Y-%m-%d %H:%M:%S"'
 alias path='echo $PATH | tr ":" "\n"'
 alias reload='source ~/.bashrc'
 alias tf='terraform'
+alias z='$EDITOR ~/Documents/journal/$(date +%Y-%m-%d).md'
