@@ -88,7 +88,7 @@ if [[ "${NO_MOUNT}" -eq 0 ]]; then
   CONTAINER_WORKDIR="/${HOST_DIRNAME}"
 else
   echo "[pi-run] playground mode — working directory not mounted" >&2
-  CONTAINER_WORKDIR="/playground"
+  CONTAINER_WORKDIR="/root"
 fi
 
 # Launch
