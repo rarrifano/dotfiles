@@ -5,6 +5,17 @@ set -euo pipefail
 IMAGE="${PI_IMAGE:-pi-agent:latest}"
 AGENT_DIR="${PI_AGENT_DIR:-${HOME}/.config/pi}"
 WORK_DIR="${PI_WORKDIR:-$(pwd)}"
+NO_MOUNT=0
+
+# Parse flags
+ARGS=()
+for arg in "$@"; do
+  case "$arg" in
+    --no-mount|-n) NO_MOUNT=1 ;;
+    *) ARGS+=("$arg") ;;
+  esac
+done
+set -- "${ARGS[@]+${ARGS[@]}}"
 
 # Clipboard detection
 DISPLAY_ARGS=()
@@ -70,9 +81,15 @@ if [[ -d "${HOME}/.config/gh" ]]; then
   MOUNT_ARGS+=(-v "${HOME}/.config/gh:/root/.config/gh:ro")
 fi
 
-# working directory — mount under the host directory's basename
-HOST_DIRNAME="$(basename "${WORK_DIR}")"
-MOUNT_ARGS+=(-v "${WORK_DIR}:/${HOST_DIRNAME}")
+# working directory — mount under the host directory's basename (skipped with --no-mount)
+if [[ "${NO_MOUNT}" -eq 0 ]]; then
+  HOST_DIRNAME="$(basename "${WORK_DIR}")"
+  MOUNT_ARGS+=(-v "${WORK_DIR}:/${HOST_DIRNAME}")
+  CONTAINER_WORKDIR="/${HOST_DIRNAME}"
+else
+  echo "[pi-run] playground mode — working directory not mounted" >&2
+  CONTAINER_WORKDIR="/playground"
+fi
 
 # Launch
 TTY_ARGS=()
@@ -91,6 +108,6 @@ exec podman run --rm "${TTY_ARGS[@]}" \
     -e "TASKRC=/root/.config/task/taskrc" \
     -e "TERM=${TERM:-xterm-256color}" \
     -e "COLORTERM=${COLORTERM:-truecolor}" \
-    --workdir "/${HOST_DIRNAME}" \
+    --workdir "${CONTAINER_WORKDIR}" \
     "${IMAGE}" \
     "$@"

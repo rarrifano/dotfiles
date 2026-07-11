@@ -13,6 +13,7 @@ go      = "1.26.4"    # required by: personal Go projects
 stylua  = "2.1.0"    # lua formatter
 shfmt   = "3.11.0"   # sh/bash formatter
 ruff    = "0.11.13"  # python formatter + linter
+uv      = "latest"
 
 # LSP servers (npm-based)
 "npm:prettier"                      = "3.5.3"    # yaml/json formatter
@@ -28,10 +29,5 @@ ruff    = "0.11.13"  # python formatter + linter
 "aqua:terraform-linters/tflint"    = "0.57.0"  # terraform linter
 "aqua:LuaLS/lua-language-server"   = "3.14.0"  # lua_ls
 
-# Terminal rendering
-rust        = "stable"      # required by: cargo:mdcat
-"cargo:mdcat" = "2.7.1"    # markdown renderer — kitty graphics protocol + ANSI fallback
-
 # mise
 usage   = "latest"   # mise task completion + mise help
-uv = "latest"
