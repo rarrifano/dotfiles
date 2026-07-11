@@ -11,8 +11,8 @@ NO_MOUNT=0
 ARGS=()
 for arg in "$@"; do
   case "$arg" in
-    --no-mount|-n) NO_MOUNT=1 ;;
-    *) ARGS+=("$arg") ;;
+  --no-mount | -n) NO_MOUNT=1 ;;
+  *) ARGS+=("$arg") ;;
   esac
 done
 set -- "${ARGS[@]+${ARGS[@]}}"
@@ -29,8 +29,6 @@ if [[ -n "${WAYLAND_DISPLAY:-}" ]]; then
       -e "XDG_RUNTIME_DIR=/tmp/xdg-runtime"
       -v "${WAYLAND_SOCKET}:/tmp/xdg-runtime/${WAYLAND_DISPLAY}:ro"
     )
-  else
-    echo "[pi-run] warn: WAYLAND_DISPLAY set but socket not found at ${WAYLAND_SOCKET}" >&2
   fi
 fi
 
@@ -87,7 +85,6 @@ if [[ "${NO_MOUNT}" -eq 0 ]]; then
   MOUNT_ARGS+=(-v "${WORK_DIR}:/${HOST_DIRNAME}")
   CONTAINER_WORKDIR="/${HOST_DIRNAME}"
 else
-  echo "[pi-run] playground mode — working directory not mounted" >&2
   CONTAINER_WORKDIR="/root"
 fi
 
@@ -100,14 +97,14 @@ else
 fi
 
 exec podman run --rm "${TTY_ARGS[@]}" \
-    "${DISPLAY_ARGS[@]+"${DISPLAY_ARGS[@]}"}" \
-    "${MOUNT_ARGS[@]+"${MOUNT_ARGS[@]}"}" \
-    -e "VISUAL=vim" \
-    -e "EDITOR=vim" \
-    -e "PI_CODING_AGENT_DIR=/root/.pi/agent" \
-    -e "TASKRC=/root/.config/task/taskrc" \
-    -e "TERM=${TERM:-xterm-256color}" \
-    -e "COLORTERM=${COLORTERM:-truecolor}" \
-    --workdir "${CONTAINER_WORKDIR}" \
-    "${IMAGE}" \
-    "$@"
+  "${DISPLAY_ARGS[@]+"${DISPLAY_ARGS[@]}"}" \
+  "${MOUNT_ARGS[@]+"${MOUNT_ARGS[@]}"}" \
+  -e "VISUAL=vim" \
+  -e "EDITOR=vim" \
+  -e "PI_CODING_AGENT_DIR=/root/.pi/agent" \
+  -e "TASKRC=/root/.config/task/taskrc" \
+  -e "TERM=${TERM:-xterm-256color}" \
+  -e "COLORTERM=${COLORTERM:-truecolor}" \
+  --workdir "${CONTAINER_WORKDIR}" \
+  "${IMAGE}" \
+  "$@"
