@@ -10,6 +10,9 @@ nvim/.config/nvim/.netrwhist
 .DS_Store
 Thumbs.db
 
+# node_modules -- ignored everywhere in the repo
+node_modules/
+
 # pi package cache
 pi/.config/pi-sandbox/agent/npm/
 pi/.config/pi/npm/
@@ -21,7 +24,6 @@ pi/.config/pi/sessions/
 pi/.config/pi/trust.json
 
 # report-builder skill -- deps are reproducible via npm install
-pi/.config/pi/skills/report-builder/scripts/node_modules/
 pi/.config/pi/skills/report-builder/scripts/package-lock.json
 
 # Logs and local env files
