@@ -90,7 +90,34 @@ Create a file at `./AGENTS.md` (project root) using this structure — fill ever
 
 ${1:- }
 
-## Step 4 — Scaffold `.pi/` (if missing)
+## Step 4 — Create `mise.toml` (if missing)
+
+If a `mise.toml` (or `.mise.toml`) does not exist at the project root, create one based on the detected stack. Use this as a starting template — keep only what applies to this project:
+
+```toml
+# mise — dev toolchain manager
+# Install everything: mise install
+# https://mise.jdx.dev
+
+[tools]
+# Add runtimes and tools detected in Step 2
+# Examples:
+# node    = "lts"
+# python  = "3.13"
+# go      = "latest"
+
+[tasks]
+# Optional: define project tasks here (mise run <task>)
+# Examples:
+# test = "npm test"
+# lint = "npm run lint"
+```
+
+Only include tools that are actually required by the project. Pin versions where possible — use `"latest"` only for tools where stability is not critical.
+
+If a `mise.toml` already exists, skip this step.
+
+## Step 5 — Scaffold `.pi/` (if missing)
 
 If `.pi/` does not exist yet, create a minimal project-local scaffold:
 
@@ -102,7 +129,7 @@ If `.pi/` does not exist yet, create a minimal project-local scaffold:
 
 Just create the directories — don't add placeholder files unless there's a clear need.
 
-## Step 5 — Report
+## Step 6 — Report
 
 After writing the files, print a short summary:
 

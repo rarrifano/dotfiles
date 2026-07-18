@@ -88,17 +88,6 @@ else
   CONTAINER_WORKDIR="/root"
 fi
 
-# mise — run install before the agent if the workdir has a mise config file
-HAS_MISE_CONFIG=0
-if [[ "${NO_MOUNT}" -eq 0 ]]; then
-  for f in mise.toml .mise.toml .mise/config.toml .tool-versions; do
-    if [[ -f "${WORK_DIR}/${f}" ]]; then
-      HAS_MISE_CONFIG=1
-      break
-    fi
-  done
-fi
-
 # Launch
 TTY_ARGS=()
 if [[ -t 0 && -t 1 ]]; then
@@ -107,22 +96,15 @@ else
   TTY_ARGS=(-i)
 fi
 
-CMD_ARGS=("$@")
-if [[ "${HAS_MISE_CONFIG}" -eq 1 ]]; then
-  # wrap in bash so mise install runs before handing off to pi
-  QUOTED=$(printf '%q ' "${CMD_ARGS[@]+${CMD_ARGS[@]}}")
-  CMD_ARGS=(bash -c "mise install --quiet 2>/dev/null || true; exec pi ${QUOTED}")
-fi
-
 exec podman run --rm "${TTY_ARGS[@]}" \
   "${DISPLAY_ARGS[@]+"${DISPLAY_ARGS[@]}"}" \
   "${MOUNT_ARGS[@]+"${MOUNT_ARGS[@]}"}" \
-  -e "VISUAL=vim" \
-  -e "EDITOR=vim" \
+  -e "VISUAL=vi" \
+  -e "EDITOR=vi" \
   -e "PI_CODING_AGENT_DIR=/root/.pi/agent" \
   -e "TASKRC=/root/.config/task/taskrc" \
   -e "TERM=${TERM:-xterm-256color}" \
   -e "COLORTERM=${COLORTERM:-truecolor}" \
   --workdir "${CONTAINER_WORKDIR}" \
   "${IMAGE}" \
-  "${CMD_ARGS[@]+${CMD_ARGS[@]}}"
+  "$@"

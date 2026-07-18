@@ -26,61 +26,46 @@ echo "==> Building ${IMAGE} with pi@${VERSION}..."
 cat > "${BUILD_CTX}/Containerfile" <<'CONTAINERFILE'
 FROM node:24-bookworm-slim
 
-# System dependencies
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+# system deps — only what mise cannot provide
 RUN apt-get update -qq && \
     apt-get install -y --no-install-recommends \
-        # shell essentials
-        bash \
         curl \
         ca-certificates \
         git \
         unzip \
-        jq \
-        openssl \
+        gpg \
+        make \
         openssh-client \
-        # clipboard support (wayland)
-        wl-clipboard \
-        # editor + search
-        neovim \
-        ripgrep \
-        fd-find \
-        fzf \
-        # multiplexer
-        tmux \
-        # devops / task management
-        gnupg \
-        apt-transport-https \
-        taskwarrior \
+        python3 \
     && rm -rf /var/lib/apt/lists/*
 
-# Host CA certificates
+# host CA certificates
 COPY ca-certs/ /usr/local/share/ca-certificates/
 RUN if [ -n "$(ls /usr/local/share/ca-certificates/*.crt 2>/dev/null)" ]; then \
         update-ca-certificates; \
     fi
 
-# gh CLI
-RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg \
-        -o /usr/share/keyrings/githubcli-archive-keyring.gpg && \
-    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" \
-        > /etc/apt/sources.list.d/github-cli.list && \
-    apt-get update -qq && \
-    apt-get install -y --no-install-recommends gh && \
-    rm -rf /var/lib/apt/lists/*
+# mise
+ENV MISE_DATA_DIR="/mise" \
+    MISE_CACHE_DIR="/mise/cache" \
+    MISE_INSTALL_PATH="/usr/local/bin/mise"
+ENV PATH="/mise/shims:$PATH"
+RUN curl -fsSL https://mise.run | sh
 
-# yq
-ARG YQ_VERSION=v4.44.3
-RUN curl -fsSL "https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/yq_linux_amd64" \
-        -o /usr/local/bin/yq && \
-    chmod +x /usr/local/bin/yq
-
-# kubectl
-RUN curl -fsSL "https://dl.k8s.io/release/$(curl -fsSL https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" \
-        -o /usr/local/bin/kubectl && \
-    chmod +x /usr/local/bin/kubectl
-
-# helm
-RUN curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+# core devops tools baked globally
+RUN MISE_CONFIG_DIR=/mise mise use --global --jobs 8 \
+        jq \
+        yq \
+        gh \
+        ripgrep \
+        fd \
+        kubectl \
+        helm \
+        terraform && \
+    mise reshim && \
+    rm -rf /mise/cache
 
 # pi
 ARG PI_VERSION=0.0.0-unset
@@ -88,13 +73,14 @@ RUN npm install -g --ignore-scripts \
         "@earendil-works/pi-coding-agent@${PI_VERSION}" && \
     npm cache clean --force
 
-# Runtime
+# runtime
 ENV NODE_EXTRA_CA_CERTS=/etc/ssl/certs/ca-certificates.crt
 WORKDIR /workspace
 ENTRYPOINT ["pi"]
 CONTAINERFILE
 
 podman build \
+    --format docker \
     --build-arg "PI_VERSION=${VERSION}" \
     -t "${IMAGE}" \
     -f "${BUILD_CTX}/Containerfile" \
