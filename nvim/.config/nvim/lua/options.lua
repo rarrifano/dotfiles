@@ -21,7 +21,10 @@ vim.o.confirm = true
 vim.o.wrap = false
 vim.o.cursorline = false
 vim.o.autoread = true
-vim.o.completeopt = "menuone,noselect,popup"
+vim.o.completeopt = "menuone,noinsert,noselect,popup,fuzzy"
+
+vim.o.winborder = "rounded"
+vim.o.clipboard = "unnamedplus"
 
 -- Indentation defaults (replaces guess-indent.nvim)
 vim.o.expandtab = true

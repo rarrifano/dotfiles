@@ -23,29 +23,31 @@ end
 
 vim.api.nvim_create_user_command("ReloadConfig", reload_config, { desc = "Reload Neovim config" })
 
--- Python modern script runner and test runner commands
-local function run_python()
+-- Universal F5 runner
+local runners = {
+	python = function(file) return "uv run " .. vim.fn.shellescape(file) end,
+	sh     = function(file) return "bash " .. vim.fn.shellescape(file) end,
+	bash   = function(file) return "bash " .. vim.fn.shellescape(file) end,
+	lua    = function(file) return "luajit " .. vim.fn.shellescape(file) end,
+	go     = function(_)    return "go run ." end,
+}
+
+vim.keymap.set("n", "<F5>", function()
+	local ft = vim.bo.filetype
 	local file = vim.fn.expand("%:p")
-	if file == "" then
-		vim.notify("No file active to run!", vim.log.levels.WARN)
+	local runner = runners[ft]
+	if not runner then
+		vim.notify("No F5 runner for filetype: " .. ft, vim.log.levels.WARN)
 		return
 	end
-	vim.cmd("split | terminal uv run " .. vim.fn.shellescape(file))
-	vim.cmd("startinsert")
-end
-
-local function test_python()
-	local file = vim.fn.expand("%:t")
-	local cmd = "uv run pytest"
-	if file:match("^test_.*%.py$") or file:match("^.*_test%.py$") then
-		cmd = cmd .. " " .. vim.fn.shellescape(vim.fn.expand("%:p"))
+	local cmd = runner(file)
+	if vim.env.KITTY_WINDOW_ID then
+		vim.system({ "kitten", "@", "launch", "--type=window", "--location=hsplit", "--cwd=current", "bash", "-i", "-c", cmd .. "; echo; read -p 'Press enter to close...' " })
+	else
+		vim.cmd("split | terminal " .. cmd)
+		vim.cmd("startinsert")
 	end
-	vim.cmd("split | terminal " .. cmd)
-	vim.cmd("startinsert")
-end
-
-vim.api.nvim_create_user_command("RunPython", run_python, { desc = "Run current Python script with uv" })
-vim.api.nvim_create_user_command("TestPython", test_python, { desc = "Run Python tests with uv run pytest" })
+end, { desc = "[F5] Run current file" })
 
 local function center_horizontally()
 	local info = vim.fn.getwininfo(vim.api.nvim_get_current_win())[1]
@@ -100,12 +102,6 @@ vim.keymap.set("n", "<A-l>", function() navigate("l") end)
 vim.keymap.set("n", "<leader>w", "<cmd>w<CR>", { desc = "Save file" })
 vim.keymap.set("n", "<leader>q", "<cmd>bd<CR>", { desc = "Close buffer" })
 vim.keymap.set("n", "<leader>R", "<cmd>ReloadConfig<CR>", { desc = "Reload Neovim config" })
-
--- Clipboard
-vim.keymap.set({ "n", "v" }, "<leader>y", '"+y', { desc = "Yank to clipboard" })
-vim.keymap.set("n", "<leader>Y", '"+Y', { desc = "Yank line to clipboard" })
-vim.keymap.set({ "n", "v" }, "<leader>p", '"+p', { desc = "Paste from clipboard after" })
-vim.keymap.set({ "n", "v" }, "<leader>P", '"+P', { desc = "Paste from clipboard before" })
 
 -- DevOps linters
 local function lint_terraform()

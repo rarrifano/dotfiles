@@ -12,7 +12,10 @@ local formatters_by_ft = {
 	yaml = { "prettier" },
 	json = { "prettier" },
 	terraform = { "terraform_fmt" },
+	["terraform-vars"] = { "terraform_fmt" },
+	hcl = { "hclfmt" },
 	markdown = { "prettier" },
+	toml = { "taplo" },
 }
 
 require("conform").setup({

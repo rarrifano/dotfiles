@@ -58,6 +58,6 @@ vim.keymap.set("n", "<leader>gt", fzf_call("git_status"), { desc = "[G]it S[t]at
 vim.keymap.set("n", "<leader>gS", fzf_call("git_stash"), { desc = "[G]it [S]tash" })
 
 -- Neovim config
-vim.keymap.set("n", "<leader>sn", function()
+vim.keymap.set("n", "<leader>fn", function()
 	require("fzf-lua").files({ cwd = vim.fn.stdpath("config") })
-end, { desc = "[F]ind [N]eovim files" })
+end, { desc = "[F]ind [N]eovim config" })

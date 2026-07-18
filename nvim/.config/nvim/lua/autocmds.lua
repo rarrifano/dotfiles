@@ -8,6 +8,9 @@ vim.api.nvim_create_autocmd("BufReadPre", {
 		vim.filetype.add({
 			pattern = {
 				["docker%-compose.*%.ya?ml"] = "yaml.docker-compose",
+				[".*%.pkr%.hcl"] = "hcl",
+				[".*%.pkr%.json"] = "json",
+				[".*playbook.*%.ya?ml"] = "yaml.ansible",
 				[".+%.ya?ml"] = function(path, _)
 					local f = io.open(path, "r")
 					if f then
@@ -15,6 +18,9 @@ vim.api.nvim_create_autocmd("BufReadPre", {
 						f:close()
 						if head:match("stages:%s*%[") or head:match("%-%-%-%s*stages:") then
 							return "yaml.gitlab"
+						end
+						if path:match("%.github/workflows/") then
+							return "yaml.github-actions"
 						end
 						if
 							head:match("apiVersion:")

@@ -15,12 +15,18 @@ shfmt   = "3.11.0"   # sh/bash formatter
 ruff    = "0.11.13"  # python formatter + linter
 uv      = "latest"
 
+# Formatters (non-npm)
+"aqua:tamasfe/taplo"               = "0.10.0"  # toml formatter + taplo LSP
+"go:github.com/hashicorp/hcl/v2/cmd/hclfmt" = "latest"  # hcl formatter (Packer, Nomad)
+
 # LSP servers (npm-based)
-"npm:prettier"                      = "3.5.3"    # yaml/json formatter
-"npm:pyright"                       = "1.1.402"  # python LSP
-"npm:bash-language-server"          = "5.6.0"    # bashls
-"npm:yaml-language-server"         = "1.15.0"  # yamlls
-"npm:vscode-langservers-extracted" = "4.10.0"  # jsonls
+"npm:prettier"                                  = "3.5.3"    # yaml/json/md formatter
+"npm:pyright"                                   = "1.1.402"  # python LSP
+"npm:bash-language-server"                      = "5.6.0"    # bashls
+"npm:yaml-language-server"                      = "1.15.0"   # yamlls
+"npm:vscode-langservers-extracted"              = "4.10.0"   # jsonls
+"npm:@microsoft/compose-language-service"       = "0.5.0"    # docker_compose_language_service
+"npm:@ansible/ansible-language-server"          = "26.6.0"   # ansiblels
 
 # LSP servers (aqua/github release)
 "aqua:hashicorp/terraform"         = "1.12.2"  # terraform CLI (required by terraform_fmt)
@@ -28,6 +34,7 @@ uv      = "latest"
 "aqua:rhysd/actionlint"            = "1.7.7"   # github actions linter
 "aqua:terraform-linters/tflint"    = "0.57.0"  # terraform linter
 "aqua:LuaLS/lua-language-server"   = "3.14.0"  # lua_ls
+"aqua:mrjosh/helm-ls"              = "0.5.4"   # helm_ls
 
 # mise
 usage   = "latest"   # mise task completion + mise help

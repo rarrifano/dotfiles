@@ -29,9 +29,6 @@ FROM node:24-bookworm-slim
 # System dependencies
 RUN apt-get update -qq && \
     apt-get install -y --no-install-recommends \
-        # clipboard support
-        xclip \
-        wl-clipboard \
         # shell essentials
         bash \
         curl \
@@ -39,13 +36,21 @@ RUN apt-get update -qq && \
         git \
         unzip \
         jq \
-        # editor
-        vim \
-        # devops
+        openssl \
+        openssh-client \
+        # clipboard support (wayland)
+        wl-clipboard \
+        # editor + search
+        neovim \
+        ripgrep \
+        fd-find \
+        fzf \
+        # multiplexer
+        tmux \
+        # devops / task management
         gnupg \
-        taskwarrior \
-        # gh CLI dep (added via keyring below)
         apt-transport-https \
+        taskwarrior \
     && rm -rf /var/lib/apt/lists/*
 
 # Host CA certificates
@@ -76,20 +81,6 @@ RUN curl -fsSL "https://dl.k8s.io/release/$(curl -fsSL https://dl.k8s.io/release
 
 # helm
 RUN curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
-
-# terraform
-ARG TERRAFORM_VERSION=1.9.8
-RUN curl -fsSL "https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip" \
-        -o /tmp/terraform.zip && \
-    unzip -q /tmp/terraform.zip -d /usr/local/bin && \
-    rm /tmp/terraform.zip
-
-# AWS CLI
-RUN curl -fsSL "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" \
-        -o /tmp/awscliv2.zip && \
-    unzip -q /tmp/awscliv2.zip -d /tmp && \
-    /tmp/aws/install && \
-    rm -rf /tmp/aws /tmp/awscliv2.zip
 
 # pi
 ARG PI_VERSION=0.0.0-unset

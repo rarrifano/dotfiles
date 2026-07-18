@@ -31,6 +31,21 @@
 - If a command fails, diagnose before retrying.
 - Show the actual error output, not just "it failed".
 
+## Environment
+
+- Running inside a **Docker container** with **Debian 12 (bookworm)**
+- Extra packages available: `git`, `gh`, `curl`, `jq`, `unzip`, `openssl`, `vim`, `taskwarrior`, `wl-clipboard`, `xclip`
+- Runtimes available: `node` v24, `npm` v11, `terraform`, `kubectl`, `helm`
+- No Python runtime installed by default — install via `apt` or `pipx` if needed
+- Use `apt-get` for system packages; prefer tools already present before installing new ones
+
+## Neovim
+
+- Version: **v0.12**
+- Always prefer native Neovim APIs and built-ins over plugins (e.g. `vim.lsp.*`, `vim.diagnostic.*`, `vim.treesitter.*`, native completion via `vim.lsp.completion.enable`)
+- Only suggest a plugin when there is no native equivalent or the native API is clearly insufficient
+- Keep config lean — no nvim-cmp, no mason auto-install, no deprecated `require('lspconfig')` patterns unless already present
+
 ## Stack
 
 - IaC: Terraform (modules, remote state, workspaces)
