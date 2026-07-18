@@ -88,12 +88,30 @@ else
   CONTAINER_WORKDIR="/root"
 fi
 
+# mise — run install before the agent if the workdir has a mise config file
+HAS_MISE_CONFIG=0
+if [[ "${NO_MOUNT}" -eq 0 ]]; then
+  for f in mise.toml .mise.toml .mise/config.toml .tool-versions; do
+    if [[ -f "${WORK_DIR}/${f}" ]]; then
+      HAS_MISE_CONFIG=1
+      break
+    fi
+  done
+fi
+
 # Launch
 TTY_ARGS=()
 if [[ -t 0 && -t 1 ]]; then
   TTY_ARGS=(-it)
 else
   TTY_ARGS=(-i)
+fi
+
+CMD_ARGS=("$@")
+if [[ "${HAS_MISE_CONFIG}" -eq 1 ]]; then
+  # wrap in bash so mise install runs before handing off to pi
+  QUOTED=$(printf '%q ' "${CMD_ARGS[@]+${CMD_ARGS[@]}}")
+  CMD_ARGS=(bash -c "mise install --quiet 2>/dev/null || true; exec pi ${QUOTED}")
 fi
 
 exec podman run --rm "${TTY_ARGS[@]}" \
@@ -107,4 +125,4 @@ exec podman run --rm "${TTY_ARGS[@]}" \
   -e "COLORTERM=${COLORTERM:-truecolor}" \
   --workdir "${CONTAINER_WORKDIR}" \
   "${IMAGE}" \
-  "$@"
+  "${CMD_ARGS[@]+${CMD_ARGS[@]}}"
