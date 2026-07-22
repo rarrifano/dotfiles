@@ -26,6 +26,22 @@ vim.o.completeopt = "menuone,noinsert,noselect,popup,fuzzy"
 vim.o.winborder = "rounded"
 vim.o.clipboard = "unnamedplus"
 
+-- WSL clipboard bridge via win32yank
+if vim.fn.has("wsl") == 1 then
+  vim.g.clipboard = {
+    name = "win32yank",
+    copy = {
+      ["+"] = "win32yank.exe -i --crlf",
+      ["*"] = "win32yank.exe -i --crlf",
+    },
+    paste = {
+      ["+"] = "win32yank.exe -o --lf",
+      ["*"] = "win32yank.exe -o --lf",
+    },
+    cache_enabled = true,
+  }
+end
+
 -- Indentation defaults (replaces guess-indent.nvim)
 vim.o.expandtab = true
 vim.o.shiftwidth = 2
