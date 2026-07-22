@@ -8,3 +8,4 @@
 # Local caches and agent data
 /agent/
 *.log
+/models-store.json
