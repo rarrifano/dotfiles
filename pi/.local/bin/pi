@@ -71,8 +71,8 @@ fi
 # working directory — mount under the host directory's basename (skipped with --no-mount)
 if [[ "${NO_MOUNT}" -eq 0 ]]; then
   HOST_DIRNAME="$(basename "${WORK_DIR}")"
-  MOUNT_ARGS+=(-v "${WORK_DIR}:/${HOST_DIRNAME}")
-  CONTAINER_WORKDIR="/${HOST_DIRNAME}"
+  MOUNT_ARGS+=(-v "${WORK_DIR}:/root/${HOST_DIRNAME}")
+  CONTAINER_WORKDIR="/root/${HOST_DIRNAME}"
 else
   CONTAINER_WORKDIR="/root"
 fi
