@@ -35,10 +35,13 @@ fi
 
 if [[ -n "${DISPLAY:-}" ]]; then
   # X11: pass display socket
+  # SELinux cannot relabel tmpfs-backed X sockets (lsetxattr fails), so we
+  # disable label confinement for this container instead of using :z.
   if [[ -d /tmp/.X11-unix ]]; then
     DISPLAY_ARGS+=(
       -e "DISPLAY=${DISPLAY}"
       -v /tmp/.X11-unix:/tmp/.X11-unix:ro
+      --security-opt label=disable
     )
   else
     echo "[pi-run] warn: DISPLAY set but /tmp/.X11-unix not found" >&2

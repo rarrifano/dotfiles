@@ -142,10 +142,18 @@ fi
 # Key bindings: CTRL-R (history), CTRL-T (files), ALT-C (cd into dir)
 # Shell completion: trigger with ** + TAB (e.g. vim **<TAB>)
 if command -v fzf &>/dev/null; then
+  # Debian/Ubuntu path
   [ -f /usr/share/doc/fzf/examples/key-bindings.bash ] &&
     . /usr/share/doc/fzf/examples/key-bindings.bash
+  # Fedora/RHEL path
+  [ -f /usr/share/fzf/shell/key-bindings.bash ] &&
+    . /usr/share/fzf/shell/key-bindings.bash
+  # Bash completion (Debian)
   [ -f /usr/share/bash-completion/completions/fzf ] &&
     . /usr/share/bash-completion/completions/fzf
+  # Bash completion (Fedora)
+  [ -f /usr/share/fzf/shell/completion.bash ] &&
+    . /usr/share/fzf/shell/completion.bash
 
   # Use fd for fzf file listing if available (respects .gitignore)
   if command -v fdfind &>/dev/null; then
