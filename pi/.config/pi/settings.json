@@ -1,5 +1,5 @@
 {
-  "lastChangelogVersion": "0.81.1",
+  "lastChangelogVersion": "0.83.0",
   "theme": "gruvbox",
   "defaultProvider": "github-copilot",
   "defaultModel": "claude-sonnet-4.6",

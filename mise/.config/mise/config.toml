@@ -38,4 +38,3 @@ uv = "latest"
 
 # tools
 usage = "latest"  # mise task completion + mise help
-neovim = "latest"
