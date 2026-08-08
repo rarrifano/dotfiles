@@ -1,5 +1,5 @@
 {
-  "lastChangelogVersion": "0.83.0",
+  "lastChangelogVersion": "0.84.1",
   "theme": "gruvbox",
   "defaultProvider": "github-copilot",
   "defaultModel": "claude-sonnet-4.6",
@@ -19,7 +19,7 @@
   "enableInstallTelemetry": false,
   "defaultProjectTrust": "ask",
   "treeFilterMode": "no-tools",
-  "defaultThinkingLevel": "off",
+  "defaultThinkingLevel": "medium",
   "compaction": {
     "enabled": true,
     "reserveTokens": 16384,
