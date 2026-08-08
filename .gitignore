@@ -23,6 +23,9 @@ pi/.config/pi/sessions/
 # pi trust config (local machine-specific paths)
 pi/.config/pi/trust.json
 
+# pi mise binary -- installed separately, not version-pinned here
+pi/.local/bin/mise
+
 # report-builder skill -- deps are reproducible via npm install
 pi/.config/pi/skills/report-builder/scripts/package-lock.json
 

@@ -1,2 +1,6 @@
 \.config/pi/npm
 \.config/pi/sessions
+\.config/pi/auth\.json
+\.config/pi/models-store\.json
+\.config/pi/trust\.json
+\.local/bin/mise
