@@ -1,7 +1,3 @@
-// Move the pi-rewind checkpoint counter from the bottom status strip to the
-// first footer line (same line as the cwd / git branch), flush right.
-// All other footer lines (token stats, model) are preserved as-is.
-
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import { truncateToWidth, visibleWidth } from "@earendil-works/pi-tui";
 
@@ -13,16 +9,22 @@ function fmt(n: number): string {
   return `${Math.round(n / 1_000_000)}M`;
 }
 
-function sanitize(text: string): string {
-  return text.replace(/[\r\n\t]/g, " ").replace(/ +/g, " ").trim();
-}
-
 function formatCwd(cwd: string): string {
   const home = process.env.HOME ?? process.env.USERPROFILE ?? "";
   if (!home) return cwd;
   if (cwd === home) return "~";
   if (cwd.startsWith(home + "/")) return "~" + cwd.slice(home.length);
   return cwd;
+}
+
+function stripAnsi(text: string): string {
+  return text.replace(/\x1b\[[\d;]*m/g, "");
+}
+
+function spread(left: string, right: string, width: number): string {
+  if (!right) return truncateToWidth(left, width);
+  const gap = Math.max(1, width - visibleWidth(left) - visibleWidth(right));
+  return truncateToWidth(left + " ".repeat(gap) + right, width);
 }
 
 export default function (pi: ExtensionAPI) {
@@ -32,105 +34,79 @@ export default function (pi: ExtensionAPI) {
     ctx.ui.setFooter((tui, theme, footerData) => {
       const disposeBranch = footerData.onBranchChange(() => tui.requestRender());
 
+      function renderCwdLine(width: number): string {
+        const statuses = footerData.getExtensionStatuses();
+        const rewindStatus = stripAnsi(statuses.get("rewind") ?? "")
+          .replace(/^◆\s*/, "")
+          .trim();
+
+        let pwd = formatCwd(ctx.cwd ?? "");
+        const branch = footerData.getGitBranch();
+        if (branch) pwd += ` (${branch})`;
+        const sessionName = ctx.sessionManager.getSessionName?.();
+        if (sessionName) pwd += ` • ${sessionName}`;
+
+        return spread(
+          theme.fg("dim", pwd),
+          rewindStatus ? theme.fg("dim", rewindStatus) : "",
+          width,
+        );
+      }
+
+      function renderStatsLine(width: number): string {
+        let totalInput = 0, totalOutput = 0, totalCacheRead = 0,
+            totalCacheWrite = 0, totalCost = 0;
+        let latestCacheHitRate: number | undefined;
+
+        for (const entry of ctx.sessionManager.getEntries()) {
+          if (entry.type !== "message" || entry.message.role !== "assistant") continue;
+          const m = entry.message as any;
+          totalInput += m.usage?.input ?? 0;
+          totalOutput += m.usage?.output ?? 0;
+          totalCacheRead += m.usage?.cacheRead ?? 0;
+          totalCacheWrite += m.usage?.cacheWrite ?? 0;
+          totalCost += m.usage?.cost?.total ?? 0;
+          const promptTokens = (m.usage?.input ?? 0) + (m.usage?.cacheRead ?? 0) + (m.usage?.cacheWrite ?? 0);
+          if (promptTokens > 0) latestCacheHitRate = (m.usage?.cacheRead ?? 0) / promptTokens * 100;
+        }
+
+        const parts: string[] = [];
+        if (totalInput) parts.push(`↑${fmt(totalInput)}`);
+        if (totalOutput) parts.push(`↓${fmt(totalOutput)}`);
+        if (totalCacheRead) parts.push(`R${fmt(totalCacheRead)}`);
+        if (totalCacheWrite) parts.push(`W${fmt(totalCacheWrite)}`);
+        if ((totalCacheRead > 0 || totalCacheWrite > 0) && latestCacheHitRate !== undefined)
+          parts.push(`CH${latestCacheHitRate.toFixed(1)}%`);
+        if (totalCost) parts.push(`$${totalCost.toFixed(3)}`);
+
+        const model = (ctx as any).model;
+        const modelName = model?.id ?? "no-model";
+        const thinkingLevel = ctx.getThinkingLevel?.() ?? "off";
+        const modelLabel = model?.reasoning
+          ? `${modelName} • ${thinkingLevel === "off" ? "thinking off" : thinkingLevel}`
+          : modelName;
+
+        return theme.fg("dim", spread(parts.join(" "), modelLabel, width));
+      }
+
+      function renderStatusLine(width: number): string | null {
+        const statuses = footerData.getExtensionStatuses();
+        const others = Array.from(statuses.entries())
+          .filter(([key]) => key !== "rewind")
+          .sort(([a], [b]) => a.localeCompare(b))
+          .map(([, text]) => text.replace(/[\r\n\t]/g, " ").replace(/ +/g, " ").trim());
+
+        if (others.length === 0) return null;
+        return truncateToWidth(others.join(" "), width);
+      }
+
       return {
         dispose: disposeBranch,
         invalidate() {},
         render(width: number): string[] {
-          const branch = footerData.getGitBranch();
-          const statuses = footerData.getExtensionStatuses();
-          // Strip the leading "◆ " glyph that pi-rewind prepends, keep only the count text.
-          const rawRewind = statuses.get("rewind") ?? "";
-          const rewindStatus = rawRewind.replace(/\x1b\[[\d;]*m/g, "").replace(/^◆\s*/, "").trim();
-
-          // Line 1: cwd (branch) [session] and rewind checkpoint count flush-right
-          let pwd = formatCwd(ctx.cwd ?? "");
-          if (branch) pwd += ` (${branch})`;
-
-          const sessionName = ctx.sessionManager.getSessionName?.();
-          if (sessionName) pwd += ` • ${sessionName}`;
-
-          const left1 = theme.fg("dim", pwd);
-          const right1 = rewindStatus ? theme.fg("dim", rewindStatus) : "";
-
-          let pwdLine: string;
-          if (!right1) {
-            pwdLine = truncateToWidth(left1, width, theme.fg("dim", "..."));
-          } else {
-            const gap = width - visibleWidth(left1) - visibleWidth(right1);
-            const pad = " ".repeat(Math.max(1, gap));
-            pwdLine = truncateToWidth(left1 + pad + right1, width, theme.fg("dim", "..."));
-          }
-
-          // Line 2: token stats + model (replicate default footer)
-          let totalInput = 0, totalOutput = 0, totalCacheRead = 0,
-              totalCacheWrite = 0, totalCost = 0;
-          let latestCacheHitRate: number | undefined;
-
-          for (const entry of ctx.sessionManager.getEntries()) {
-            if (entry.type === "message" && entry.message.role === "assistant") {
-              const m = entry.message as any;
-              totalInput += m.usage?.input ?? 0;
-              totalOutput += m.usage?.output ?? 0;
-              totalCacheRead += m.usage?.cacheRead ?? 0;
-              totalCacheWrite += m.usage?.cacheWrite ?? 0;
-              totalCost += m.usage?.cost?.total ?? 0;
-              const latestPrompt = (m.usage?.input ?? 0) + (m.usage?.cacheRead ?? 0) + (m.usage?.cacheWrite ?? 0);
-              if (latestPrompt > 0)
-                latestCacheHitRate = ((m.usage?.cacheRead ?? 0) / latestPrompt) * 100;
-            }
-          }
-
-          const statsParts: string[] = [];
-          if (totalInput) statsParts.push(`↑${fmt(totalInput)}`);
-          if (totalOutput) statsParts.push(`↓${fmt(totalOutput)}`);
-          if (totalCacheRead) statsParts.push(`R${fmt(totalCacheRead)}`);
-          if (totalCacheWrite) statsParts.push(`W${fmt(totalCacheWrite)}`);
-          if ((totalCacheRead > 0 || totalCacheWrite > 0) && latestCacheHitRate !== undefined)
-            statsParts.push(`CH${latestCacheHitRate.toFixed(1)}%`);
-          if (totalCost) statsParts.push(`$${totalCost.toFixed(3)}`);
-
-          const statsLeft = statsParts.join(" ");
-          const model = (ctx as any).model;
-          const modelName = model?.id ?? "no-model";
-          const thinkingLevel = ctx.getThinkingLevel?.() ?? "off";
-          const modelRight = model?.reasoning
-            ? `${modelName} • ${thinkingLevel === "off" ? "thinking off" : thinkingLevel}`
-            : modelName;
-          const statsLeftW = visibleWidth(statsLeft);
-          const modelRightW = visibleWidth(modelRight);
-          const minPad = 2;
-
-          let statsLine: string;
-          if (statsLeftW + minPad + modelRightW <= width) {
-            const padding = " ".repeat(width - statsLeftW - modelRightW);
-            statsLine = statsLeft + padding + modelRight;
-          } else {
-            const avail = width - statsLeftW - minPad;
-            if (avail > 0) {
-              const trunc = truncateToWidth(modelRight, avail, "");
-              const padding = " ".repeat(Math.max(0, width - statsLeftW - visibleWidth(trunc)));
-              statsLine = statsLeft + padding + trunc;
-            } else {
-              statsLine = truncateToWidth(statsLeft, width);
-            }
-          }
-          const dimStatsLeft = theme.fg("dim", statsLeft);
-          const remainder = statsLine.slice(statsLeft.length);
-          const statsLineStyled = dimStatsLeft + theme.fg("dim", remainder);
-
-          const lines = [pwdLine, statsLineStyled];
-
-          // Line 3: remaining extension statuses (everything except rewind)
-          const otherStatuses = Array.from(statuses.entries())
-            .filter(([key]) => key !== "rewind")
-            .sort(([a], [b]) => a.localeCompare(b))
-            .map(([, text]) => sanitize(text));
-
-          if (otherStatuses.length > 0) {
-            const statusLine = otherStatuses.join(" ");
-            lines.push(truncateToWidth(statusLine, width, theme.fg("dim", "...")));
-          }
-
+          const lines = [renderCwdLine(width), renderStatsLine(width)];
+          const statusLine = renderStatusLine(width);
+          if (statusLine !== null) lines.push(statusLine);
           return lines;
         },
       };

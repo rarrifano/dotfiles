@@ -1,66 +1,34 @@
 # Global Agent Instructions
 
-## Language
+## Communication
+- Be concise. No preamble, no filler, no summaries of what you just did.
+- Show code and commands — don't describe changes you could just make.
+- When uncertain, ask one focused question. Don't guess and don't over-explain.
+- Prefer concrete file paths, commands, and edits over generic advice.
 
-- Always respond to the user in **English**, regardless of the language used in documents, runbooks, or any generated artifacts.
-- Documents and deliverables may be written in pt-BR (or any other requested language) — but all agent responses and explanations must be in English.
+## Working Style
+- Make small, focused changes. Don't mix unrelated refactors into a task.
+- Read relevant existing code before changing structure or behavior.
+- Prefer the simplest solution that satisfies the request.
+- State assumptions explicitly when something is ambiguous.
+- If docs and code disagree, call it out — don't silently diverge.
 
-## General Behaviour
+## Code Quality
+- Optimize for readability and maintainability, not cleverness.
+- Explicit over implicit. Early returns over deep nesting.
+- No vague names: avoid `helper`, `utils`, `common`, `misc`, `stuff`, `data`.
+- Don't introduce dependencies without a clear reason.
+- No inline comments explaining what code does — only add comments for non-obvious *why*.
+- Never create documentation files (README, CHANGELOG, TODO, etc.) unless explicitly asked.
+- Match the conventions of the existing codebase before applying preferences.
 
-- Be concise. Prefer code and diffs over long explanations.
-- Never truncate files when writing — always write the full content.
-- Prefer editing existing files over rewriting them from scratch.
-- When unsure about scope, ask one focused question before proceeding.
-- After completing a task, briefly summarise what changed and why.
+## Hard Rules
+- Never silently swallow errors or use empty catch blocks.
+- Never commit secrets, tokens, or credentials.
+- Don't create, delete, or rename files outside the stated scope of a task.
+- Don't add unrequested features, abstractions, or infrastructure.
+- Never push directly to `main` or `master`.
 
-## Code Style
-
-- Match the conventions already present in the file being edited.
-- Leave no debugging artefacts (console.log, print, TODO) unless explicitly asked.
-- Keep functions small and single-purpose.
-- Comments: plain and simple only — no decorative lines, banners, or separators (no `---`, `===`, `***`, or similar). One short line that describes what follows.
-
-## Shell & Commands
-
-- Prefer non-destructive commands; add `--dry-run` or `-n` where available.
-- Chain related read-only commands (`ls`, `grep`, `find`) into one bash call.
-- Never run anything that modifies production data without explicit confirmation.
-
-## Error Handling
-
-- If a command fails, diagnose before retrying.
-- Show the actual error output, not just "it failed".
-
-## Environment
-
-- Running inside a **Docker container** with **Debian 12 (bookworm)**
-- Extra packages available: `git`, `gh`, `curl`, `jq`, `unzip`, `openssl`, `vim`, `taskwarrior`, `wl-clipboard`, `xclip`
-- Runtimes available: `node` v24, `npm` v11, `terraform`, `kubectl`, `helm`
-- No Python runtime installed by default — install via `apt` or `pipx` if needed
-- Use `apt-get` for system packages; prefer tools already present before installing new ones
-
-## Neovim
-
-- Version: **v0.12**
-- Always prefer native Neovim APIs and built-ins over plugins (e.g. `vim.lsp.*`, `vim.diagnostic.*`, `vim.treesitter.*`, native completion via `vim.lsp.completion.enable`)
-- Only suggest a plugin when there is no native equivalent or the native API is clearly insufficient
-- Keep config lean — no nvim-cmp, no mason auto-install, no deprecated `require('lspconfig')` patterns unless already present
-
-## Stack
-
-- IaC: Terraform (modules, remote state, workspaces)
-- Orchestration: Kubernetes (kubectl, Helm, Kustomize)
-- CI/CD: GitHub Actions
-- Shell: Bash -- CLI-first, no GUI tooling
-
-## Hard Constraints
-
-- Never run terraform apply, kubectl delete, or any destructive cloud command without explicit confirmation
-- Secrets never in code -- always via vault/sealed secrets/env injection
-
-## Conventions
-
-- Terraform: modules in modules/, environments in environments/<env>/
-- Always run terraform fmt and terraform validate before plan
-- K8s: Kustomize base + overlays pattern preferred over raw manifests
-- CI: jobs should be idempotent and re-runnable without side effects
+## Validation
+- Verify that changed paths work and don't obviously break adjacent behavior.
+- If the repo has a testing pattern, add or update tests when behavior changes.

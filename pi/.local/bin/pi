@@ -1,107 +1,40 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Config
 IMAGE="${PI_IMAGE:-pi-agent:latest}"
 AGENT_DIR="${PI_AGENT_DIR:-${HOME}/.config/pi}"
 WORK_DIR="${PI_WORKDIR:-$(pwd)}"
-NO_MOUNT=0
-
-# Parse flags
-ARGS=()
-for arg in "$@"; do
-  case "$arg" in
-    --no-mount | -n) NO_MOUNT=1 ;;
-    *) ARGS+=("$arg") ;;
-  esac
-done
-set -- "${ARGS[@]+${ARGS[@]}}"
-
-# Clipboard detection
-DISPLAY_ARGS=()
-
-if [[ -n "${WAYLAND_DISPLAY:-}" ]]; then
-  # Wayland: pass socket from XDG_RUNTIME_DIR
-  WAYLAND_SOCKET="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/${WAYLAND_DISPLAY}"
-  if [[ -S "${WAYLAND_SOCKET}" ]]; then
-    DISPLAY_ARGS+=(
-      -e "WAYLAND_DISPLAY=${WAYLAND_DISPLAY}"
-      -e "XDG_RUNTIME_DIR=/tmp/xdg-runtime"
-      # Socket file pass-through doesn't use SELinux relabeling flags
-      -v "${WAYLAND_SOCKET}:/tmp/xdg-runtime/${WAYLAND_DISPLAY}:ro"
-    )
-  fi
-fi
-
-if [[ -n "${DISPLAY:-}" ]]; then
-  # X11: pass display socket
-  # SELinux cannot relabel tmpfs-backed X sockets (lsetxattr fails), so we
-  # disable label confinement for this container instead of using :z.
-  if [[ -d /tmp/.X11-unix ]]; then
-    DISPLAY_ARGS+=(
-      -e "DISPLAY=${DISPLAY}"
-      -v /tmp/.X11-unix:/tmp/.X11-unix:ro
-      --security-opt label=disable
-    )
-  else
-    echo "[pi-run] warn: DISPLAY set but /tmp/.X11-unix not found" >&2
-  fi
-fi
-
-if [[ ${#DISPLAY_ARGS[@]} -eq 0 ]]; then
-  echo "[pi-run] warn: no clipboard socket detected — Ctrl+V image paste will not work" >&2
-fi
 
 # Mounts
 MOUNT_ARGS=()
 
-# .pi/agent/ — rw so pi can write settings, sessions, etc.
-# FIXED: added :z flag for SELinux private container context
+# pi config dir — rw for settings, sessions, etc.
+# PI_CODING_AGENT_DIR tells pi where to find its config (overrides default ~/.pi/agent)
 if [[ -d "${AGENT_DIR}" ]]; then
-  MOUNT_ARGS+=(-v "${AGENT_DIR}:/root/.pi/agent:z")
+    MOUNT_ARGS+=(-v "${AGENT_DIR}:/root/.config/pi:z")
 else
-  echo "[pi-run] warn: agent dir not found at ${AGENT_DIR}" >&2
+    echo "[pi] warn: agent dir not found at ${AGENT_DIR}" >&2
 fi
 
-# git config — ro so the container inherits host identity
-# FIXED: added :z,ro flags
-if [[ -f "${HOME}/.gitconfig" ]]; then
-  MOUNT_ARGS+=(-v "${HOME}/.gitconfig:/root/.gitconfig:z,ro")
-fi
+# Git identity
+[[ -f "${HOME}/.gitconfig" ]] && \
+    MOUNT_ARGS+=(-v "${HOME}/.gitconfig:/root/.gitconfig:z,ro")
 
-# gh CLI config — ro so the container inherits host credentials
-# FIXED: added :z,ro flags
-if [[ -d "${HOME}/.config/gh" ]]; then
-  MOUNT_ARGS+=(-v "${HOME}/.config/gh:/root/.config/gh:z,ro")
-fi
+# Working directory
+HOST_DIRNAME="$(basename "${WORK_DIR}")"
+MOUNT_ARGS+=(-v "${WORK_DIR}:/root/${HOST_DIRNAME}:z")
 
-# working directory — mount under the host directory's basename (skipped with --no-mount)
-# FIXED: added :z flag so the agent can write project logs/code
-if [[ "${NO_MOUNT}" -eq 0 ]]; then
-  HOST_DIRNAME="$(basename "${WORK_DIR}")"
-  MOUNT_ARGS+=(-v "${WORK_DIR}:/root/${HOST_DIRNAME}:z")
-  CONTAINER_WORKDIR="/root/${HOST_DIRNAME}"
-else
-  CONTAINER_WORKDIR="/root"
-fi
-
-# Launch
-TTY_ARGS=()
-if [[ -t 0 && -t 1 ]]; then
-  TTY_ARGS=(-it)
-else
-  TTY_ARGS=(-i)
-fi
+# TTY detection
+TTY_ARGS=(-i)
+[[ -t 0 && -t 1 ]] && TTY_ARGS=(-it)
 
 exec podman run --rm "${TTY_ARGS[@]}" \
-  "${DISPLAY_ARGS[@]+"${DISPLAY_ARGS[@]}"}" \
-  "${MOUNT_ARGS[@]+"${MOUNT_ARGS[@]}"}" \
-  -e "VISUAL=vi" \
-  -e "EDITOR=vi" \
-  -e "PI_CODING_AGENT_DIR=/root/.pi/agent" \
-  -e "TASKRC=/root/.config/task/taskrc" \
-  -e "TERM=${TERM:-xterm-256color}" \
-  -e "COLORTERM=${COLORTERM:-truecolor}" \
-  --workdir "${CONTAINER_WORKDIR}" \
-  "${IMAGE}" \
-  "$@"
+    "${MOUNT_ARGS[@]+"${MOUNT_ARGS[@]}"}" \
+    -e "PI_CODING_AGENT_DIR=/root/.config/pi" \
+    -e "VISUAL=vi" \
+    -e "EDITOR=vi" \
+    -e "TERM=${TERM:-xterm-256color}" \
+    -e "COLORTERM=${COLORTERM:-truecolor}" \
+    --workdir "/root/${HOST_DIRNAME}" \
+    "${IMAGE}" \
+    "$@"
