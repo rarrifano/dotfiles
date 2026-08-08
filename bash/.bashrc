@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 [[ $- != *i* ]] && return
 
 export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
@@ -33,7 +34,7 @@ _git_branch() {
   printf ' (%s)' "$branch"
 }
 
-PS1='\[\e[1m\]\W\[\e[0;38;5;243m\]$(_git_branch)\[\e[0m\] \$ '
+PS1='\W\[\e[38;5;243m\]$(_git_branch)\[\e[38;5;142m\] \$\[\e[0m\] '
 
 command -v podman &>/dev/null && ! command -v docker &>/dev/null && alias docker='podman'
 
@@ -54,9 +55,10 @@ fi
 alias z='$EDITOR ~/Documents/journal/$(date +%Y-%m-%d).md'
 
 if command -v fzf &>/dev/null; then
-  export FZF_DEFAULT_OPTS='--color=bg+:237,bg:235,spinner:108,hl:214,fg:223,header:245,info:108,pointer:208,marker:142,fg+:223,prompt:208,hl+:208 --height=40% --layout=reverse --border=sharp'
+  export FZF_DEFAULT_OPTS='--color=spinner:108,hl:214,fg:223,header:245,info:108,pointer:208,marker:142,fg+:223,prompt:208,hl+:208 --height=40% --layout=reverse --border=sharp'
 
   [ -f /usr/share/doc/fzf/examples/key-bindings.bash ] && . /usr/share/doc/fzf/examples/key-bindings.bash
-  [ -f /usr/share/bash-completion/completions/fzf ]    && . /usr/share/bash-completion/completions/fzf
+  [ -f /usr/share/bash-completion/completions/fzf ] && . /usr/share/bash-completion/completions/fzf
+  # shellcheck source=/dev/null
   [ -f ~/.fzf.bash ] && . ~/.fzf.bash
 fi

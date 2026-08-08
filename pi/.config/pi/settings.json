@@ -4,8 +4,6 @@
   "defaultProvider": "github-copilot",
   "defaultModel": "claude-sonnet-4.6",
   "extensions": [
-    "./extensions/hide-cursor.ts",
-    "./extensions/taskwarrior.ts",
     "./extensions/rewind-footer.ts"
   ],
   "packages": [
@@ -41,5 +39,8 @@
   "warnings": {
     "anthropicExtraUsage": true
   },
-  "doubleEscapeAction": "tree"
+  "doubleEscapeAction": "tree",
+  "terminal": {
+    "showTerminalProgress": false
+  }
 }

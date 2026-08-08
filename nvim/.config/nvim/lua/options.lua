@@ -24,8 +24,11 @@ vim.o.autoread = true
 vim.o.completeopt = "menuone,noinsert,noselect,popup,fuzzy"
 
 vim.o.winborder = "rounded"
-vim.o.clipboard = "unnamedplus"
 
+vim.o.expandtab = true
+vim.o.tabstop = 2
+vim.o.shiftwidth = 2
+vim.o.softtabstop = 2
 -- WSL clipboard bridge via win32yank
 if vim.fn.has("wsl") == 1 then
   vim.g.clipboard = {
@@ -41,8 +44,3 @@ if vim.fn.has("wsl") == 1 then
     cache_enabled = true,
   }
 end
-
--- Indentation defaults (replaces guess-indent.nvim)
-vim.o.expandtab = true
-vim.o.shiftwidth = 2
-vim.o.tabstop = 2
