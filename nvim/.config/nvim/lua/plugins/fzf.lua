@@ -5,29 +5,29 @@
 local util = require("util")
 
 vim.schedule(function()
-	vim.pack.add({
-		{ src = util.gh("ibhagwan/fzf-lua"), version = "267f5db2aa2202b9f6cc7a50783f0ccd2121766c" },
-	})
+  vim.pack.add({
+    { src = util.gh("ibhagwan/fzf-lua"), version = "267f5db2aa2202b9f6cc7a50783f0ccd2121766c" },
+  })
 
-	local fzf = require("fzf-lua")
+  local fzf = require("fzf-lua")
 
-	fzf.setup({
-		"telescope", -- telescope-style keymaps + layout
-		-- explicitly disable all icons (no nvim-web-devicons / mini.icons needed)
-		file_icons = false,
-		git_icons = false,
-		color_icons = false,
-	})
+  fzf.setup({
+    "telescope", -- telescope-style keymaps + layout
+    -- explicitly disable all icons (no nvim-web-devicons / mini.icons needed)
+    file_icons = false,
+    git_icons = false,
+    color_icons = false,
+  })
 
-	-- Override vim.ui.select
-	fzf.register_ui_select()
+  -- Override vim.ui.select
+  fzf.register_ui_select()
 end)
 
 -- Lazy wrapper: calls fzf-lua method only when the keymap is triggered.
 local function fzf_call(method, opts)
-	return function()
-		require("fzf-lua")[method](opts)
-	end
+  return function()
+    require("fzf-lua")[method](opts)
+  end
 end
 
 -- Files & search
@@ -59,5 +59,5 @@ vim.keymap.set("n", "<leader>gS", fzf_call("git_stash"), { desc = "[G]it [S]tash
 
 -- Neovim config
 vim.keymap.set("n", "<leader>fn", function()
-	require("fzf-lua").files({ cwd = vim.fn.stdpath("config") })
+  require("fzf-lua").files({ cwd = vim.fn.stdpath("config") })
 end, { desc = "[F]ind [N]eovim config" })
