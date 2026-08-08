@@ -51,23 +51,30 @@ fi
 HOST_DIRNAME="$(basename "${WORK_DIR}")"
 MOUNT_ARGS+=(-v "${WORK_DIR}:/root/${HOST_DIRNAME}:z")
 
-# Clipboard — Wayland socket or X11 socket so image paste (Ctrl+V) works inside the container
+# Clipboard — use X11/XWayland rather than Wayland directly.
+# Direct Wayland socket access fails in containers (compositor rejects connections
+# via SO_PEERCRED when UIDs don't match across the user namespace boundary).
+# XWayland bridges the Wayland clipboard to X11, so xclip works reliably.
 CLIPBOARD_ENV=()
-if [[ -n "${WAYLAND_DISPLAY:-}" && -n "${XDG_RUNTIME_DIR:-}" ]]; then
-    # WAYLAND_DISPLAY may be a bare name (e.g. wayland-0) relative to XDG_RUNTIME_DIR
-    case "${WAYLAND_DISPLAY}" in
-        /*) WAYLAND_SOCK="${WAYLAND_DISPLAY}" ;;
-        *)  WAYLAND_SOCK="${XDG_RUNTIME_DIR}/${WAYLAND_DISPLAY}" ;;
-    esac
-    if [[ -S "${WAYLAND_SOCK}" ]]; then
-        # Mount to a fixed path; XDG_RUNTIME_DIR (/run/user/NNNN) won't exist inside the container
-        MOUNT_ARGS+=(-v "${WAYLAND_SOCK}:/tmp/wayland-host.sock:z")
-        CLIPBOARD_ENV+=(-e "WAYLAND_DISPLAY=/tmp/wayland-host.sock")
-        CLIPBOARD_ENV+=(-e "XDG_SESSION_TYPE=wayland")
-    fi
-elif [[ -n "${DISPLAY:-}" ]] && [[ -d "/tmp/.X11-unix" ]]; then
-    MOUNT_ARGS+=(-v "/tmp/.X11-unix:/tmp/.X11-unix:z")
+CLIPBOARD_SECURITY_ARGS=()
+if [[ -n "${DISPLAY:-}" ]] && [[ -d "/tmp/.X11-unix" ]]; then
+    # No :z — relabelling a socket file breaks the host-side X server
+    MOUNT_ARGS+=(-v "/tmp/.X11-unix:/tmp/.X11-unix")
     CLIPBOARD_ENV+=(-e "DISPLAY=${DISPLAY}")
+    # Force pi's isWaylandSession()=true so it routes through wl-paste??xclip
+    # instead of the native clipboard module whose getImageBinary() throws
+    # rather than returning null, blocking the xclip fallback entirely.
+    CLIPBOARD_ENV+=(-e "XDG_SESSION_TYPE=wayland")
+    # X11 auth cookie — check $XAUTHORITY first, fall back to ~/.Xauthority
+    _XAUTH="${XAUTHORITY:-${HOME}/.Xauthority}"
+    if [[ -f "${_XAUTH}" ]]; then
+        MOUNT_ARGS+=(-v "${_XAUTH}:/tmp/.Xauthority:z,ro")
+        CLIPBOARD_ENV+=(-e "XAUTHORITY=/tmp/.Xauthority")
+    fi
+    # SELinux: container_t is denied write on user_tmp_t sock_file (X0).
+    # label=disable is the standard Podman approach for X11 GUI containers;
+    # --privileged is NOT needed — only the MAC label is relaxed.
+    CLIPBOARD_SECURITY_ARGS+=(--security-opt label=disable)
 fi
 
 # TTY detection
@@ -95,6 +102,7 @@ SESSION_ENV=()
 
 exec podman run --rm "${TTY_ARGS[@]}" \
     "${MOUNT_ARGS[@]+"${MOUNT_ARGS[@]}"}" \
+    "${CLIPBOARD_SECURITY_ARGS[@]+${CLIPBOARD_SECURITY_ARGS[@]}}" \
     -e "PI_CODING_AGENT_DIR=/root/.config/pi" \
     -e "VISUAL=vi" \
     -e "EDITOR=vi" \
