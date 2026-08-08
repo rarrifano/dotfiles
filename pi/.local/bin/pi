@@ -20,13 +20,78 @@ fi
 [[ -f "${HOME}/.gitconfig" ]] && \
     MOUNT_ARGS+=(-v "${HOME}/.gitconfig:/root/.gitconfig:z,ro")
 
+# SSH — forward agent socket only (no private key material in the container)
+# Mount known_hosts + config read-only for host verification and aliases
+SSH_ENV=()
+if [[ -S "${SSH_AUTH_SOCK:-}" ]]; then
+    MOUNT_ARGS+=(-v "${SSH_AUTH_SOCK}:/tmp/ssh-agent.sock:z")
+    SSH_ENV+=(-e "SSH_AUTH_SOCK=/tmp/ssh-agent.sock")
+fi
+[[ -f "${HOME}/.ssh/known_hosts" ]] && \
+    MOUNT_ARGS+=(-v "${HOME}/.ssh/known_hosts:/root/.ssh/known_hosts:z,ro")
+[[ -f "${HOME}/.ssh/config" ]] && \
+    MOUNT_ARGS+=(-v "${HOME}/.ssh/config:/root/.ssh/config:z,ro")
+
+# GPG — forward agent socket only (no private key material in the container)
+# Mount public keyring + trustdb read-only for encrypt/verify operations
+GPG_AGENT_SOCK="$(gpgconf --list-dirs agent-socket 2>/dev/null || echo "${HOME}/.gnupg/S.gpg-agent")"
+if [[ -S "${GPG_AGENT_SOCK}" ]]; then
+    MOUNT_ARGS+=(-v "${GPG_AGENT_SOCK}:/root/.gnupg/S.gpg-agent:z")
+fi
+[[ -f "${HOME}/.gnupg/pubring.kbx" ]] && \
+    MOUNT_ARGS+=(-v "${HOME}/.gnupg/pubring.kbx:/root/.gnupg/pubring.kbx:z,ro")
+[[ -f "${HOME}/.gnupg/trustdb.gpg" ]] && \
+    MOUNT_ARGS+=(-v "${HOME}/.gnupg/trustdb.gpg:/root/.gnupg/trustdb.gpg:z,ro")
+
+# GitHub CLI config — read-only so gh auth works inside the container
+[[ -d "${HOME}/.config/gh" ]] && \
+    MOUNT_ARGS+=(-v "${HOME}/.config/gh:/root/.config/gh:z,ro")
+
 # Working directory
 HOST_DIRNAME="$(basename "${WORK_DIR}")"
 MOUNT_ARGS+=(-v "${WORK_DIR}:/root/${HOST_DIRNAME}:z")
 
+# Clipboard — Wayland socket or X11 socket so image paste (Ctrl+V) works inside the container
+CLIPBOARD_ENV=()
+if [[ -n "${WAYLAND_DISPLAY:-}" && -n "${XDG_RUNTIME_DIR:-}" ]]; then
+    # WAYLAND_DISPLAY may be a bare name (e.g. wayland-0) relative to XDG_RUNTIME_DIR
+    case "${WAYLAND_DISPLAY}" in
+        /*) WAYLAND_SOCK="${WAYLAND_DISPLAY}" ;;
+        *)  WAYLAND_SOCK="${XDG_RUNTIME_DIR}/${WAYLAND_DISPLAY}" ;;
+    esac
+    if [[ -S "${WAYLAND_SOCK}" ]]; then
+        # Mount to a fixed path; XDG_RUNTIME_DIR (/run/user/NNNN) won't exist inside the container
+        MOUNT_ARGS+=(-v "${WAYLAND_SOCK}:/tmp/wayland-host.sock:z")
+        CLIPBOARD_ENV+=(-e "WAYLAND_DISPLAY=/tmp/wayland-host.sock")
+        CLIPBOARD_ENV+=(-e "XDG_SESSION_TYPE=wayland")
+    fi
+elif [[ -n "${DISPLAY:-}" ]] && [[ -d "/tmp/.X11-unix" ]]; then
+    MOUNT_ARGS+=(-v "/tmp/.X11-unix:/tmp/.X11-unix:z")
+    CLIPBOARD_ENV+=(-e "DISPLAY=${DISPLAY}")
+fi
+
 # TTY detection
 TTY_ARGS=(-i)
-[[ -t 0 && -t 1 ]] && TTY_ARGS=(-it)
+INTERACTIVE=false
+[[ -t 0 && -t 1 ]] && TTY_ARGS=(-it) && INTERACTIVE=true
+
+# Non-interactive parallel runs get ephemeral sessions unless the caller
+# already passed a session flag (--session, --no-session, -c, -r).
+EXTRA_ARGS=()
+if [[ "${INTERACTIVE}" == false ]]; then
+    has_session_flag=false
+    for arg in "$@"; do
+        case "${arg}" in
+            --session|--no-session|-c|-r) has_session_flag=true; break ;;
+        esac
+    done
+    [[ "${has_session_flag}" == false ]] && EXTRA_ARGS+=(--no-session)
+fi
+
+# Session env — honour caller-supplied override, otherwise let PI_CODING_AGENT_DIR own it
+SESSION_ENV=()
+[[ -n "${PI_CODING_AGENT_SESSION_DIR:-}" ]] && \
+    SESSION_ENV+=(-e "PI_CODING_AGENT_SESSION_DIR=${PI_CODING_AGENT_SESSION_DIR}")
 
 exec podman run --rm "${TTY_ARGS[@]}" \
     "${MOUNT_ARGS[@]+"${MOUNT_ARGS[@]}"}" \
@@ -35,6 +100,10 @@ exec podman run --rm "${TTY_ARGS[@]}" \
     -e "EDITOR=vi" \
     -e "TERM=${TERM:-xterm-256color}" \
     -e "COLORTERM=${COLORTERM:-truecolor}" \
+    "${CLIPBOARD_ENV[@]+${CLIPBOARD_ENV[@]}}" \
+    "${SSH_ENV[@]+${SSH_ENV[@]}}" \
+    "${SESSION_ENV[@]+${SESSION_ENV[@]}}" \
     --workdir "/root/${HOST_DIRNAME}" \
     "${IMAGE}" \
+    "${EXTRA_ARGS[@]+${EXTRA_ARGS[@]}}" \
     "$@"

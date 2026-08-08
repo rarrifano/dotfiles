@@ -3,8 +3,13 @@
   "theme": "gruvbox",
   "defaultProvider": "github-copilot",
   "defaultModel": "claude-sonnet-4.6",
+  "skills": [
+    "~/.config/pi/skills"
+  ],
+  "enableSkillCommands": true,
   "extensions": [
-    "./extensions/rewind-footer.ts"
+    "./extensions/rewind-footer.ts",
+    "./extensions/hide-cursor.ts"
   ],
   "packages": [
     "npm:pi-web-access",
@@ -35,6 +40,7 @@
     "claude-sonnet*",
     "claude-haiku*"
   ],
+  "externalEditor": "vi",
   "showHardwareCursor": true,
   "warnings": {
     "anthropicExtraUsage": true

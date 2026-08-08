@@ -34,10 +34,19 @@ RUN apt-get update -qq && \
         curl \
         ca-certificates \
         git \
+        openssh-client \
+        gpg \
+        gpg-agent \
         unzip \
         jq \
         ripgrep \
         fd-find \
+        vim-tiny \
+        wl-clipboard \
+        xclip \
+        python3 \
+        python3-pip \
+        python3-venv \
     && ln -s /usr/bin/fdfind /usr/local/bin/fd \
     && rm -rf /var/lib/apt/lists/*
 
@@ -52,6 +61,9 @@ ARG PI_VERSION=0.0.0-unset
 RUN npm install -g --ignore-scripts \
         "@earendil-works/pi-coding-agent@${PI_VERSION}" \
     && npm cache clean --force
+
+# Ensure GPG home exists so the agent socket can be bind-mounted in
+RUN mkdir -p /root/.gnupg && chmod 700 /root/.gnupg
 
 ENV NODE_EXTRA_CA_CERTS=/etc/ssl/certs/ca-certificates.crt
 WORKDIR /workspace
