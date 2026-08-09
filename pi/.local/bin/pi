@@ -51,30 +51,49 @@ fi
 HOST_DIRNAME="$(basename "${WORK_DIR}")"
 MOUNT_ARGS+=(-v "${WORK_DIR}:/root/${HOST_DIRNAME}:z")
 
-# Clipboard — use X11/XWayland rather than Wayland directly.
-# Direct Wayland socket access fails in containers (compositor rejects connections
-# via SO_PEERCRED when UIDs don't match across the user namespace boundary).
-# XWayland bridges the Wayland clipboard to X11, so xclip works reliably.
+# Clipboard
 CLIPBOARD_ENV=()
 CLIPBOARD_SECURITY_ARGS=()
+
+# X11 socket — used as fallback when Wayland socket is unavailable, and for
+# pure X11 hosts. No :z — relabelling a socket file breaks the host-side X server.
 if [[ -n "${DISPLAY:-}" ]] && [[ -d "/tmp/.X11-unix" ]]; then
-    # No :z — relabelling a socket file breaks the host-side X server
     MOUNT_ARGS+=(-v "/tmp/.X11-unix:/tmp/.X11-unix")
     CLIPBOARD_ENV+=(-e "DISPLAY=${DISPLAY}")
-    # Force pi's isWaylandSession()=true so it routes through wl-paste??xclip
-    # instead of the native clipboard module whose getImageBinary() throws
-    # rather than returning null, blocking the xclip fallback entirely.
+    # Force isWaylandSession()=true so pi routes through wl-paste→xclip rather
+    # than the native clipboard module (whose getImageBinary() throws instead of
+    # returning null, blocking the xclip fallback entirely).
     CLIPBOARD_ENV+=(-e "XDG_SESSION_TYPE=wayland")
-    # X11 auth cookie — check $XAUTHORITY first, fall back to ~/.Xauthority
     _XAUTH="${XAUTHORITY:-${HOME}/.Xauthority}"
     if [[ -f "${_XAUTH}" ]]; then
         MOUNT_ARGS+=(-v "${_XAUTH}:/tmp/.Xauthority:z,ro")
         CLIPBOARD_ENV+=(-e "XAUTHORITY=/tmp/.Xauthority")
     fi
-    # SELinux: container_t is denied write on user_tmp_t sock_file (X0).
-    # label=disable is the standard Podman approach for X11 GUI containers;
+    # SELinux: label=disable so container_t can access user_tmp_t socket.
     # --privileged is NOT needed — only the MAC label is relaxed.
     CLIPBOARD_SECURITY_ARGS+=(--security-opt label=disable)
+fi
+
+# Wayland socket — mount directly so wl-paste works natively in the container.
+# With rootless Podman, uid=0 inside the container maps to the invoking user's
+# UID via user namespaces, so the compositor's SO_PEERCRED check passes.
+# WAYLAND_DISPLAY may be a bare name (relative to XDG_RUNTIME_DIR) or an
+# absolute path — handle both.
+if [[ -n "${WAYLAND_DISPLAY:-}" ]]; then
+    if [[ "${WAYLAND_DISPLAY}" = /* ]]; then
+        _WAYLAND_SOCK="${WAYLAND_DISPLAY}"
+        _WAYLAND_NAME="$(basename "${WAYLAND_DISPLAY}")"
+    else
+        _WAYLAND_SOCK="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/${WAYLAND_DISPLAY}"
+        _WAYLAND_NAME="${WAYLAND_DISPLAY}"
+    fi
+    if [[ -S "${_WAYLAND_SOCK}" ]]; then
+        MOUNT_ARGS+=(-v "${_WAYLAND_SOCK}:/tmp/${_WAYLAND_NAME}")
+        CLIPBOARD_ENV+=(-e "WAYLAND_DISPLAY=${_WAYLAND_NAME}")
+        CLIPBOARD_ENV+=(-e "XDG_RUNTIME_DIR=/tmp")
+        [[ ${#CLIPBOARD_SECURITY_ARGS[@]} -eq 0 ]] && \
+            CLIPBOARD_SECURITY_ARGS+=(--security-opt label=disable)
+    fi
 fi
 
 # TTY detection

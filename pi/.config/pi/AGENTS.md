@@ -13,6 +13,13 @@
 - State assumptions explicitly when something is ambiguous.
 - If docs and code disagree, call it out — don't silently diverge.
 
+## Token Efficiency
+- Prefer Unix tools over reading full files: use `grep`, `rg`, `sed`, `awk`, `find`, `wc`, `head`, `tail`, `cut` to extract only what's needed.
+- Use `grep -n` to locate line numbers before reading; use `read` with `offset`/`limit` to fetch only the relevant slice.
+- Use `rg` (ripgrep) for fast codebase-wide search — faster and more token-efficient than reading files to find symbols.
+- Never read an entire large file when a targeted query (grep/rg/awk) can answer the question.
+- Pipe and combine commands (`grep | head`, `rg --context`) to minimize round-trips.
+
 ## Code Quality
 - Optimize for readability and maintainability, not cleverness.
 - Explicit over implicit. Early returns over deep nesting.
