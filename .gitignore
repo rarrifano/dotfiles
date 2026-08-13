@@ -1,6 +1,3 @@
-# Neovim
-nvim/.config/nvim/.netrwhist
-
 # Editor swap and backup files
 *.swp
 *.swo
@@ -10,26 +7,18 @@ nvim/.config/nvim/.netrwhist
 .DS_Store
 Thumbs.db
 
-# node_modules -- ignored everywhere in the repo
-node_modules/
-
-# pi package cache
-pi/.config/pi-sandbox/agent/npm/
-pi/.config/pi/npm/
-
-# pi session history (conversation logs -- no value in version control)
-pi/.config/pi/sessions/
-
-# pi trust config (local machine-specific paths)
-pi/.config/pi/trust.json
-
-# pi mise binary -- installed separately, not version-pinned here
-pi/.local/bin/mise
-
-# report-builder skill -- deps are reproducible via npm install
-pi/.config/pi/skills/report-builder/scripts/package-lock.json
-
 # Logs and local env files
 *.log
 .env
 .env.*
+
+# Node dependencies
+node_modules/
+
+# Neovim local history
+nvim/.config/nvim/.netrwhist
+
+# Pi local cache and machine-specific state
+pi/.pi/agent/npm/
+pi/.pi/agent/sessions/
+pi/.pi/agent/trust.json
