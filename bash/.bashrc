@@ -35,5 +35,8 @@ alias gl='git log --oneline --graph --decorate'
 alias v='vim'
 alias ta='tmux attach -t main || tmux new -s main'
 
+# Bash completion
+[[ -r /usr/share/bash-completion/bash_completion ]] && source /usr/share/bash-completion/bash_completion
+
 # Local overrides
 [[ -f ~/.bashrc.local ]] && source ~/.bashrc.local
