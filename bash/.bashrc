@@ -19,11 +19,11 @@ PROMPT_DIRTRIM=3
 _prompt_git_branch() {
     local branch
     branch=$(git symbolic-ref --short HEAD 2>/dev/null) || return
-    printf ' (%s)' "$branch"
+    printf '(%s)' "$branch"
 }
 
 # Prompt
-PS1='\[\e[1;34m\]\w\[\e[0;33m\]$(_prompt_git_branch)\[\e[0m\] \$ '
+PS1='\[\e[1;34m\]\w\[\e[0;33m\]$(_prompt_git_branch)\[\e[0m\]:\$ '
 
 # Aliases
 alias ls='ls --color=auto'

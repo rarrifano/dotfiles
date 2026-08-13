@@ -11,8 +11,11 @@ Follow Conventional Commits:
 - Write an imperative subject, lowercase after the colon, at most 50
   characters, with no trailing period.
 - Use a lowercase scope when useful.
-- Include a body only when warranted; explain what and why, hard-wrapped at
-  72 characters.
+- For a complex diff, always include a structured body. Consider a diff
+  complex when it spans multiple concerns, components, or behavior changes.
+  Use concise bullets grouped by concern; state what changed and why, and
+  hard-wrap each line at 72 characters.
+- For a simple diff, include a body only when it adds useful context.
 - Include `BREAKING CHANGE: <description>`, `Fixes #<issue>`, or
   `Closes #<issue>` footers when applicable.
 
