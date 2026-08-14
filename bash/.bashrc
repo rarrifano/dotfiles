@@ -33,7 +33,7 @@ alias l='ls -CF'
 alias gs='git status -sb'
 alias gl='git log --oneline --graph --decorate'
 alias v='vim'
-alias ta='tmux attach -t main || tmux new -s main'
+alias ta='tmux new -A -s main'
 
 # Bash completion
 [[ -r /usr/share/bash-completion/bash_completion ]] && source /usr/share/bash-completion/bash_completion

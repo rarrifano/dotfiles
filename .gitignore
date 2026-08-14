@@ -15,8 +15,8 @@ Thumbs.db
 # Node dependencies
 node_modules/
 
-# Neovim local history
-nvim/.config/nvim/.netrwhist
+# Machine-local overrides
+*.local
 
 # Pi local cache and machine-specific state
 pi/.pi/agent/npm/
