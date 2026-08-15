@@ -9,6 +9,9 @@ set expandtab
 set splitbelow
 set splitright
 
+set autoread
+autocmd FocusGained,BufEnter,CursorHold,CursorHoldI * checktime
+
 syntax on
 filetype plugin indent on
 set background=dark
