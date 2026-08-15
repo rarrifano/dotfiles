@@ -8,9 +8,17 @@ set shiftwidth=4
 set expandtab
 set splitbelow
 set splitright
-
 set autoread
-autocmd FocusGained,BufEnter,CursorHold,CursorHoldI * checktime
+
+set undofile
+if !isdirectory(expand("~/.vim/swap"))
+  call mkdir(expand("~/.vim/swap"), "p")
+endif
+if !isdirectory(expand("~/.vim/undo"))
+  call mkdir(expand("~/.vim/undo"), "p")
+endif
+set directory=~/.vim/swap//
+set undodir=~/.vim/undo//
 
 syntax on
 filetype plugin indent on
