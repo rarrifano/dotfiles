@@ -1,0 +1,11 @@
+[init]
+	defaultBranch = main
+[pull]
+	rebase = true
+[color]
+	ui = auto
+[core]
+	editor = vim
+
+[include]
+	path = ~/.gitconfig.local

@@ -17,8 +17,3 @@ node_modules/
 
 # Machine-local overrides
 *.local
-
-# Pi local cache and machine-specific state
-pi/.pi/agent/npm/
-pi/.pi/agent/sessions/
-pi/.pi/agent/trust.json
