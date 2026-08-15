@@ -9,6 +9,7 @@ set expandtab
 set splitbelow
 set splitright
 set autoread
+set updatetime=100
 
 set undofile
 if !isdirectory(expand("~/.vim/swap"))
