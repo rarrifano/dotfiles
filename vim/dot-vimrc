@@ -1,0 +1,60 @@
+set number
+set relativenumber
+let mapleader = " "
+set ignorecase
+set smartcase
+set tabstop=4
+set shiftwidth=4
+set expandtab
+set splitbelow
+set splitright
+set autoread
+
+set undofile
+if !isdirectory(expand("~/.vim/swap"))
+  call mkdir(expand("~/.vim/swap"), "p")
+endif
+if !isdirectory(expand("~/.vim/undo"))
+  call mkdir(expand("~/.vim/undo"), "p")
+endif
+set directory=~/.vim/swap//
+set undodir=~/.vim/undo//
+
+syntax on
+filetype plugin indent on
+set background=dark
+colorscheme retrobox
+
+autocmd FileType yaml,yml setlocal tabstop=2 shiftwidth=2 expandtab
+autocmd FileType terraform,hcl setlocal tabstop=2 shiftwidth=2 expandtab
+
+cnoreabbrev <expr> grep (getcmdtype() ==# ':' && getcmdline() ==# 'grep') ? 'silent grep' : 'grep'
+autocmd QuickFixCmdPost grep redraw! | cwindow
+
+set path+=**
+set wildmenu
+set wildmode=longest:full,full
+set wildignore+=*/.git/*
+
+if executable('rg')
+  set grepprg=rg\ --vimgrep\ --smart-case
+  set grepformat=%f:%l:%c:%m
+endif
+
+if executable('fdfind')
+  function! FdFindFunc(cmdarg, cmdcomplete)
+    return systemlist('fdfind --type f --hidden --exclude .git --glob ' . shellescape(a:cmdarg . '*'))
+  endfunction
+  set findfunc=FdFindFunc
+endif
+
+nnoremap <leader>y "+y
+vnoremap <leader>y "+y
+
+nnoremap <leader>f :find<space>
+nnoremap <leader>g :silent grep<space>
+
+nnoremap ]q :cnext<CR>
+nnoremap [q :cprev<CR>
+nnoremap ]b :bnext<CR>
+nnoremap [b :bprev<CR>
