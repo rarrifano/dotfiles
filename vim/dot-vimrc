@@ -69,13 +69,8 @@ if executable('fdfind')
   set findfunc=FdFindFunc
 endif
 
-cnoreabbrev <expr> grep (getcmdtype() ==# ':' && getcmdline() ==# 'grep') ? 'silent grep' : 'grep'
-augroup vimrc
-  autocmd QuickFixCmdPost grep redraw! | cwindow
-augroup END
-
 nnoremap <leader>f :find<space>
-nnoremap <leader>g :silent grep<space>
+nnoremap <leader>g :grep<space>
 nnoremap ]q :cnext<CR>
 nnoremap [q :cprev<CR>
 nnoremap ]b :bnext<CR>
