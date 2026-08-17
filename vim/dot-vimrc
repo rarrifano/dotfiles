@@ -1,14 +1,40 @@
+let mapleader = " "
+
+syntax on
+filetype plugin indent on
+set background=dark
+silent! colorscheme retrobox
+
 set number
 set relativenumber
-let mapleader = " "
-set ignorecase
-set smartcase
+set ruler
+set laststatus=2
+set scrolloff=1
+set sidescroll=1
+set sidescrolloff=2
+set display+=lastline
+set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+
+set splitbelow
+set splitright
+
 set tabstop=4
 set shiftwidth=4
 set expandtab
-set splitbelow
-set splitright
+set smarttab
+set formatoptions+=j
+
+set ignorecase
+set smartcase
+set incsearch
+
 set autoread
+set backspace=indent,eol,start
+set complete-=i
+set nrformats-=octal
+set history=1000
+set tabpagemax=50
+set sessionoptions-=options
+set viewoptions-=options
 
 set undofile
 if !isdirectory(expand("~/.vim/swap"))
@@ -20,16 +46,11 @@ endif
 set directory=~/.vim/swap//
 set undodir=~/.vim/undo//
 
-syntax on
-filetype plugin indent on
-set background=dark
-colorscheme retrobox
-
-autocmd FileType yaml,yml setlocal tabstop=2 shiftwidth=2 expandtab
-autocmd FileType terraform,hcl setlocal tabstop=2 shiftwidth=2 expandtab
-
-cnoreabbrev <expr> grep (getcmdtype() ==# ':' && getcmdline() ==# 'grep') ? 'silent grep' : 'grep'
-autocmd QuickFixCmdPost grep redraw! | cwindow
+augroup vimrc
+  autocmd!
+  autocmd FileType yaml setlocal tabstop=2 shiftwidth=2 expandtab
+  autocmd FileType terraform,hcl setlocal tabstop=2 shiftwidth=2 expandtab
+augroup END
 
 set path+=**
 set wildmenu
@@ -48,9 +69,13 @@ if executable('fdfind')
   set findfunc=FdFindFunc
 endif
 
+cnoreabbrev <expr> grep (getcmdtype() ==# ':' && getcmdline() ==# 'grep') ? 'silent grep' : 'grep'
+augroup vimrc
+  autocmd QuickFixCmdPost grep redraw! | cwindow
+augroup END
+
 nnoremap <leader>f :find<space>
 nnoremap <leader>g :silent grep<space>
-
 nnoremap ]q :cnext<CR>
 nnoremap [q :cprev<CR>
 nnoremap ]b :bnext<CR>
