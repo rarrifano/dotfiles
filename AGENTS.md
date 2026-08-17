@@ -7,3 +7,4 @@
 - For shell config changes, avoid breaking non-interactive shells.
 - Keep changes portable and simple unless a host-specific tweak is requested.
 - Validate with the lightest relevant check before finishing.
+- Vim config is vanilla vim (no plugin manager); don't assume plugins are available.
