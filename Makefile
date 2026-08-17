@@ -1,5 +1,5 @@
 DOTFILES := $(shell pwd)
-PACKAGES := bash git kitty pi vim
+PACKAGES := bash git kitty pi tmux vim
 STOW     := stow --dotfiles --no-folding -t $(HOME) -d $(DOTFILES)
 
 .PHONY: stow unstow lint
