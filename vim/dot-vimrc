@@ -69,6 +69,8 @@ if executable('fdfind')
   set findfunc=FdFindFunc
 endif
 
+nnoremap <leader>y "+y
+vnoremap <leader>y "+y
 nnoremap <leader>f :find<space>
 nnoremap <leader>g :grep<space>
 nnoremap ]q :cnext<CR>
