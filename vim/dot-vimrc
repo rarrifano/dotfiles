@@ -50,13 +50,20 @@ augroup vimrc
   autocmd!
   autocmd FileType yaml setlocal tabstop=2 shiftwidth=2 expandtab
   autocmd FileType terraform,hcl setlocal tabstop=2 shiftwidth=2 expandtab
+  autocmd BufEnter * silent! lcd `=FindRootOrCwd()`
 augroup END
+
+function! FindRootOrCwd()
+  let root = system('git -C ' . shellescape(expand('%:p:h')) . ' rev-parse --show-toplevel 2>/dev/null')
+  return v:shell_error ? expand('%:p:h') : substitute(root, '\n', '', '')
+endfunction
 
 set path+=**
 set wildmenu
 set wildmode=longest:full,full
 set wildignore+=*/.git/*
 
+let $FZF_DEFAULT_COMMAND = 'rg --files --follow'
 let $FZF_DEFAULT_OPTS = '--cycle'
 
 let g:fzf_colors = {
