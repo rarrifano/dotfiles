@@ -57,6 +57,8 @@ set wildmenu
 set wildmode=longest:full,full
 set wildignore+=*/.git/*
 
+let $FZF_DEFAULT_OPTS = '--cycle'
+
 let g:fzf_colors = {
   \ 'fg':      ['fg', 'Normal'],
   \ 'bg':      ['bg', 'Normal'],
@@ -75,7 +77,7 @@ let g:fzf_colors = {
 nnoremap <leader>y "+y
 vnoremap <leader>y "+y
 nnoremap <leader>f :FZF<CR>
-nnoremap <leader>g :Rg<SPACE>
+
 nnoremap ]q :cnext<CR>
 nnoremap [q :cprev<CR>
 nnoremap ]b :bnext<CR>
