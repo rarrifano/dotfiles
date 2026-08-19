@@ -13,7 +13,6 @@ set scrolloff=1
 set sidescroll=1
 set sidescrolloff=2
 set display+=lastline
-set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+
 set splitbelow
 set splitright
 
@@ -57,22 +56,25 @@ set wildmenu
 set wildmode=longest:full,full
 set wildignore+=*/.git/*
 
-if executable('rg')
-  set grepprg=rg\ --vimgrep\ --smart-case
-  set grepformat=%f:%l:%c:%m
-endif
-
-if executable('fdfind')
-  function! FdFindFunc(cmdarg, cmdcomplete)
-    return systemlist('fdfind --type f --hidden --exclude .git --glob ' . shellescape(a:cmdarg . '*'))
-  endfunction
-  set findfunc=FdFindFunc
-endif
+let g:fzf_colors = {
+  \ 'fg':      ['fg', 'Normal'],
+  \ 'bg':      ['bg', 'Normal'],
+  \ 'hl':      ['fg', 'Comment'],
+  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+  \ 'hl+':     ['fg', 'Statement'],
+  \ 'info':    ['fg', 'PreProc'],
+  \ 'border':  ['fg', 'Ignore'],
+  \ 'prompt':  ['fg', 'Conditional'],
+  \ 'pointer': ['fg', 'Exception'],
+  \ 'marker':  ['fg', 'Keyword'],
+  \ 'spinner': ['fg', 'Label'],
+  \ 'header':  ['fg', 'Comment'] }
 
 nnoremap <leader>y "+y
 vnoremap <leader>y "+y
-nnoremap <leader>f :find<space>
-nnoremap <leader>g :grep<space>
+nnoremap <leader>f :FZF<CR>
+nnoremap <leader>g :Rg<CR>
 nnoremap ]q :cnext<CR>
 nnoremap [q :cprev<CR>
 nnoremap ]b :bnext<CR>

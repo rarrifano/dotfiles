@@ -4,7 +4,7 @@
   "enableInstallTelemetry": false,
   "defaultProjectTrust": "ask",
   "externalEditor": "vim",
-  "lastChangelogVersion": "0.84.1",
+  "lastChangelogVersion": "0.84.2",
   "theme": "retrobox",
   "defaultProvider": "github-copilot",
   "defaultModel": "claude-sonnet-5",
