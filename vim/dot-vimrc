@@ -27,6 +27,7 @@ set smartcase
 set incsearch
 
 set autoread
+set updatetime=100
 set backspace=indent,eol,start
 set complete-=i
 set nrformats-=octal
