@@ -7,7 +7,6 @@ Personal configuration files, managed with [GNU Stow](https://www.gnu.org/softwa
 - `bash`
 - `git`
 - `pi`
-- `tmux`
 - `vim`
 
 ## Usage
