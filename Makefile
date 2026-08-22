@@ -5,6 +5,7 @@ STOW     := stow --dotfiles --no-folding -t $(HOME) -d $(DOTFILES)
 .PHONY: stow unstow lint
 
 stow:
+	mkdir -p $(HOME)/.vim/backup $(HOME)/.vim/swap $(HOME)/.vim/undo
 	$(STOW) $(PACKAGES)
 
 unstow:
@@ -14,3 +15,4 @@ lint:
 	grep -rlE ' +$$' $(PACKAGES) | xargs -r sed -i -E 's/ +$$//'
 	! grep -rInE ' +$$' $(PACKAGES)
 	! grep -rInP '^(\t+ +|\t* +\t+)' $(PACKAGES)
+	bash -n bash/dot-bashrc
