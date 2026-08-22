@@ -5,14 +5,14 @@
   "defaultProjectTrust": "ask",
   "externalEditor": "vim",
   "lastChangelogVersion": "0.84.2",
-  "theme": "retrobox",
+  "theme": "dark",
   "defaultProvider": "github-copilot",
   "defaultModel": "claude-sonnet-5",
   "defaultThinkingLevel": "medium",
   "packages": [
     "npm:pi-web-access"
   ],
-  "showHardwareCursor": true,
+  "showHardwareCursor": false,
   "editorPaddingX": 1,
   "fullscreenScrollbar": "auto",
   "tuiMode": "regular",
