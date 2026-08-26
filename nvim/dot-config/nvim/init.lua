@@ -24,6 +24,22 @@ vim.opt.splitbelow = true
 vim.opt.splitright = true
 vim.opt.path:append("**")
 
+vim.opt.grepprg = "rg --vimgrep --smart-case --no-heading"
+vim.opt.grepformat = "%f:%l:%c:%m"
+
+vim.api.nvim_create_user_command("Fd", function(opts)
+  local cmd = "fdfind --type f --strip-cwd-prefix"
+  if opts.args ~= "" then
+    cmd = cmd .. " " .. vim.fn.shellescape(opts.args)
+  end
+  local files = vim.fn.systemlist(cmd)
+  vim.fn.setqflist({}, " ", {
+    title = "Fd",
+    items = vim.tbl_map(function(f) return { filename = f } end, files),
+  })
+  vim.cmd("copen")
+end, { nargs = "*" })
+
 vim.opt.mouse = "a"
 vim.opt.undofile = true
 
@@ -33,4 +49,4 @@ vim.keymap.set("n", "]b", ":bnext<CR>")
 vim.keymap.set("n", "[b", ":bprevious<CR>")
 
 vim.keymap.set({ "n", "v" }, "<leader>y", "\"+y")
-vim.keymap.set("n", "<leader>f", ":find *")
+vim.keymap.set("n", "<leader>f", ":Fd ")

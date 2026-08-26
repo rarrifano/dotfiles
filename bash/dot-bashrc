@@ -36,6 +36,7 @@ alias ls='ls --color=auto'
 alias v='vim'
 alias gs='git status -sb'
 alias gp='git push'
+alias vj='$EDITOR ~/journal.txt'
 
 if [ -f /usr/share/bash-completion/bash_completion ]; then
 	. /usr/share/bash-completion/bash_completion
