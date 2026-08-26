@@ -5,7 +5,6 @@
   "defaultProjectTrust": "ask",
   "externalEditor": "vim",
   "lastChangelogVersion": "0.84.3",
-  "theme": "gruvbox-dark-hard",
   "defaultProvider": "github-copilot",
   "defaultModel": "claude-sonnet-5",
   "defaultThinkingLevel": "medium",
@@ -18,5 +17,6 @@
   "tuiMode": "regular",
   "markdown": {
     "mermaid": "streaming"
-  }
+  },
+  "theme": "dark"
 }

@@ -2,15 +2,6 @@
 
 Personal configuration files, managed with [GNU Stow](https://www.gnu.org/software/stow/).
 
-## Packages
-
-- `bash`
-- `foot`
-- `git`
-- `pi`
-- `tmux`
-- `vim`
-
 ## Usage
 
 ```sh
