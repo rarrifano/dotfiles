@@ -2,7 +2,10 @@
 
 syntax on
 filetype plugin indent on
+set background=dark
 colorscheme retrobox
+highlight Normal ctermbg=NONE guibg=NONE
+highlight NonText ctermbg=NONE guibg=NONE
 
 let mapleader=" "
 set nocompatible

@@ -5,8 +5,10 @@ Personal configuration files, managed with [GNU Stow](https://www.gnu.org/softwa
 ## Packages
 
 - `bash`
+- `foot`
 - `git`
 - `pi`
+- `tmux`
 - `vim`
 
 ## Usage
