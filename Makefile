@@ -5,7 +5,6 @@ STOW     := stow --dotfiles --no-folding -t $(HOME) -d $(DOTFILES)
 .PHONY: stow unstow lint
 
 stow:
-	mkdir -p $(HOME)/.vim/backup $(HOME)/.vim/swap $(HOME)/.vim/undo
 	$(STOW) $(PACKAGES)
 
 unstow:

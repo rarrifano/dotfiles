@@ -14,8 +14,8 @@ shopt -s checkwinsize
 shopt -s cdspell
 set -o vi
 
-export EDITOR=vim
-export VISUAL=vim
+export EDITOR=nvim
+export VISUAL=nvim
 
 PROMPT_DIRTRIM=3
 parse_git_branch() {
