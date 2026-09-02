@@ -4,7 +4,12 @@ return {
   build = ":TSUpdate",
   config = function()
     require("nvim-treesitter").install({
-      "bash", "lua", "markdown", "markdown_inline", "vim", "vimdoc",
+      "bash",
+      "lua",
+      "markdown",
+      "markdown_inline",
+      "vim",
+      "vimdoc",
     })
 
     vim.api.nvim_create_autocmd("FileType", {

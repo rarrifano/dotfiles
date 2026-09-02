@@ -1,4 +1,5 @@
 # ~/.bashrc
+# shellcheck shell=bash
 
 case $- in
 	*i*) ;;

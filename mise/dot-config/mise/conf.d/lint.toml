@@ -1,0 +1,10 @@
+[tools]
+shellcheck = "latest"
+stylua = "latest"
+ruff = "latest"
+golangci-lint = "latest"
+hadolint = "latest"
+tflint = "latest"
+uv = "latest"
+yamllint = "latest"
+kubeconform = "latest"

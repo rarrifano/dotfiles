@@ -8,7 +8,27 @@ return {
         },
       },
     })
-    vim.lsp.enable({ "lua_ls", "terraformls", "yamlls", "dockerls" })
+    vim.lsp.config("terraformls", {
+      filetypes = { "terraform", "terraform-vars", "hcl" },
+    })
+    vim.lsp.config("yamlls", {
+      settings = {
+        yaml = {
+          schemas = {
+            kubernetes = { "k8s/**/*.yaml", "kubernetes/**/*.yaml", "*.k8s.yaml" },
+          },
+        },
+      },
+    })
+    vim.lsp.enable({
+      "lua_ls",
+      "terraformls",
+      "yamlls",
+      "dockerls",
+      "bashls",
+      "pyright",
+      "gopls",
+    })
 
     vim.api.nvim_create_autocmd("BufWritePre", {
       pattern = "*",
