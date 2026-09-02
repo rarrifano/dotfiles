@@ -27,16 +27,9 @@ if command -v dircolors >/dev/null 2>&1; then
 	eval "$(dircolors -b)"
 fi
 
-alias ..='cd ..'
-alias gg='git grep'
 alias grep='grep --color=auto'
-alias la='ls -A'
-alias ll='ls -alF'
 alias ls='ls --color=auto'
-alias v='$EDITOR'
-alias gs='git status -sb'
-alias gp='git push'
-alias vj='$EDITOR ~/journal.txt'
+alias vim='$EDITOR'
 
 if [ -f /usr/share/bash-completion/bash_completion ]; then
 	. /usr/share/bash-completion/bash_completion
