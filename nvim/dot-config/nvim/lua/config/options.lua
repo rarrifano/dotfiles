@@ -2,12 +2,6 @@
 
 vim.g.mapleader = " "
 
-vim.cmd.colorscheme("retrobox")
-vim.cmd.highlight("Normal ctermbg=NONE guibg=NONE")
-vim.cmd.highlight("NonText ctermbg=NONE guibg=NONE")
-vim.cmd.highlight("SignColumn ctermbg=NONE guibg=NONE")
-vim.cmd.highlight("LineNr ctermbg=NONE guibg=NONE")
-
 vim.opt.updatetime = 100
 
 vim.opt.tabstop = 4
@@ -28,3 +22,8 @@ vim.opt.splitright = true
 
 vim.opt.mouse = "a"
 vim.opt.undofile = true
+
+vim.opt.signcolumn = "yes"
+
+vim.opt.list = true
+vim.opt.listchars = { tab = "> ", trail = "-", nbsp = "+" }
