@@ -17,3 +17,16 @@ node_modules/
 
 # Machine-local overrides
 *.local
+
+# pi agent dir: only track allowlisted files
+pi/dot-pi/agent/*
+!pi/dot-pi/agent/AGENTS.md
+!pi/dot-pi/agent/APPEND_SYSTEM.md
+!pi/dot-pi/agent/keybindings.json
+!pi/dot-pi/agent/settings.json
+!pi/dot-pi/agent/extensions/
+!pi/dot-pi/agent/extensions/**
+!pi/dot-pi/agent/skills/
+!pi/dot-pi/agent/skills/**
+!pi/dot-pi/agent/prompts/
+!pi/dot-pi/agent/prompts/**
