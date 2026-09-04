@@ -51,18 +51,13 @@ set expandtab
 
 augroup filetype_indent
 	autocmd!
-	autocmd FileType yaml,yaml.ansible,json,jsonc,toml,dockerfile,helm setlocal shiftwidth=2 softtabstop=2
+	autocmd FileType yaml,json,jsonc,toml,dockerfile,helm setlocal shiftwidth=2 softtabstop=2
 	autocmd FileType go,make setlocal noexpandtab
 augroup END
 
 set hlsearch
 set ignorecase
 set smartcase
-
-if executable('rg')
-	set grepprg=rg\ --vimgrep\ --smart-case\ --no-heading
-	set grepformat=%f:%l:%c:%m
-endif
 
 set directory=~/.vim/swap//
 set backupdir=~/.vim/backup//
@@ -76,11 +71,6 @@ for s:dir in [&directory, &backupdir, has('persistent_undo') ? &undodir : '']
 		call mkdir(s:dir, 'p', 0700)
 	endif
 endfor
-
-nnoremap [b :bprevious<CR>
-nnoremap ]b :bnext<CR>
-nnoremap [q :cprevious<CR>
-nnoremap ]q :cnext<CR>
 
 nnoremap <C-d> <C-d>zz
 nnoremap <C-u> <C-u>zz
