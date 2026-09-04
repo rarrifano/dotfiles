@@ -11,12 +11,12 @@
   "packages": [
     "npm:pi-web-access"
   ],
-  "showHardwareCursor": true,
+  "showHardwareCursor": false,
   "editorPaddingX": 1,
   "fullscreenScrollbar": "auto",
   "tuiMode": "regular",
   "markdown": {
     "mermaid": "streaming"
   },
-  "theme": "gruvbox"
+  "theme": "dark"
 }

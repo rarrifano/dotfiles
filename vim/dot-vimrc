@@ -1,0 +1,79 @@
+" ~/.vimrc
+
+if &compatible
+	set nocompatible
+endif
+
+filetype plugin indent on
+syntax on
+
+colorscheme retrobox
+highlight Normal ctermbg=NONE guibg=NONE
+highlight NonText ctermbg=NONE guibg=NONE
+
+set encoding=utf-8
+set autoread
+set backspace=indent,eol,start
+set complete-=i
+set smarttab
+set nrformats-=octal
+set ttimeout
+set ttimeoutlen=50
+set incsearch
+set laststatus=2
+set number
+set showcmd
+set wildmenu
+set path+=**
+set scrolloff=1
+set sidescrolloff=5
+set display+=lastline
+set autoindent
+set hidden
+set history=1000
+set tabpagemax=50
+set formatoptions+=j
+
+if !empty(&viminfo)
+	set viminfo^=!
+endif
+set sessionoptions-=options
+set viewoptions-=options
+
+set tabstop=4
+set shiftwidth=4
+set noexpandtab
+
+set hlsearch
+set ignorecase
+set smartcase
+
+if executable('rg')
+	set grepprg=rg\ --vimgrep\ --smart-case\ --no-heading
+	set grepformat=%f:%l:%c:%m
+endif
+
+cnoreabbrev <expr> grep (getcmdtype() ==# ':' && getcmdline() ==# 'grep') ? 'silent grep' : 'grep'
+
+set directory=~/.vim/swap//
+set backupdir=~/.vim/backup//
+if has('persistent_undo')
+	set undodir=~/.vim/undo//
+	set undofile
+endif
+
+for s:dir in [&directory, &backupdir, has('persistent_undo') ? &undodir : '']
+	if !empty(s:dir) && !isdirectory(s:dir)
+		call mkdir(s:dir, 'p', 0700)
+	endif
+endfor
+
+nnoremap [b :bprevious<CR>
+nnoremap ]b :bnext<CR>
+nnoremap [q :cprevious<CR>
+nnoremap ]q :cnext<CR>
+
+nnoremap <C-d> <C-d>zz
+nnoremap <C-u> <C-u>zz
+
+nnoremap <silent> <Esc> :nohlsearch<CR>

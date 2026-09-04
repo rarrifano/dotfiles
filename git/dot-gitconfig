@@ -9,7 +9,7 @@
 [color]
 	ui = auto
 [core]
-	editor = nvim
+	editor = vim
 
 [include]
 	path = ~/.gitconfig.local
