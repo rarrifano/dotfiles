@@ -53,8 +53,6 @@ if executable('rg')
 	set grepformat=%f:%l:%c:%m
 endif
 
-cnoreabbrev <expr> grep (getcmdtype() ==# ':' && getcmdline() ==# 'grep') ? 'silent grep' : 'grep'
-
 set directory=~/.vim/swap//
 set backupdir=~/.vim/backup//
 if has('persistent_undo')
