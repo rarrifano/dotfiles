@@ -7,9 +7,13 @@ endif
 filetype plugin indent on
 syntax on
 
+augroup transparent_bg
+	autocmd!
+	autocmd ColorScheme * highlight Normal ctermbg=NONE guibg=NONE
+				\ | highlight NonText ctermbg=NONE guibg=NONE
+augroup END
+
 colorscheme retrobox
-highlight Normal ctermbg=NONE guibg=NONE
-highlight NonText ctermbg=NONE guibg=NONE
 
 set encoding=utf-8
 set autoread
@@ -42,7 +46,14 @@ set viewoptions-=options
 
 set tabstop=4
 set shiftwidth=4
-set noexpandtab
+set softtabstop=4
+set expandtab
+
+augroup filetype_indent
+	autocmd!
+	autocmd FileType yaml,yaml.ansible,json,jsonc,toml,dockerfile,helm setlocal shiftwidth=2 softtabstop=2
+	autocmd FileType go,make setlocal noexpandtab
+augroup END
 
 set hlsearch
 set ignorecase
