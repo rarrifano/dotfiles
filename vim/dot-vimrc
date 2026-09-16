@@ -16,33 +16,16 @@ augroup END
 colorscheme retrobox
 
 set encoding=utf-8
-set autoread
 set backspace=indent,eol,start
 set complete-=i
-set smarttab
 set nrformats-=octal
-set ttimeout
-set ttimeoutlen=50
 set incsearch
-set laststatus=2
 set number
 set showcmd
 set wildmenu
-set path+=**
-set scrolloff=1
-set sidescrolloff=5
-set display+=lastline
+set grepprg=git\ grep\ -n\ --no-color
+set grepformat=%f:%l:%m
 set autoindent
-set hidden
-set history=1000
-set tabpagemax=50
-set formatoptions+=j
-
-if !empty(&viminfo)
-	set viminfo^=!
-endif
-set sessionoptions-=options
-set viewoptions-=options
 
 set tabstop=4
 set shiftwidth=4
@@ -59,20 +42,17 @@ set hlsearch
 set ignorecase
 set smartcase
 
-set directory=~/.vim/swap//
-set backupdir=~/.vim/backup//
-if has('persistent_undo')
-	set undodir=~/.vim/undo//
-	set undofile
-endif
+let s:statedir = expand('~/.vim/state')
 
-for s:dir in [&directory, &backupdir, has('persistent_undo') ? &undodir : '']
-	if !empty(s:dir) && !isdirectory(s:dir)
-		call mkdir(s:dir, 'p', 0700)
-	endif
+for s:name in ['swap', 'backup']
+	call mkdir(s:statedir . '/' . s:name, 'p', 0700)
 endfor
 
-nnoremap <C-d> <C-d>zz
-nnoremap <C-u> <C-u>zz
+let &directory = s:statedir . '/swap//'
+let &backupdir = s:statedir . '/backup//'
 
-nnoremap <silent> <Esc> :nohlsearch<CR>
+if has('persistent_undo')
+	call mkdir(s:statedir . '/undo', 'p', 0700)
+	let &undodir = s:statedir . '/undo//'
+	set undofile
+endif

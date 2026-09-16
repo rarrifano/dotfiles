@@ -4,9 +4,8 @@
   "enableInstallTelemetry": false,
   "defaultProjectTrust": "ask",
   "externalEditor": "vim",
-  "lastChangelogVersion": "0.85.0",
   "defaultProvider": "github-copilot",
-  "defaultModel": "claude-sonnet-5",
+  "defaultModel": "gpt-5.6-terra",
   "defaultThinkingLevel": "medium",
   "packages": [
     "npm:pi-web-access"
@@ -18,5 +17,6 @@
   "markdown": {
     "mermaid": "streaming"
   },
-  "theme": "dark"
+  "theme": "dark",
+  "lastChangelogVersion": "0.85.1"
 }
