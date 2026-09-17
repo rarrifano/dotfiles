@@ -8,7 +8,7 @@ Personal configuration files, managed with
 - GNU Stow and GNU Make
 - Git, Vim, and Bash
 - GNOME with Ptyxis for `make gnome`
-- The secret key for the signing key to commit
+- The private key corresponding to the configured Git signing key
 
 ## Usage
 
@@ -17,5 +17,4 @@ make stow    # symlink all packages into $HOME
 make unstow  # remove the symlinks
 make restow  # restow all packages
 make gnome   # apply GNOME/Ptyxis settings
-make fmt     # check files for 80-column lines
 ```
