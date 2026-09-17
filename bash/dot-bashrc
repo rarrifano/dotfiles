@@ -32,5 +32,5 @@ alias la='ls -lhA'
 alias pi-commit='git commit -m "$(pi -p /commit)"'
 
 vgrep() {
-    nvim -q <(git grep -n --no-color "$@") -c copen
+    nvim -q <(git grep -n --no-color "$@")
 }
