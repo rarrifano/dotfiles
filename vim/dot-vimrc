@@ -10,3 +10,6 @@ set grepprg=git\ grep\ -n\ --no-color
 set hidden
 set nocompatible
 set number
+
+nnoremap [q :cprevious<CR>
+nnoremap ]q :cnext<CR>
