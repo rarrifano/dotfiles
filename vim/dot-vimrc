@@ -1,3 +1,5 @@
+" .vimrc
+
 source $VIMRUNTIME/defaults.vim
 
 set background=dark
