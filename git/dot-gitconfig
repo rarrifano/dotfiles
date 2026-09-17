@@ -17,10 +17,10 @@
 	lineNumber = true
 [core]
 	editor = vim
-[commit]
-	gpgsign = true
-[user]
-	signingkey = B78F95845A6311FD0C38256C916D9BCA8710D55F
+# [commit]
+# 	gpgsign = true
+# [user]
+# 	signingkey = B78F95845A6311FD0C38256C916D9BCA8710D55F
 
 [include]
 	path = ~/.gitconfig.local
