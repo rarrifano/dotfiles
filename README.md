@@ -6,7 +6,7 @@ Personal configuration files, managed with
 ## Prerequisites
 
 - GNU Stow and GNU Make
-- Git, Neovim, and Bash
+- Git, Vim, and Bash
 - GNOME with Ptyxis for `make gnome`
 - The private key corresponding to the configured Git signing key
 

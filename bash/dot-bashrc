@@ -9,7 +9,7 @@ if [ -f /etc/bashrc ]; then
     . /etc/bashrc
 fi
 
-if [ -f ~/bashrc.local ]; then
+if [ -f ~/.bashrc.local ]; then
     . ~/.bashrc.local
 fi
 
@@ -21,10 +21,9 @@ esac
 PS1='\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 
 export PATH
-export EDITOR=nvim
-export VISUAL=nvim
+export EDITOR=vim
+export VISUAL=vim
 
-alias vim='nvim'
 alias grep='grep --color=auto'
 alias ls='ls --color=auto'
 alias ll='ls -lh'
@@ -32,5 +31,5 @@ alias la='ls -lhA'
 alias pi-commit='git commit -m "$(pi -p /commit)"'
 
 vgrep() {
-    nvim -q <(git grep -n --no-color "$@")
+    vim -q <(git grep -n --no-color "$@")
 }

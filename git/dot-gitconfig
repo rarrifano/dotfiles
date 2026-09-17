@@ -16,7 +16,7 @@
 [grep]
 	lineNumber = true
 [core]
-	editor = nvim
+	editor = vim
 # [commit]
 # 	gpgsign = true
 # [user]

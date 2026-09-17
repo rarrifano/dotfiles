@@ -3,7 +3,7 @@
   "collapseChangelog": true,
   "enableInstallTelemetry": false,
   "defaultProjectTrust": "ask",
-  "externalEditor": "nvim",
+  "externalEditor": "vim",
   "defaultProvider": "github-copilot",
   "defaultModel": "gpt-5.6-terra",
   "defaultThinkingLevel": "medium",

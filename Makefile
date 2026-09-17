@@ -1,5 +1,5 @@
 DOTFILES := $(CURDIR)
-PACKAGES := bash git nvim pi
+PACKAGES := bash git vim pi
 STOW     := stow --dotfiles --no-folding -t $(HOME) -d $(DOTFILES)
 
 .PHONY: stow unstow restow gnome
