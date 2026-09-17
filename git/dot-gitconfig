@@ -1,3 +1,5 @@
+# .gitconfig
+
 [init]
 	defaultBranch = main
 [pull]

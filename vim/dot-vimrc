@@ -1,58 +1,12 @@
-" ~/.vimrc
+" .vimrc
 
-if &compatible
-	set nocompatible
-endif
-
-filetype plugin indent on
 syntax on
+filetype plugin indent on
 
-augroup transparent_bg
-	autocmd!
-	autocmd ColorScheme * highlight Normal ctermbg=NONE guibg=NONE
-				\ | highlight NonText ctermbg=NONE guibg=NONE
-augroup END
-
-colorscheme retrobox
-
-set encoding=utf-8
 set backspace=indent,eol,start
-set complete-=i
-set nrformats-=octal
-set incsearch
-set number
-set showcmd
-set wildmenu
-set grepprg=git\ grep\ -n\ --no-color
+set encoding=utf-8
 set grepformat=%f:%l:%m
-set autoindent
-
-set tabstop=4
-set shiftwidth=4
-set softtabstop=4
-set expandtab
-
-augroup filetype_indent
-	autocmd!
-	autocmd FileType yaml,json,jsonc,toml,dockerfile,helm setlocal shiftwidth=2 softtabstop=2
-	autocmd FileType go,make setlocal noexpandtab
-augroup END
-
-set hlsearch
-set ignorecase
-set smartcase
-
-let s:statedir = expand('~/.vim/state')
-
-for s:name in ['swap', 'backup']
-	call mkdir(s:statedir . '/' . s:name, 'p', 0700)
-endfor
-
-let &directory = s:statedir . '/swap//'
-let &backupdir = s:statedir . '/backup//'
-
-if has('persistent_undo')
-	call mkdir(s:statedir . '/undo', 'p', 0700)
-	let &undodir = s:statedir . '/undo//'
-	set undofile
-endif
+set grepprg=git\ grep\ -n\ --no-color
+set hidden
+set nocompatible
+set number
