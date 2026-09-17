@@ -1,5 +1,3 @@
-# .bashrc
-
 case $- in
     *i*) ;;
     *) return ;;
@@ -29,7 +27,6 @@ alias ls='ls --color=auto'
 alias ll='ls -lh'
 alias la='ls -lhA'
 alias pi-commit='git commit -m "$(pi -p /commit)"'
-alias gcc='gcc -Wall -Wextra'
 
 vgrep() {
     vim -q <(git grep -n --no-color "$@")

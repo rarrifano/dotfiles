@@ -1,5 +1,3 @@
-" .vimrc
-
 source $VIMRUNTIME/defaults.vim
 
 set expandtab
@@ -7,6 +5,3 @@ set shiftwidth=4
 
 nnoremap [q :cprevious<CR>
 nnoremap ]q :cnext<CR>
-nnoremap <F5> :make<CR>
-
-autocmd FileType c setlocal makeprg=gcc\ -Wall\ -Wextra\ -o\ %:r\ %\ &&\ ./%:r
