@@ -3,5 +3,10 @@ source $VIMRUNTIME/defaults.vim
 set expandtab
 set shiftwidth=4
 
+if executable('git')
+    set grepprg=git\ grep\ -n\ --no-color
+    set grepformat=%f:%l:%m
+endif
+
 nnoremap [q :cprevious<CR>
 nnoremap ]q :cnext<CR>
